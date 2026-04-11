@@ -105,8 +105,8 @@
   .hero-left {
     background: var(--ink);
     display: flex; flex-direction: column;
-    justify-content: flex-end;
-    padding: 120px 64px 80px;
+    justify-content: center;
+    padding: 80px 64px;
     position: relative;
     overflow: hidden;
   }
@@ -189,12 +189,14 @@
     background: var(--ink);
     overflow: hidden;
   }
+  .hero-right-photo img,
   .hero-right-photo svg {
     width: 100%; height: 100%;
     object-fit: cover;
     transform: scale(1.04);
     transition: transform 8s ease;
   }
+  .hero-right-photo:hover img,
   .hero-right-photo:hover svg { transform: scale(1); }
   /* Parallax layer */
   .hero-right-overlay {
@@ -229,7 +231,7 @@
     border: 1px solid rgba(184,151,106,.25); border-radius: 50%;
   }
   .hero-logo-circle img {
-    width: 110px; height: 110px; object-fit: contain;
+    width: 148px; height: 148px; object-fit: contain;
     filter: brightness(10);
   }
   .hero-right-accroche {
@@ -238,6 +240,7 @@
     color: rgba(245,240,232,.85);
     letter-spacing: .04em; text-align: center;
     max-width: 260px; line-height: 1.6;
+    margin-top: 14px;
     text-shadow: 0 2px 12px rgba(0,0,0,.4);
   }
   /* bottom bar */
@@ -352,11 +355,11 @@
   }
 
   /* ─── À PROPOS ─── */
-  .about { background: var(--parch); }
+  .about { background: var(--parch); padding-top: 48px; }
   .about-grid {
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 100px; align-items: center;
-    margin-top: 80px;
+    margin-top: 40px;
   }
   .about-img-frame {
     position: relative;
