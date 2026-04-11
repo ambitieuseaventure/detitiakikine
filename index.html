@@ -74,6 +74,7 @@
   }
   .nav-actions {
     display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
   }
   .nav-links a {
     font-size: 9px; letter-spacing: .24em; text-transform: uppercase;
@@ -113,6 +114,10 @@
   nav.scrolled .nav-client-btn:hover {
     color: var(--gold);
     border-color: var(--gold);
+  }
+  @media (max-width: 1280px) {
+    .nav-links { display: none; }
+    nav { padding: 0 24px; }
   }
 
   /* ─── ESPACE CLIENT ─── */
