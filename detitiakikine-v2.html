@@ -1,0 +1,2226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Titi à Kikine — Maison de Création</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:    #1a1612;
+    --parch:  #f5f0e8;
+    --warm:   #ede6d6;
+    --gold:   #b8976a;
+    --gold-lt:#d4b896;
+    --muted:  #8a7a68;
+    --rule:   rgba(184,151,106,0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--parch);
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ─── CURSOR ─── */
+  .cursor {
+    position: fixed; width: 6px; height: 6px;
+    background: var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform .15s ease, width .3s ease, height .3s ease;
+  }
+  .cursor-ring {
+    position: fixed; width: 32px; height: 32px;
+    border: 1px solid var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: transform .35s cubic-bezier(.25,.46,.45,.94), opacity .3s ease, width .3s, height .3s;
+    opacity: 0.6;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 68px;
+    background: rgba(245,240,232,0.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--rule);
+    transition: background .4s, box-shadow .4s;
+  }
+  nav.scrolled {
+    background: rgba(26,22,18,0.96);
+    border-bottom-color: rgba(184,151,106,.2);
+    box-shadow: 0 4px 32px rgba(0,0,0,.18);
+  }
+  nav.scrolled .nav-links a { color: rgba(245,240,232,.55); }
+  nav.scrolled .nav-links a:hover { color: var(--gold); }
+  nav.scrolled .nav-cta { background: var(--gold); color: var(--ink); }
+  .nav-brand img {
+    height: 42px; width: auto;
+    filter: contrast(1.05);
+    transition: opacity .3s;
+  }
+  nav.scrolled .nav-brand img { filter: invert(1) brightness(1.2); }
+  .nav-links {
+    display: flex; gap: 32px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 9px; letter-spacing: .24em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    position: relative;
+    transition: color .25s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute;
+    bottom: -3px; left: 0; right: 0; height: 1px;
+    background: var(--gold); transform: scaleX(0);
+    transition: transform .3s ease;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  nav.scrolled .nav-links a::after { background: var(--gold); }
+  .nav-cta {
+    font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--parch); background: var(--ink);
+    padding: 10px 22px; border: none; cursor: pointer;
+    font-family: 'Jost', sans-serif; font-weight: 300;
+    transition: background .3s, color .3s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--ink); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+  .hero-left {
+    background: var(--ink);
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 120px 64px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(184,151,106,0.08)' stroke-width='0.5'%3E%3Cpath d='M0 0 L80 80 M80 0 L0 80'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-eyebrow {
+    font-size: 9px; letter-spacing: .35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 28px;
+    display: flex; align-items: center; gap: 16px;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp .8s .2s forwards ease;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block;
+    width: 36px; height: 1px; background: var(--gold);
+  }
+  .hero-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(54px, 6vw, 86px);
+    font-weight: 300; line-height: 1.02;
+    color: var(--parch);
+    margin-bottom: 36px;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp .8s .4s forwards ease;
+  }
+  .hero-h1 em {
+    font-style: italic; color: var(--gold);
+    display: block;
+  }
+  /* ─ Letter-by-letter title animation ─ */
+  .letter-reveal span {
+    display: inline-block;
+    opacity: 0; transform: translateY(16px);
+    animation: letterFadeUp .5s forwards ease;
+  }
+  @keyframes letterFadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-tagline {
+    font-size: 12.5px; color: rgba(245,240,232,.42);
+    letter-spacing: .07em; line-height: 2;
+    border-top: 1px solid rgba(184,151,106,.2);
+    padding-top: 28px; margin-bottom: 48px;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp .8s .6s forwards ease;
+  }
+  .hero-actions {
+    display: flex; gap: 14px; align-items: center;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp .8s .8s forwards ease;
+  }
+  .btn-prim {
+    font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase;
+    background: var(--gold); color: var(--ink);
+    padding: 14px 32px; border: none; cursor: pointer;
+    font-family: 'Jost', sans-serif; font-weight: 400;
+    transition: background .25s, transform .2s;
+  }
+  .btn-prim:hover { background: var(--gold-lt); transform: translateY(-1px); }
+  .btn-ghost {
+    font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase;
+    background: transparent; color: var(--parch);
+    padding: 13px 32px; border: 1px solid rgba(245,240,232,.25); cursor: pointer;
+    font-family: 'Jost', sans-serif; font-weight: 300;
+    transition: border-color .25s, color .25s;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ─── HERO RIGHT — grande photo plein cadre ─── */
+  .hero-right {
+    position: relative; overflow: hidden;
+    opacity: 0; transform: translateX(20px);
+    animation: fadeIn .9s .5s forwards ease;
+  }
+  .hero-right-photo {
+    position: absolute; inset: 0;
+    background: var(--ink);
+    overflow: hidden;
+  }
+  .hero-right-photo svg {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scale(1.04);
+    transition: transform 8s ease;
+  }
+  .hero-right-photo:hover svg { transform: scale(1); }
+  /* Parallax layer */
+  .hero-right-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      160deg,
+      rgba(26,22,18,.3) 0%,
+      rgba(26,22,18,.05) 40%,
+      rgba(26,22,18,.5) 100%
+    );
+    z-index: 1;
+  }
+  /* Logo centré en surimpression */
+  .hero-right-logo-center {
+    position: absolute;
+    inset: 0; z-index: 2;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px;
+  }
+  .hero-logo-circle {
+    width: 170px; height: 170px;
+    border: 1px solid rgba(184,151,106,.5);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    backdrop-filter: blur(4px);
+    background: rgba(26,22,18,.25);
+  }
+  .hero-logo-circle::before {
+    content: ''; position: absolute; inset: 8px;
+    border: 1px solid rgba(184,151,106,.25); border-radius: 50%;
+  }
+  .hero-logo-circle img {
+    width: 110px; height: 110px; object-fit: contain;
+    filter: brightness(10);
+  }
+  .hero-right-accroche {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic; font-weight: 300;
+    color: rgba(245,240,232,.85);
+    letter-spacing: .04em; text-align: center;
+    max-width: 260px; line-height: 1.6;
+    text-shadow: 0 2px 12px rgba(0,0,0,.4);
+  }
+  /* bottom bar */
+  .hero-right-bottom {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    z-index: 3;
+  }
+  .hero-stats-strip {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    border-top: 1px solid rgba(184,151,106,.25);
+    background: rgba(26,22,18,.72);
+    backdrop-filter: blur(8px);
+  }
+  .hero-stat {
+    padding: 20px 22px;
+    border-right: 1px solid rgba(184,151,106,.2);
+  }
+  .hero-stat:last-child { border-right: none; }
+  .hero-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; color: var(--parch); line-height: 1;
+    margin-bottom: 3px;
+  }
+  .hero-stat-lbl {
+    font-size: 7.5px; letter-spacing: .18em; text-transform: uppercase;
+    color: rgba(245,240,232,.4);
+  }
+  .hero-creation-bar {
+    background: var(--gold);
+    padding: 13px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .hero-creation-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ink); flex-shrink: 0;
+    animation: pulse-dot 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: .4; transform: scale(1.5); }
+  }
+  .hero-creation-text {
+    flex: 1; font-size: 10.5px; color: var(--ink); letter-spacing: .05em;
+  }
+  .hero-creation-text strong { font-weight: 500; }
+  .hero-creation-link {
+    font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink); text-decoration: none;
+    border-bottom: 1px solid rgba(26,22,18,.35); padding-bottom: 1px;
+    white-space: nowrap;
+    transition: opacity .2s;
+  }
+  .hero-creation-link:hover { opacity: .7; }
+
+  /* ─── MARQUEE ─── */
+  .marquee-wrap {
+    background: var(--gold);
+    overflow: hidden; padding: 14px 0;
+    white-space: nowrap;
+  }
+  .marquee-track {
+    display: inline-flex;
+    animation: marquee 32s linear infinite;
+  }
+  .marquee-item {
+    font-size: 9.5px; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--ink); margin: 0 36px;
+  }
+  .marquee-dot {
+    display: inline-block; width: 3px; height: 3px;
+    background: var(--ink); border-radius: 50%;
+    vertical-align: middle; margin: 0 20px;
+  }
+  @keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ─── SECTION COMMONS ─── */
+  .section { padding: 120px 80px; }
+  .sec-label {
+    font-size: 9px; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .sec-label::after {
+    content: ''; flex: 1; max-width: 40px; height: 1px; background: var(--gold);
+  }
+  .sec-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(34px, 4vw, 52px);
+    font-weight: 300; line-height: 1.1;
+    color: var(--ink); margin-bottom: 10px;
+  }
+  .sec-sub {
+    font-size: 12.5px; color: var(--muted);
+    letter-spacing: .04em; line-height: 1.8;
+  }
+
+  /* ─── SECTION TITLE ANIMATIONS ─── */
+  .sec-title-anim .letter-wrap {
+    display: inline-block; overflow: hidden;
+    vertical-align: bottom;
+  }
+  .sec-title-anim .letter-wrap span {
+    display: inline-block;
+    transform: translateY(100%);
+    transition: transform .5s cubic-bezier(.22,1,.36,1);
+  }
+  .sec-title-anim.visible .letter-wrap span {
+    transform: translateY(0);
+  }
+
+  /* ─── À PROPOS ─── */
+  .about { background: var(--parch); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 100px; align-items: center;
+    margin-top: 80px;
+  }
+  .about-img-frame {
+    position: relative;
+  }
+  .about-img-main {
+    width: 100%; aspect-ratio: 4/5;
+    overflow: hidden;
+    position: relative;
+  }
+  .about-img-main::after {
+    content: '';
+    position: absolute; inset: 0;
+    border: 1px solid var(--rule);
+    pointer-events: none;
+  }
+  .about-img-main img,
+  .about-img-main svg {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform .8s ease;
+  }
+  .about-img-main:hover img,
+  .about-img-main:hover svg { transform: scale(1.04); }
+  .about-img-accent {
+    position: absolute;
+    bottom: -32px; right: -32px;
+    width: 160px; height: 160px;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .about-img-accent-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px; font-style: italic;
+    color: var(--ink); text-align: center; line-height: 1.5;
+  }
+  .about-content { padding-top: 20px; }
+  .about-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; line-height: 1.75;
+    color: #3a3028; margin-bottom: 32px;
+  }
+  .about-detail {
+    font-size: 12.5px; color: var(--muted);
+    line-height: 1.9; margin-bottom: 40px;
+    border-left: 1px solid var(--gold);
+    padding-left: 20px;
+  }
+
+  /* ─── VALEURS ─── */
+  .values { background: var(--ink); }
+  .values .sec-label { color: var(--gold); }
+  .values .sec-label::after { background: var(--gold); }
+  .values .sec-title { color: var(--parch); }
+  .values-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0; margin-top: 72px;
+    border-top: 1px solid rgba(184,151,106,.15);
+  }
+  .value-item {
+    padding: 48px 40px;
+    border-right: 1px solid rgba(184,151,106,.15);
+    position: relative;
+    transition: background .3s;
+  }
+  .value-item:last-child { border-right: none; }
+  .value-item:hover { background: rgba(184,151,106,.05); }
+  .value-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px; color: rgba(184,151,106,.12);
+    line-height: 1; margin-bottom: -16px;
+    font-weight: 300;
+  }
+  .value-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; color: var(--parch);
+    margin-bottom: 16px; font-weight: 400;
+  }
+  .value-desc {
+    font-size: 12.5px; color: rgba(245,240,232,.45);
+    line-height: 1.85;
+  }
+  .value-line {
+    width: 24px; height: 1px; background: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  /* ─── SERVICES ─── */
+  .services { background: var(--warm); }
+  .services-layout {
+    display: grid; grid-template-columns: 1fr 2fr;
+    gap: 80px; margin-top: 72px; align-items: start;
+  }
+  .services-intro { position: sticky; top: 100px; }
+  .services-intro-body {
+    font-size: 12.5px; color: var(--muted); line-height: 1.9;
+    margin-top: 20px;
+  }
+  .service-list { display: flex; flex-direction: column; gap: 2px; }
+  .service-item {
+    background: var(--parch);
+    border: 1px solid transparent;
+    padding: 40px 44px;
+    position: relative;
+    transition: border-color .3s, background .3s, transform .3s;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .service-item:hover {
+    border-color: var(--rule);
+    background: #fff;
+    transform: translateX(4px);
+  }
+  /* Golden reflet hover */
+  .service-item::after {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(184,151,106,.06), transparent);
+    transition: left .5s ease;
+  }
+  .service-item:hover::after { left: 150%; }
+  .service-item::before {
+    content: attr(data-num);
+    position: absolute; top: 36px; right: 36px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; color: rgba(184,151,106,.12);
+    line-height: 1; font-weight: 300;
+  }
+  .service-head {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 18px;
+  }
+  .service-tag {
+    font-size: 8.5px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); background: rgba(184,151,106,.1);
+    padding: 4px 12px;
+  }
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; color: var(--ink); margin-bottom: 14px;
+    font-weight: 400;
+  }
+  .service-desc {
+    font-size: 12.5px; color: var(--muted); line-height: 1.85;
+    margin-bottom: 24px;
+  }
+  .service-cta {
+    font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid rgba(184,151,106,.3); padding-bottom: 2px;
+    transition: border-color .2s;
+    display: inline-block;
+  }
+  .service-cta:hover { border-color: var(--gold); }
+
+  /* ─── APPROCHE ─── */
+  .approche { background: var(--ink); padding: 120px 80px; }
+  .approche .sec-label { color: var(--gold); }
+  .approche .sec-label::after { background: var(--gold); }
+  .approche .sec-title { color: var(--parch); }
+  .approche-steps {
+    display: grid; grid-template-columns: repeat(5,1fr); gap: 0;
+    margin-top: 72px;
+    border-top: 1px solid rgba(184,151,106,.15);
+  }
+  .approche-step {
+    padding: 40px 32px 40px 32px;
+    border-right: 1px solid rgba(184,151,106,.12);
+  }
+  .approche-step:first-child { padding-left: 0; }
+  .approche-step:last-child { border-right: none; padding-right: 0; }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 44px; color: rgba(184,151,106,.18); line-height: 1;
+    margin-bottom: -10px; font-weight: 300;
+  }
+  .step-rule { width: 20px; height: 1px; background: var(--gold); margin: 20px 0 16px; }
+  .step-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px; color: var(--parch); margin-bottom: 10px;
+  }
+  .step-desc {
+    font-size: 12px; color: rgba(245,240,232,.38); line-height: 1.85;
+  }
+
+  /* ─── PRICING ─── */
+  .pricing { background: var(--parch); }
+  .pricing-intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic;
+    color: var(--muted); margin-top: 16px; line-height: 1.7;
+    max-width: 560px;
+  }
+  /* Tabs */
+  .pricing-tabs {
+    display: flex; gap: 0;
+    margin-top: 56px;
+    border: 1px solid var(--rule);
+    width: fit-content;
+  }
+  .ptab {
+    font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+    padding: 12px 28px; cursor: pointer; border: none;
+    background: transparent; color: var(--muted);
+    font-family: 'Jost', sans-serif; font-weight: 300;
+    transition: background .25s, color .25s;
+    border-right: 1px solid var(--rule);
+  }
+  .ptab:last-child { border-right: none; }
+  .ptab.active { background: var(--ink); color: var(--parch); }
+  /* Price grids */
+  .pricing-panel { display: none; }
+  .pricing-panel.active { display: block; }
+  /* Vêtements */
+  .price-vetements {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 2px; background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-top: 2px;
+  }
+  .price-vet-item {
+    background: var(--parch); padding: 36px 28px;
+    position: relative; overflow: hidden;
+    transition: background .25s;
+  }
+  .price-vet-item:hover { background: #fff; }
+  .price-vet-item::after {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(184,151,106,.08), transparent);
+    transition: left .5s ease;
+  }
+  .price-vet-item:hover::after { left: 150%; }
+  .price-vet-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; color: var(--ink); margin-bottom: 10px; font-weight: 400;
+  }
+  .price-vet-from {
+    font-size: 8px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 4px;
+  }
+  .price-vet-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; color: var(--gold); font-weight: 300;
+    margin-bottom: 12px;
+  }
+  .price-vet-detail {
+    font-size: 11px; color: var(--muted); line-height: 1.7;
+    border-top: 1px solid var(--rule); padding-top: 14px;
+    margin-top: 8px;
+  }
+  .price-vet-cta {
+    display: inline-block; margin-top: 18px;
+    font-size: 8.5px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid rgba(184,151,106,.3); padding-bottom: 2px;
+    transition: border-color .2s;
+  }
+  .price-vet-cta:hover { border-color: var(--gold); }
+
+  /* Packs */
+  .price-packs {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2px; background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-top: 2px;
+  }
+  .pack-card {
+    background: var(--parch); padding: 48px 44px;
+    position: relative; overflow: hidden;
+    transition: background .25s;
+  }
+  .pack-card.featured { background: var(--ink); }
+  .pack-tag {
+    font-size: 8.5px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); background: rgba(184,151,106,.1);
+    padding: 4px 12px; display: inline-block; margin-bottom: 20px;
+  }
+  .pack-card.featured .pack-tag { background: rgba(184,151,106,.18); }
+  .pack-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; color: var(--ink); margin-bottom: 8px; font-weight: 400;
+  }
+  .pack-card.featured .pack-name { color: var(--parch); }
+  .pack-discount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 44px; color: var(--gold); font-weight: 300; line-height: 1;
+    margin-bottom: 8px;
+  }
+  .pack-sub {
+    font-size: 12px; color: var(--muted); margin-bottom: 28px; line-height: 1.7;
+  }
+  .pack-card.featured .pack-sub { color: rgba(245,240,232,.45); }
+  .pack-btn {
+    font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase;
+    background: var(--gold); color: var(--ink);
+    padding: 13px 28px; border: none; cursor: pointer;
+    font-family: 'Jost', sans-serif; font-weight: 400;
+    transition: background .25s;
+  }
+  .pack-btn:hover { background: var(--gold-lt); }
+
+  /* Maroquinerie */
+  .price-maroquinerie {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-top: 2px;
+  }
+  .maro-card {
+    background: var(--parch); padding: 40px 36px;
+    position: relative; overflow: hidden;
+    transition: background .25s;
+  }
+  .maro-card:hover { background: #fff; }
+  .maro-card::after {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(184,151,106,.07), transparent);
+    transition: left .5s ease;
+  }
+  .maro-card:hover::after { left: 150%; }
+  .maro-cat {
+    font-size: 8px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 12px;
+  }
+  .maro-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; color: var(--ink); margin-bottom: 6px; font-weight: 400;
+  }
+  .maro-from {
+    font-size: 8px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 2px;
+  }
+  .maro-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; color: var(--gold); font-weight: 300; line-height: 1;
+    margin-bottom: 14px;
+  }
+  .maro-desc {
+    font-size: 11.5px; color: var(--muted); line-height: 1.7;
+    border-top: 1px solid var(--rule); padding-top: 14px;
+  }
+  .maro-cta {
+    display: inline-block; margin-top: 16px;
+    font-size: 8.5px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid rgba(184,151,106,.3); padding-bottom: 2px;
+    transition: border-color .2s;
+  }
+  .maro-cta:hover { border-color: var(--gold); }
+
+  /* ─── VIP ─── */
+  .vip {
+    background: var(--ink);
+    padding: 120px 80px;
+    position: relative; overflow: hidden;
+  }
+  .vip::before {
+    content: 'VIP';
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 320px; font-weight: 300; font-style: italic;
+    color: rgba(184,151,106,.04);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    white-space: nowrap; pointer-events: none;
+  }
+  .vip-inner { position: relative; z-index: 1; }
+  .vip .sec-label { color: var(--gold); }
+  .vip .sec-label::after { background: var(--gold); }
+  .vip .sec-title { color: var(--parch); }
+  .vip-intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px; font-style: italic;
+    color: rgba(245,240,232,.5); margin-top: 20px;
+    max-width: 580px; line-height: 1.7;
+  }
+  .vip-layout {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; margin-top: 72px;
+  }
+  .vip-perks { display: flex; flex-direction: column; gap: 0; }
+  .vip-perk {
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(184,151,106,.12);
+    display: flex; gap: 28px;
+  }
+  .vip-perk:first-child { border-top: 1px solid rgba(184,151,106,.12); }
+  .vip-perk-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300;
+    color: rgba(184,151,106,.35);
+    flex-shrink: 0; width: 40px; padding-top: 4px;
+  }
+  .vip-perk-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px; color: var(--parch);
+    margin-bottom: 8px; font-weight: 400;
+  }
+  .vip-perk-desc {
+    font-size: 12.5px; color: rgba(245,240,232,.4); line-height: 1.8;
+  }
+  .vip-cta-panel {
+    display: flex; flex-direction: column; justify-content: center;
+    align-items: flex-start;
+    padding: 60px 56px;
+    border: 1px solid rgba(184,151,106,.2);
+    position: relative; overflow: hidden;
+  }
+  .vip-cta-panel::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--gold);
+  }
+  .vip-cta-label {
+    font-size: 9px; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px;
+  }
+  .vip-cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; color: var(--parch);
+    line-height: 1.15; margin-bottom: 20px; font-weight: 300;
+  }
+  .vip-cta-title em { color: var(--gold); font-style: italic; }
+  .vip-cta-text {
+    font-size: 12.5px; color: rgba(245,240,232,.45);
+    line-height: 1.9; margin-bottom: 40px;
+  }
+  .btn-vip {
+    font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase;
+    background: var(--gold); color: var(--ink);
+    padding: 16px 36px; border: none; cursor: pointer;
+    font-family: 'Jost', sans-serif; font-weight: 400;
+    transition: background .25s;
+    display: inline-block;
+  }
+  .btn-vip:hover { background: var(--gold-lt); }
+
+  /* ─── AVIS ─── */
+  .reviews { background: var(--warm); }
+  .reviews-top {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 72px;
+  }
+  .reviews-score {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px; color: var(--ink); line-height: 1;
+  }
+  .reviews-score span { font-size: 24px; color: var(--muted); }
+  .reviews-stars { color: var(--gold); font-size: 18px; letter-spacing: 4px; margin-bottom: 4px; }
+  .reviews-count { font-size: 11px; color: var(--muted); letter-spacing: .1em; }
+  .reviews-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2px; background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .review-card {
+    background: var(--parch); padding: 44px;
+    transition: background .25s;
+    position: relative; overflow: hidden;
+  }
+  .review-card:hover { background: #fff; }
+  /* Reflet doré hover */
+  .review-card::after {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(184,151,106,.08), transparent);
+    transition: left .5s ease;
+  }
+  .review-card:hover::after { left: 150%; }
+  .review-open {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px; color: var(--gold);
+    line-height: .7; margin-bottom: 20px; display: block;
+  }
+  .review-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px; font-style: italic;
+    color: #3a3028; line-height: 1.75;
+    margin-bottom: 28px;
+  }
+  .review-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--rule); padding-top: 20px;
+  }
+  .review-author {
+    font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .review-verified {
+    font-size: 8.5px; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--gold); background: rgba(184,151,106,.1);
+    padding: 4px 10px;
+  }
+
+  /* ─── BLOG ─── */
+  .blog { background: var(--parch); }
+  .blog-grid {
+    display: grid; grid-template-columns: 1.65fr 1fr;
+    gap: 2px; background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-top: 64px;
+  }
+  .blog-featured {
+    background: var(--parch); padding: 48px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    min-height: 480px; position: relative; overflow: hidden;
+    cursor: pointer;
+  }
+  .blog-featured-bg {
+    position: absolute; inset: 0; overflow: hidden;
+  }
+  .blog-featured-bg svg {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    transition: transform .8s ease;
+  }
+  .blog-featured:hover .blog-featured-bg svg { transform: scale(1); }
+  .blog-featured-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,22,18,.88) 0%, rgba(26,22,18,.1) 55%, transparent 100%);
+  }
+  .blog-featured-content { position: relative; z-index: 1; }
+  .blog-cat {
+    font-size: 8.5px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 10px;
+  }
+  .blog-featured-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 400; color: var(--parch);
+    line-height: 1.2; margin-bottom: 12px;
+  }
+  .blog-featured-date {
+    font-size: 10px; letter-spacing: .14em; color: rgba(245,240,232,.45);
+    margin-bottom: 22px;
+  }
+  .blog-read {
+    font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid var(--gold); padding-bottom: 2px;
+    display: inline-block;
+    transition: opacity .2s;
+  }
+  .blog-read:hover { opacity: .7; }
+  .blog-list {
+    background: var(--parch);
+    display: flex; flex-direction: column;
+  }
+  .blog-item {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--rule);
+    transition: background .25s;
+    display: flex; gap: 18px; align-items: flex-start;
+    text-decoration: none;
+    position: relative; overflow: hidden;
+  }
+  .blog-item:last-child { border-bottom: none; }
+  .blog-item:hover { background: var(--warm); }
+  .blog-item-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; color: rgba(184,151,106,.18);
+    line-height: 1; flex-shrink: 0; padding-top: 3px;
+  }
+  .blog-item-cat {
+    font-size: 8px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .blog-item-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; color: var(--ink); line-height: 1.3;
+    margin-bottom: 5px; font-weight: 400;
+  }
+  .blog-item-date {
+    font-size: 10px; letter-spacing: .1em; color: var(--muted);
+  }
+
+  /* ─── INSTAGRAM ─── */
+  .instagram { background: var(--parch); padding-top: 80px; padding-bottom: 80px; }
+  .insta-head {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 48px;
+  }
+  .insta-handle {
+    font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    border-bottom: 1px solid var(--rule); padding-bottom: 4px;
+    transition: color .2s, border-color .2s;
+  }
+  .insta-handle:hover { color: var(--gold); border-color: var(--gold); }
+  /* Instagram embed wrapper */
+  .insta-embed-wrap {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 24px;
+  }
+  .insta-embed-notice {
+    font-size: 12px; color: var(--muted); font-style: italic;
+    text-align: center; line-height: 1.7;
+    max-width: 480px;
+    padding: 32px;
+    border: 1px solid var(--rule);
+    background: var(--warm);
+  }
+  .insta-embed-notice a {
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid rgba(184,151,106,.4);
+  }
+  .insta-embed-notice a:hover { border-color: var(--gold); }
+
+  /* ─── CONTACT ─── */
+  .contact { background: var(--ink); }
+  .contact .sec-label { color: var(--gold); }
+  .contact .sec-label::after { background: var(--gold); }
+  .contact .sec-title { color: var(--parch); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 100px; margin-top: 72px;
+  }
+  .contact-detail-label {
+    font-size: 8.5px; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .contact-detail-val {
+    font-size: 14px; color: rgba(245,240,232,.65);
+    line-height: 1.8;
+  }
+  .contact-detail-val a { color: rgba(245,240,232,.65); text-decoration: none; }
+  .contact-detail-val a:hover { color: var(--gold); }
+  .contact-separator {
+    width: 100%; height: 1px; background: rgba(184,151,106,.15);
+    margin: 36px 0;
+  }
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    font-size: 8.5px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group textarea {
+    display: block; width: 100%;
+    background: transparent;
+    border: none; border-bottom: 1px solid rgba(184,151,106,.25);
+    color: rgba(245,240,232,.8);
+    font-family: 'Jost', sans-serif; font-weight: 300;
+    font-size: 13px; padding: 12px 0;
+    outline: none;
+    transition: border-color .25s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--gold); }
+  .form-group textarea { resize: none; height: 80px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-submit {
+    font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase;
+    background: var(--gold); color: var(--ink);
+    padding: 14px 36px; border: none; cursor: pointer;
+    font-family: 'Jost', sans-serif; font-weight: 400;
+    margin-top: 8px;
+    transition: background .25s;
+  }
+  .form-submit:hover { background: var(--gold-lt); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #111109;
+    border-top: 1px solid rgba(184,151,106,.2);
+  }
+  .footer-main {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px; padding: 72px 80px 56px;
+    border-bottom: 1px solid rgba(184,151,106,.08);
+  }
+  .footer-brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-style: italic; font-weight: 300;
+    color: var(--parch); margin-bottom: 12px;
+  }
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; font-style: italic;
+    color: rgba(245,240,232,.28); line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .footer-newsletter label {
+    font-size: 8.5px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); display: block; margin-bottom: 12px;
+  }
+  .footer-newsletter-row { display: flex; }
+  .footer-newsletter-row input {
+    flex: 1; background: rgba(255,255,255,.04);
+    border: 1px solid rgba(184,151,106,.2); border-right: none;
+    color: rgba(245,240,232,.6);
+    font-family: 'Jost', sans-serif; font-weight: 300;
+    font-size: 12px; padding: 10px 14px;
+    outline: none;
+  }
+  .footer-newsletter-row button {
+    font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
+    background: var(--gold); color: var(--ink); border: none;
+    padding: 10px 18px; cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    transition: background .2s;
+  }
+  .footer-newsletter-row button:hover { background: var(--gold-lt); }
+  .footer-col-title {
+    font-size: 8.5px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 12px; }
+  .footer-links a {
+    font-size: 12.5px; color: rgba(245,240,232,.35);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 80px;
+  }
+  .footer-copy {
+    font-size: 10px; letter-spacing: .12em;
+    color: rgba(245,240,232,.2);
+  }
+  .footer-mention {
+    font-size: 10px; letter-spacing: .12em;
+    color: rgba(245,240,232,.15);
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .8s cubic-bezier(.25,.46,.45,.94), transform .8s cubic-bezier(.25,.46,.45,.94);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+  .reveal-delay-4 { transition-delay: .4s; }
+
+  /* ─── HERO LOAD ANIMATION ─── */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ─── BLOG ARTICLE PAGE ─── */
+  .article-page {
+    display: none;
+    min-height: 100vh;
+    padding-top: 68px;
+  }
+  .article-page.active { display: block; }
+  .main-site { transition: opacity .3s; }
+  .main-site.hidden { display: none; }
+  .article-hero {
+    height: 58vh; position: relative; overflow: hidden;
+    background: var(--ink);
+  }
+  .article-hero-img {
+    width: 100%; height: 100%;
+    object-fit: cover; opacity: .65;
+  }
+  .article-hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,22,18,.75) 0%, transparent 55%);
+  }
+  .article-hero-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 60px 80px;
+  }
+  .article-cat {
+    font-size: 8.5px; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 14px;
+  }
+  .article-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 54px); font-weight: 300;
+    color: var(--parch); line-height: 1.15; max-width: 700px;
+    margin-bottom: 14px;
+  }
+  .article-meta {
+    font-size: 11px; color: rgba(245,240,232,.4); letter-spacing: .1em;
+  }
+  .article-body {
+    max-width: 720px; margin: 0 auto;
+    padding: 80px 40px;
+  }
+  .article-lead {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-style: italic; font-weight: 300;
+    color: #3a3028; line-height: 1.7;
+    margin-bottom: 48px;
+    padding-bottom: 48px; border-bottom: 1px solid var(--rule);
+  }
+  .article-text {
+    font-size: 15px; color: #3a3028; line-height: 1.9;
+    margin-bottom: 28px;
+  }
+  .article-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 400; color: var(--ink);
+    margin-bottom: 16px; margin-top: 48px;
+  }
+  .article-quote {
+    border-left: 2px solid var(--gold);
+    padding: 20px 32px;
+    margin: 40px 0;
+    background: var(--warm);
+  }
+  .article-quote p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-style: italic; color: var(--ink);
+    line-height: 1.7;
+  }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    cursor: pointer; border: none; background: none;
+    padding: 0; font-family: 'Jost', sans-serif;
+    transition: color .2s;
+    margin-bottom: 48px;
+  }
+  .back-btn:hover { color: var(--gold); }
+  .back-btn::before { content: '←'; font-size: 14px; }
+
+  /* Parallax images */
+  .parallax-img {
+    will-change: transform;
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- ─── ARTICLE PAGE (hidden by default) ─── -->
+<div class="article-page" id="articlePage">
+  <button class="back-btn" style="margin: 80px 80px 0;" onclick="closeArticle()">Retour au site</button>
+  <div class="article-hero">
+    <div style="position:absolute;inset:0;overflow:hidden;">
+      <svg id="articleHeroSvg" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;object-fit:cover;">
+        <defs>
+          <radialGradient id="artHeroGrad" cx="50%" cy="40%" r="65%">
+            <stop offset="0%" stop-color="#3d2a1a"/>
+            <stop offset="100%" stop-color="#1a1612"/>
+          </radialGradient>
+        </defs>
+        <rect width="1200" height="500" fill="url(#artHeroGrad)"/>
+        <ellipse cx="300" cy="200" rx="180" ry="140" fill="rgba(184,151,106,0.08)"/>
+        <ellipse cx="900" cy="300" rx="150" ry="120" fill="rgba(184,151,106,0.05)"/>
+        <!-- Texture tissage -->
+        <g stroke="rgba(184,151,106,0.06)" stroke-width="0.8" fill="none">
+          <line x1="0" y1="60" x2="1200" y2="60"/>
+          <line x1="0" y1="120" x2="1200" y2="120"/>
+          <line x1="0" y1="180" x2="1200" y2="180"/>
+          <line x1="0" y1="240" x2="1200" y2="240"/>
+          <line x1="0" y1="300" x2="1200" y2="300"/>
+          <line x1="0" y1="360" x2="1200" y2="360"/>
+          <line x1="0" y1="420" x2="1200" y2="420"/>
+        </g>
+      </svg>
+    </div>
+    <div class="article-hero-overlay"></div>
+    <div class="article-hero-content">
+      <div class="article-cat" id="articleCat">Mode & Élégance</div>
+      <h1 class="article-h1" id="articleTitle">Quand l'élégance renaît</h1>
+      <div class="article-meta" id="articleDate">5 avril 2026</div>
+    </div>
+  </div>
+  <div class="article-body">
+    <p class="article-lead" id="articleLead"></p>
+    <div id="articleContent"></div>
+  </div>
+</div>
+
+<!-- ─── MAIN SITE ─── -->
+<div class="main-site" id="mainSite">
+
+<!-- ─ NAV ─ -->
+<nav id="mainNav">
+  <a class="nav-brand" href="#">
+    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADJATEDASIAAhEBAxEB/8QAGwABAAMBAQEBAAAAAAAAAAAAAAQFBgMCAQj/xABAEAACAgECAwUFAwoEBwEAAAAAAQIDBAUREiExBhNBUWEUIjJxgZGh4RUjJDNCUrHB0fCCg5OUNENTVFWE8aL/xAAWAQEBAQAAAAAAAAAAAAAAAAAAAQL/xAAZEQEBAQEBAQAAAAAAAAAAAAAAAREhMUH/2gAMAwEAAhEDEQA/APxkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABKo0/NulBV483x/D4bgRoRlOSjFbt8kd8vDycXgeRU4Ka3i900/sLjG0OrHir9SyoVxX7KfNPyfj9hB1rUIZfc4+PXwY1C4a0+v1JorT6k29km36Hwv8ARaa8PSL9UtinNpxrTW/C/B/V/wABRQA+yblJyfVvdkvSK67M1d9RZdWk24w69OX3lEM74eJk5cpRxqnY4R4pJNckfM10yyrHRXKuvflGXVE3Q8PUbro3YbdUYvna3tFfPzRBWtNNppprk0z4XXanGyI5Ecm2mhKfuysplvGcvP0ZSlABc3sjQdnuz88qxX50lTRHnwv4p/TyAopV2RgpyrmovpJrkzwa3tlk49eDHDrilKU1KMV0glv9nUz2Bp2Xmy/M1vg/am+SS8ySiGC+lhaPp23t18sq7pKqp7Jeu5XZmZTbX3dGJXTDw25v7RohAAoAAAAAAAAAAAAAAAAAAAAAAAAHqEZTmoQi5Sb2SXifEm2klu30LuKr0PGhY0p6jbHeO/SmPn8wPWJpuFhShPVrG7ZSSjj1v3l6ss+1eoZGBXTTjOEI2cW64Vy22228upmsem25yzbJ7qNi4pSfOUm//pd9t07I0Xx5wUp8/ntt/Az9VnL77sifHfbOyXnJ7sl6Ft+UIp4/tDaaUeFPn57MgF/2Iq4tSlY/gUeB/wCL/wCFviIzw8W266/KyK8SPE/zMVvJem3QudctxNO03GxXT7RwvhSlLh3S5pvbr1M5i0vL1WFck2rLVFterLDthZx51C36ULdeu7CqnMv9ou4+6rqXRRhFJF/gpaV2dsy2l3uQvd+T5bfNdSnwsCeRi3ZMpcFdbSTfRtvbY0Gu4duXbh4te0KFUrbJPpDwb+xEpFHoeA9RzXGbfdx96x/35such35+UtN05d1i1crJR5LbxX99WctN1LTMbLyaYuVNEoOEZxgm5ctt3z8+Zb6LkVS0vIhpNEnXXLhbf6yyW2/E/r9wozPaKGPjXQwsV2KFa3nFzbi5eDXk9iVTpui5NELlqE6fcXeQ4d+F7cyJq0acat0ycLsyyXHdNc1HfnsiqS3eyKNXRh4+JFPT8F51z6WTa4WvNLzJmTkvT8fvMqff51vSK8X5LyX4EDR8RYGPC+yDtzLVtVDyX8vmTcq6McG7OpVF+o4qUbLIxSjBPy89ttiCslh1wnLP1y335PeNSfN+a9PkQ9Q1u+6Pc4qWNQukYcn+HyK2+62+x2XTlOT8W9xRTbfYq6a5Tk3ski4jmC5qwMXAkpaxGbhP4FU92tuqf3FPLbifD035F0fAeoxlN7Ri5P0RNho2pygprEsUX0bAgA931WUWyqti4zj1T8DwAAAAAAAAAAAAAAAAAAAAAAWnZnGhkanGVkVKFXvSi/Hnt/FnvOx8vUteyIc5ONji5y6RintuyFpmZPBy43wW66Sj+8iw1XX7suvuqYyprfxby4m/ry5EVw1nIogq8DDnKVFHWX78vFlrq8ld2Vpmvea7vd/R7mXNNou+Z2dvxYreUE4r5y5r+DFgzJouxU499bTulOUoyXyW+5nTtiZN2LcrqZcMly+a8hUaTRcb2B48r4yhflZcVGLX7EX1+u5Wdoq52606q4OUpbKKXjzIq1LIlqNWbdJ2Tqkmlv4J9C8zdU02rbMoXeZfd8MGn06835PmTxVfrtkMTGp0il8qvfufTim/w2I2TrGfkYixbLvza67cnL5+ZBnJzm5ye7b3Z5LiBIxs3LxoShj5FlUZ/Eoy23I4KPre73Ze9jtKjn5c8i6UY00Ld7+LKE6VX3VVzrrslGM1tJJ9RRedoNWh7RZTgS5PlO3fnL0Xp/E49krIe3W493vV21NcHhKXLYpSXpF6xtSova3UJ9CZwSMTR77tUsw5PZUycbJrntt5Fjlahh6VW8XTao2WPlOb5r6+ZZardLS7JXujv6LdoW8L2akt9nv67sh6ZPGurlfj4dOHTB7SutfFJvyT5bfMis+3malk/wDMvtfJLqy2xtCpx6vaNTvjCO/wJ7b+m/maLSXpUMO3unFVxT4p7+7Lbq9/Fo5V4fts05aZXdGb/X2Xcey81yQ0xSS1rBwU4aZirfb9Y/dfyfmV9+t6la3tkSqT6xr91HnXcfFxs7u8WfFHbeS334Xv0IEYuUlGKbbeyS8SyQJylOTlJtyfVs+Hq2udVjrsi4TXVPqjyVAAAAAAAAAAAAAAAAAA6Y7hHIrlYt4Kacl6bgcwXHabCjRkQyaYqNNyTSXSL26fZzKcDrVRdbCc6qpzjBbycVul8zkbHEc9OwMCqnaULbV3ia+NSg3s/wC/AqsWFcO1FuPGEJQsnOOzXJdSaKMtOzeZ7LncE58Ndq4W2+Sfg/4/aV11cqrZ1T+KDaZ4KLDX8T2TUJ8MHGqbcoei8vmivO1+TffXXXbbKca1tBPwOIAAAAAAAAAAAAABe4OvRhg+yZuM8iCXCtpbcvUhalqEMiqvGxaPZ8avdqO+7bfVtleCYL7TNQ0+ejT07PnbV73EpQW+50x8TAyk6tO9rtlts7Jz4Yx+m3P5bmdLbSNTqoxJ4WTGaqm2+Ot7SW/JiqmvA0XCX6blO21P9l7/AEcev3kbP1HTVBRwcCELoSTjcuW+z8jtj6bgahCx4KypuC5ynJcn8tuZL03srTZLfIypSj4qK4GvtIM1mZFmVkSus4VKXhFbI4m01Xszh0YMpUd7ZOK3jwR3k36mMknGTjJNNPZpllR8ABQAAAAAAAAAAAAAAABo9Ithqmlz069rvYL82/H0+v8AIoL6p0XSqsi4yi9miy7L0KzUHa3ypg57fveSJ+tUw1XE9vxo8NtW8bIeP9/yJ5VT+z1leRptTyIylZRvsmtuezcf/wAmZqyZPW1lcLjKV3Ft5bv8S507NshpNeYk5vHfdXx5c4Pmn9OR9lRpVuRHVY5EY1xfFZDfZt/LrvuQUuvQ4NZy152yf3kE759/tObdkbNKybkk/DdnA0gAAAAAAAAAAAAAAAAAAAAA6UzuUlGqc05PbaLfMvsfRrlXGeXqSp3W7g7Nnt6N8mZ6LcWmm010aNPp2TqOoYUartPx8iqL+Oz3X9Nmt/oSjzHJ0XBkra8vLyrIv4Jye2/o+hR6ple259uTwKHG+iL7N0FXqLpjTj7deGE+f2lPqGkZmFHjsgpQ3+KL3+7wJMVXgA0gAAAAAAAAAAAAAAACz7NZMcfVa3N7Qn7rXm/D79i90yv2HtFbjzjKdWXFyht04ur/AJoyCbTTT2a6Mv8AC1+lV1yzaJWXU865Re3PbbmZsWLbCw6XmXezqMqMqMq7YN7KEk99/tX9ORjsqp0ZNtLe7rm47+ezJVGrZlGTfdRNR76Tk4tKSW735bkK2yVtsrJveU25N+rLEeQAUAAAAAAAAAeoVzse0ISk15LcTrsr+OEo7+a2A8gAAAAAAAAAD1U4KyLsi5QT95LxRotbyM2OPTPBl+iSh8VS5p+O/ijNkvT9Ry8Fy7izaMusZLeL+jJRM0rWLKYzxsyd1uPZ1am+KL8GnuXWJOvZ2/lWm/AS2nXbHab5fLcpLNSwcqall6bBPbZypk4/d0IOZ7JxJ4nfbPqrEuX2DFc8nu3k291+r43wfLfkcwCoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB0xqndkV0p7Oyain83sczpj2ujIruit3XNSS+T3AvdQz5aLkPB0+EK51pKyxxTcntv4nnE1Z6ndHE1SNdkbPdjZw7OD8NtvU96jhLWpy1HT7Yzsmk7KXykn05FFOF2NftOEq7IS8V0aMxX3NoljZdtEk94Sa5+K8zidMi6y+2Vts3OcurZzNIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOtVF1sJzrqlOMFvJpdDkAAAAAAAAAAAAAnabpWbqD/R6vc5pzlyin5bgQSfp2kZud71VfDWt97J8orZbk9w0XS177/KOQvBcq16P1RB1LWM3Pj3dtnDUulcOUfQmqmWS0zSotY1ssrL8LIvZQ5eHrufataqzIxp1nHV8UtldFe/Ffz5lEBiau8rQ1bW8jSr45dXjFfHHx22KacJQk4zi4tdUz3jZF2NaraLJVzXRplxDVsPUEq9Xx05ckr6+Ukkh0UQLjK0K11e0afbHMp5c4fEnt5FQ009mtmXR8AAAAAAAAAAAA61Y99sJzqqnOMFvJpdAOQAAAAAAAAAAH1bb8+h8AG30jUtKWn7xlXSoL3ot7Nf1MprF2Nfmzsxa+CD6+Tfnt4EMEwAAUAAAAJum6Zm6hNRxqW1+++UV9QIRN03S83UH+jUtx6cb5R+0slRo2lbPKn7fkLZ93B7Q+r8yFqOs5uZHu3JVUrbautbLkQTIQ0TTFvfL8o5H7sHtDby8eaIOo6vmZi7uU1XV4Vw5L0K8DAABQAAAAAdsTKyMWxWY9sq5LxTLiGqafqEO71bF4bPC+rk+XRbFCCYLfJ0LIVPtGDZDNo6cVXNp/IqHyezO+Hl5OJb3mNdKuXTkW61LTdRjw6rjd1b/ANenl8lsOihBcZugZNVXf4k45tHTjq5vf5Ip3yezKAAAAAD7HbdbrdeJtdG1HS/yeoxddPAvehJ7bevqYkEs0TdZuxcjOlZi18EH6bbvz2IQBQAAAAAAAAAAAAAAAAJGBh5GdkKjGrc5vn6JebI5b9ntWp07vqsnG7+m1e8ovhl9ookRxdK0r3s6xZmQtn3Vb91ejfmiHqGtZmVDuoNUULbauvkuXiWctW7LttvQLN31fev+p5s1Tsy65KGgzUmuT718vvMqzZ0jTbJbxqm15qLLfsvm6diWXrNhwznHau1x4uD6Fti325OFk2Uau08d8UpOiCjwfLh33LqMe4yT2aa+aPhs8PVdMprlHLzq8i1tbT9m5JfYdnrOi+GRV/tvwGqwwNx+WtG/7ir/AG34HiWtaR4XVv8A9f8AAaMUDZT1rR31cH8qfwOM9Y0bwq3/AMv8BoyYNLPVtGb/AOClL6I5y1TQn8WlTl/i2GozwNAtR7Of+Fs/1PxPq1Ls346JY/8ANf8AUarPA0i1Tsz46DP/AFX/AFOGfqGgW4lleLo0qbZR2hN2N8L8+o1FXhZuXhz4sa+db6cuhbPP0zVI8OoULGve/wCeqXJ+SaO2kXQxezdmRj0408hWPvO85y4V02+84vtDVkRjXnaXi2VrrwJxk/vIqFqmj34VayIzhfjN7K2t7orTR5Wu6bHT7cbTtMlQ7Y8MuOblHb0W/UzhYgACgAAAAAAAAAAAAAAAAAAAAAAAAAAJulWYEZzrz6XKE1srIt7wfnt4llfm6ZgYGRi6bbZkyyI8Mpzjw8KKAEwAAUAAAAAAAAAAAAAH1Skk0pNJ9Un1PgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//Z" alt="De Titi à Kikine" style="mix-blend-mode:multiply;">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#valeurs">Valeurs</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#prix">Prix</a></li>
+    <li><a href="#vip">Club VIP</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#avis">Avis</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Prendre RDV</button>
+</nav>
+
+<!-- ─ HERO ─ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Maison de création française</div>
+    <h1 class="hero-h1 letter-reveal" id="heroTitle">
+      L'Élégance<br>
+      <em id="heroEm">Intemporelle</em>
+    </h1>
+    <p class="hero-tagline">
+      Vêtements pensés selon votre morphologie et vos couleurs.<br>
+      Maroquinerie façonnée à la main, pièce par pièce.<br>
+      Une élégance qui n'appartient qu'à vous — entièrement.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-prim" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Découvrir nos créations</button>
+      <button class="btn-ghost" onclick="document.getElementById('avis').scrollIntoView({behavior:'smooth'})">Lire les témoignages</button>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-photo">
+      <!-- Grande photo d'ambiance atelier cuir -->
+      <svg viewBox="0 0 800 900" xmlns="http://www.w3.org/2000/svg" class="parallax-img" id="heroParallax">
+        <defs>
+          <radialGradient id="atelierGrad" cx="45%" cy="55%" r="65%">
+            <stop offset="0%" stop-color="#2d1f0e"/>
+            <stop offset="60%" stop-color="#1a1208"/>
+            <stop offset="100%" stop-color="#0d0a05"/>
+          </radialGradient>
+          <linearGradient id="leatherGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#5c3d1e"/>
+            <stop offset="35%" stop-color="#8b5e2a"/>
+            <stop offset="65%" stop-color="#6b4520"/>
+            <stop offset="100%" stop-color="#3d2510"/>
+          </linearGradient>
+          <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#c49a72"/>
+            <stop offset="50%" stop-color="#e8b88a"/>
+            <stop offset="100%" stop-color="#b88b60"/>
+          </linearGradient>
+          <filter id="softLight">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+          <radialGradient id="lightSpot" cx="38%" cy="30%" r="50%">
+            <stop offset="0%" stop-color="rgba(255,220,160,0.35)"/>
+            <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+          </radialGradient>
+        </defs>
+        <!-- Background ambiance atelier sombre -->
+        <rect width="800" height="900" fill="url(#atelierGrad)"/>
+        <!-- Spot lumière naturelle -->
+        <ellipse cx="320" cy="250" rx="360" ry="300" fill="url(#lightSpot)"/>
+        <!-- Surface de travail en cuir -->
+        <rect x="50" y="280" width="700" height="480" rx="4" fill="#2a1a0a" opacity="0.6"/>
+        <!-- Grande pièce de cuir principale -->
+        <path d="M80 320 L720 320 L700 700 L100 700 Z" fill="url(#leatherGrad)" opacity="0.92"/>
+        <!-- Texture cuir grain -->
+        <g fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="0.6">
+          <path d="M90 350 Q200 345 310 352 Q420 359 530 354 Q640 349 710 352"/>
+          <path d="M90 380 Q200 375 310 382 Q420 389 530 384 Q640 379 710 382"/>
+          <path d="M90 410 Q200 405 310 412 Q420 419 530 414 Q640 409 710 412"/>
+          <path d="M90 440 Q200 435 310 442 Q420 449 530 444 Q640 439 710 442"/>
+          <path d="M90 470 Q200 465 310 472 Q420 479 530 474 Q640 469 710 472"/>
+          <path d="M90 500 Q200 495 310 502 Q420 509 530 504 Q640 499 710 502"/>
+          <path d="M90 530 Q200 525 310 532 Q420 539 530 534 Q640 529 710 532"/>
+          <path d="M90 560 Q200 555 310 562 Q420 569 530 564 Q640 559 710 562"/>
+          <path d="M90 590 Q200 585 310 592 Q420 599 530 594 Q640 589 710 592"/>
+          <path d="M90 620 Q200 615 310 622 Q420 629 530 624 Q640 619 710 622"/>
+          <path d="M90 660 Q200 655 310 662 Q420 669 530 664 Q640 659 710 662"/>
+        </g>
+        <!-- Reflet lumière sur cuir -->
+        <path d="M100 330 Q300 310 500 325 Q650 336 710 330 L710 340 Q650 346 500 335 Q300 320 100 340Z" fill="rgba(255,200,120,0.12)"/>
+        <!-- Mains de l'artisane — main gauche -->
+        <g transform="translate(140, 420)">
+          <ellipse cx="80" cy="120" rx="75" ry="30" fill="rgba(0,0,0,0.25)"/>
+          <!-- Paume -->
+          <path d="M20 80 Q15 40 35 20 Q55 5 75 10 Q95 5 115 20 Q135 40 130 80 L125 130 Q120 145 100 150 Q80 155 60 150 Q40 145 35 130 Z" fill="url(#skinGrad)"/>
+          <!-- Doigts -->
+          <path d="M35 80 Q30 55 38 35 Q46 20 54 25 Q60 30 58 55 L55 80Z" fill="#d4a070"/>
+          <path d="M58 75 Q55 48 62 28 Q70 12 80 15 Q89 18 88 42 L85 75Z" fill="#d8a878"/>
+          <path d="M88 77 Q86 50 94 32 Q102 15 112 18 Q121 22 119 48 L115 77Z" fill="#d4a070"/>
+          <path d="M115 82 Q115 58 122 42 Q130 28 138 32 Q145 38 142 60 L137 82Z" fill="#c89660"/>
+          <!-- Pouce -->
+          <path d="M18 90 Q0 78 2 60 Q5 42 18 40 Q28 40 30 60 L28 90Z" fill="#c89660"/>
+          <!-- Ongles -->
+          <ellipse cx="46" cy="29" rx="7" ry="10" fill="rgba(255,240,220,0.6)"/>
+          <ellipse cx="73" cy="18" rx="8" ry="11" fill="rgba(255,240,220,0.6)"/>
+          <ellipse cx="103" cy="22" rx="7" ry="10" fill="rgba(255,240,220,0.6)"/>
+          <ellipse cx="130" cy="36" rx="6" ry="9" fill="rgba(255,240,220,0.6)"/>
+          <!-- Détail jointures -->
+          <path d="M36 72 Q46 68 55 72" stroke="rgba(0,0,0,0.1)" stroke-width="1.5" fill="none"/>
+          <path d="M60 68 Q73 63 85 68" stroke="rgba(0,0,0,0.1)" stroke-width="1.5" fill="none"/>
+          <path d="M88 70 Q100 65 113 70" stroke="rgba(0,0,0,0.1)" stroke-width="1.5" fill="none"/>
+        </g>
+        <!-- Main droite tenant un outil -->
+        <g transform="translate(400, 390)">
+          <ellipse cx="100" cy="180" rx="70" ry="25" fill="rgba(0,0,0,0.2)"/>
+          <!-- Outil alène -->
+          <rect x="115" y="-60" width="8" height="200" rx="4" fill="#8a6a3a" transform="rotate(-15 119 70)"/>
+          <ellipse cx="119" cy="-55" rx="5" ry="8" fill="#c8a060" transform="rotate(-15 119 70)"/>
+          <!-- Paume tenant l'outil -->
+          <path d="M55 80 Q50 45 68 22 Q82 8 100 12 Q118 8 132 22 Q148 45 145 80 L140 140 Q135 155 115 160 Q95 165 75 160 Q55 155 50 140Z" fill="url(#skinGrad)"/>
+          <!-- Doigts refermés -->
+          <path d="M50 80 Q48 58 55 40 Q63 25 72 28 Q79 33 76 58 L73 80Z" fill="#c89060"/>
+          <path d="M75 75 Q72 52 79 34 Q87 18 97 20 Q106 24 103 48 L100 75Z" fill="#d4a070"/>
+          <path d="M100 76 Q99 54 106 37 Q114 22 124 25 Q132 30 128 52 L125 76Z" fill="#c89060"/>
+          <path d="M127 82 Q127 60 133 44 Q140 30 148 34 Q155 40 150 62 L145 82Z" fill="#bf8858"/>
+        </g>
+        <!-- Fils et aiguille -->
+        <path d="M310 380 Q350 370 390 380 Q430 390 460 375" stroke="#c8a060" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+        <path d="M460 375 Q480 368 490 378 L488 388 Q480 380 460 387" stroke="#c8a060" stroke-width="1.5" fill="none"/>
+        <!-- Couture sur le cuir -->
+        <g stroke="rgba(200,160,80,0.7)" stroke-width="1.8" stroke-dasharray="8,5" fill="none">
+          <path d="M140 580 Q300 572 460 580 Q580 586 680 578"/>
+          <path d="M140 600 Q300 592 460 600 Q580 606 680 598"/>
+        </g>
+        <!-- Outils sur la table -->
+        <!-- Bobine de fil -->
+        <ellipse cx="620" cy="350" rx="28" ry="18" fill="#5a3a18"/>
+        <ellipse cx="620" cy="342" rx="20" ry="12" fill="#8b6030"/>
+        <rect x="610" y="342" width="20" height="20" fill="#8b6030"/>
+        <ellipse cx="620" cy="362" rx="20" ry="12" fill="#7a5228"/>
+        <path d="M610 342 Q620 336 630 342" stroke="#c8a060" stroke-width="1.5" fill="none"/>
+        <!-- Règle -->
+        <rect x="640" y="450" width="4" height="180" rx="2" fill="#8a7055" transform="rotate(-8 642 540)"/>
+        <g stroke="rgba(255,240,200,0.4)" stroke-width="0.5">
+          <line x1="640" y1="465" x2="648" y2="464" transform="rotate(-8 642 540)"/>
+          <line x1="640" y1="480" x2="648" y2="479" transform="rotate(-8 642 540)"/>
+          <line x1="640" y1="495" x2="648" y2="494" transform="rotate(-8 642 540)"/>
+        </g>
+        <!-- Ombre générale pour profondeur -->
+        <rect x="0" y="700" width="800" height="200" fill="rgba(0,0,0,0.35)"/>
+        <!-- Gradient haut pour fondu -->
+        <rect x="0" y="0" width="800" height="150" fill="rgba(26,18,8,0.4)"/>
+      </svg>
+    </div>
+    <div class="hero-right-overlay"></div>
+    <div class="hero-right-logo-center">
+      <div class="hero-logo-circle">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADJATEDASIAAhEBAxEB/8QAGwABAAMBAQEBAAAAAAAAAAAAAAQFBgMCAQj/xABAEAACAgECAwUFAwoEBwEAAAAAAQIDBAUREiExBhNBUWEUIjJxgZGh4RUjJDNCUrHB0fCCg5OUNENTVFWE8aL/xAAWAQEBAQAAAAAAAAAAAAAAAAAAAQL/xAAZEQEBAQEBAQAAAAAAAAAAAAAAAREhMUH/2gAMAwEAAhEDEQA/APxkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABKo0/NulBV483x/D4bgRoRlOSjFbt8kd8vDycXgeRU4Ka3i900/sLjG0OrHir9SyoVxX7KfNPyfj9hB1rUIZfc4+PXwY1C4a0+v1JorT6k29km36Hwv8ARaa8PSL9UtinNpxrTW/C/B/V/wABRQA+yblJyfVvdkvSK67M1d9RZdWk24w69OX3lEM74eJk5cpRxqnY4R4pJNckfM10yyrHRXKuvflGXVE3Q8PUbro3YbdUYvna3tFfPzRBWtNNppprk0z4XXanGyI5Ecm2mhKfuysplvGcvP0ZSlABc3sjQdnuz88qxX50lTRHnwv4p/TyAopV2RgpyrmovpJrkzwa3tlk49eDHDrilKU1KMV0glv9nUz2Bp2Xmy/M1vg/am+SS8ySiGC+lhaPp23t18sq7pKqp7Jeu5XZmZTbX3dGJXTDw25v7RohAAoAAAAAAAAAAAAAAAAAAAAAAAAHqEZTmoQi5Sb2SXifEm2klu30LuKr0PGhY0p6jbHeO/SmPn8wPWJpuFhShPVrG7ZSSjj1v3l6ss+1eoZGBXTTjOEI2cW64Vy22228upmsem25yzbJ7qNi4pSfOUm//pd9t07I0Xx5wUp8/ntt/Az9VnL77sifHfbOyXnJ7sl6Ft+UIp4/tDaaUeFPn57MgF/2Iq4tSlY/gUeB/wCL/wCFviIzw8W266/KyK8SPE/zMVvJem3QudctxNO03GxXT7RwvhSlLh3S5pvbr1M5i0vL1WFck2rLVFterLDthZx51C36ULdeu7CqnMv9ou4+6rqXRRhFJF/gpaV2dsy2l3uQvd+T5bfNdSnwsCeRi3ZMpcFdbSTfRtvbY0Gu4duXbh4te0KFUrbJPpDwb+xEpFHoeA9RzXGbfdx96x/35such35+UtN05d1i1crJR5LbxX99WctN1LTMbLyaYuVNEoOEZxgm5ctt3z8+Zb6LkVS0vIhpNEnXXLhbf6yyW2/E/r9wozPaKGPjXQwsV2KFa3nFzbi5eDXk9iVTpui5NELlqE6fcXeQ4d+F7cyJq0acat0ycLsyyXHdNc1HfnsiqS3eyKNXRh4+JFPT8F51z6WTa4WvNLzJmTkvT8fvMqff51vSK8X5LyX4EDR8RYGPC+yDtzLVtVDyX8vmTcq6McG7OpVF+o4qUbLIxSjBPy89ttiCslh1wnLP1y335PeNSfN+a9PkQ9Q1u+6Pc4qWNQukYcn+HyK2+62+x2XTlOT8W9xRTbfYq6a5Tk3ski4jmC5qwMXAkpaxGbhP4FU92tuqf3FPLbifD035F0fAeoxlN7Ri5P0RNho2pygprEsUX0bAgA931WUWyqti4zj1T8DwAAAAAAAAAAAAAAAAAAAAAAWnZnGhkanGVkVKFXvSi/Hnt/FnvOx8vUteyIc5ONji5y6RintuyFpmZPBy43wW66Sj+8iw1XX7suvuqYyprfxby4m/ry5EVw1nIogq8DDnKVFHWX78vFlrq8ld2Vpmvea7vd/R7mXNNou+Z2dvxYreUE4r5y5r+DFgzJouxU499bTulOUoyXyW+5nTtiZN2LcrqZcMly+a8hUaTRcb2B48r4yhflZcVGLX7EX1+u5Wdoq52606q4OUpbKKXjzIq1LIlqNWbdJ2Tqkmlv4J9C8zdU02rbMoXeZfd8MGn06835PmTxVfrtkMTGp0il8qvfufTim/w2I2TrGfkYixbLvza67cnL5+ZBnJzm5ye7b3Z5LiBIxs3LxoShj5FlUZ/Eoy23I4KPre73Ze9jtKjn5c8i6UY00Ld7+LKE6VX3VVzrrslGM1tJJ9RRedoNWh7RZTgS5PlO3fnL0Xp/E49krIe3W493vV21NcHhKXLYpSXpF6xtSova3UJ9CZwSMTR77tUsw5PZUycbJrntt5Fjlahh6VW8XTao2WPlOb5r6+ZZardLS7JXujv6LdoW8L2akt9nv67sh6ZPGurlfj4dOHTB7SutfFJvyT5bfMis+3malk/wDMvtfJLqy2xtCpx6vaNTvjCO/wJ7b+m/maLSXpUMO3unFVxT4p7+7Lbq9/Fo5V4fts05aZXdGb/X2Xcey81yQ0xSS1rBwU4aZirfb9Y/dfyfmV9+t6la3tkSqT6xr91HnXcfFxs7u8WfFHbeS334Xv0IEYuUlGKbbeyS8SyQJylOTlJtyfVs+Hq2udVjrsi4TXVPqjyVAAAAAAAAAAAAAAAAAA6Y7hHIrlYt4Kacl6bgcwXHabCjRkQyaYqNNyTSXSL26fZzKcDrVRdbCc6qpzjBbycVul8zkbHEc9OwMCqnaULbV3ia+NSg3s/wC/AqsWFcO1FuPGEJQsnOOzXJdSaKMtOzeZ7LncE58Ndq4W2+Sfg/4/aV11cqrZ1T+KDaZ4KLDX8T2TUJ8MHGqbcoei8vmivO1+TffXXXbbKca1tBPwOIAAAAAAAAAAAAABe4OvRhg+yZuM8iCXCtpbcvUhalqEMiqvGxaPZ8avdqO+7bfVtleCYL7TNQ0+ejT07PnbV73EpQW+50x8TAyk6tO9rtlts7Jz4Yx+m3P5bmdLbSNTqoxJ4WTGaqm2+Ot7SW/JiqmvA0XCX6blO21P9l7/AEcev3kbP1HTVBRwcCELoSTjcuW+z8jtj6bgahCx4KypuC5ynJcn8tuZL03srTZLfIypSj4qK4GvtIM1mZFmVkSus4VKXhFbI4m01Xszh0YMpUd7ZOK3jwR3k36mMknGTjJNNPZpllR8ABQAAAAAAAAAAAAAAABo9Ithqmlz069rvYL82/H0+v8AIoL6p0XSqsi4yi9miy7L0KzUHa3ypg57fveSJ+tUw1XE9vxo8NtW8bIeP9/yJ5VT+z1leRptTyIylZRvsmtuezcf/wAmZqyZPW1lcLjKV3Ft5bv8S507NshpNeYk5vHfdXx5c4Pmn9OR9lRpVuRHVY5EY1xfFZDfZt/LrvuQUuvQ4NZy152yf3kE759/tObdkbNKybkk/DdnA0gAAAAAAAAAAAAAAAAAAAAA6UzuUlGqc05PbaLfMvsfRrlXGeXqSp3W7g7Nnt6N8mZ6LcWmm010aNPp2TqOoYUartPx8iqL+Oz3X9Nmt/oSjzHJ0XBkra8vLyrIv4Jye2/o+hR6ple259uTwKHG+iL7N0FXqLpjTj7deGE+f2lPqGkZmFHjsgpQ3+KL3+7wJMVXgA0gAAAAAAAAAAAAAAACz7NZMcfVa3N7Qn7rXm/D79i90yv2HtFbjzjKdWXFyht04ur/AJoyCbTTT2a6Mv8AC1+lV1yzaJWXU865Re3PbbmZsWLbCw6XmXezqMqMqMq7YN7KEk99/tX9ORjsqp0ZNtLe7rm47+ezJVGrZlGTfdRNR76Tk4tKSW735bkK2yVtsrJveU25N+rLEeQAUAAAAAAAAAeoVzse0ISk15LcTrsr+OEo7+a2A8gAAAAAAAAAD1U4KyLsi5QT95LxRotbyM2OPTPBl+iSh8VS5p+O/ijNkvT9Ry8Fy7izaMusZLeL+jJRM0rWLKYzxsyd1uPZ1am+KL8GnuXWJOvZ2/lWm/AS2nXbHab5fLcpLNSwcqall6bBPbZypk4/d0IOZ7JxJ4nfbPqrEuX2DFc8nu3k291+r43wfLfkcwCoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB0xqndkV0p7Oyain83sczpj2ujIruit3XNSS+T3AvdQz5aLkPB0+EK51pKyxxTcntv4nnE1Z6ndHE1SNdkbPdjZw7OD8NtvU96jhLWpy1HT7Yzsmk7KXykn05FFOF2NftOEq7IS8V0aMxX3NoljZdtEk94Sa5+K8zidMi6y+2Vts3OcurZzNIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOtVF1sJzrqlOMFvJpdDkAAAAAAAAAAAAAnabpWbqD/R6vc5pzlyin5bgQSfp2kZud71VfDWt97J8orZbk9w0XS177/KOQvBcq16P1RB1LWM3Pj3dtnDUulcOUfQmqmWS0zSotY1ssrL8LIvZQ5eHrufataqzIxp1nHV8UtldFe/Ffz5lEBiau8rQ1bW8jSr45dXjFfHHx22KacJQk4zi4tdUz3jZF2NaraLJVzXRplxDVsPUEq9Xx05ckr6+Ukkh0UQLjK0K11e0afbHMp5c4fEnt5FQ009mtmXR8AAAAAAAAAAAA61Y99sJzqqnOMFvJpdAOQAAAAAAAAAAH1bb8+h8AG30jUtKWn7xlXSoL3ot7Nf1MprF2Nfmzsxa+CD6+Tfnt4EMEwAAUAAAAJum6Zm6hNRxqW1+++UV9QIRN03S83UH+jUtx6cb5R+0slRo2lbPKn7fkLZ93B7Q+r8yFqOs5uZHu3JVUrbautbLkQTIQ0TTFvfL8o5H7sHtDby8eaIOo6vmZi7uU1XV4Vw5L0K8DAABQAAAAAdsTKyMWxWY9sq5LxTLiGqafqEO71bF4bPC+rk+XRbFCCYLfJ0LIVPtGDZDNo6cVXNp/IqHyezO+Hl5OJb3mNdKuXTkW61LTdRjw6rjd1b/ANenl8lsOihBcZugZNVXf4k45tHTjq5vf5Ip3yezKAAAAAD7HbdbrdeJtdG1HS/yeoxddPAvehJ7bevqYkEs0TdZuxcjOlZi18EH6bbvz2IQBQAAAAAAAAAAAAAAAAJGBh5GdkKjGrc5vn6JebI5b9ntWp07vqsnG7+m1e8ovhl9ookRxdK0r3s6xZmQtn3Vb91ejfmiHqGtZmVDuoNUULbauvkuXiWctW7LttvQLN31fev+p5s1Tsy65KGgzUmuT718vvMqzZ0jTbJbxqm15qLLfsvm6diWXrNhwznHau1x4uD6Fti325OFk2Uau08d8UpOiCjwfLh33LqMe4yT2aa+aPhs8PVdMprlHLzq8i1tbT9m5JfYdnrOi+GRV/tvwGqwwNx+WtG/7ir/AG34HiWtaR4XVv8A9f8AAaMUDZT1rR31cH8qfwOM9Y0bwq3/AMv8BoyYNLPVtGb/AOClL6I5y1TQn8WlTl/i2GozwNAtR7Of+Fs/1PxPq1Ls346JY/8ANf8AUarPA0i1Tsz46DP/AFX/AFOGfqGgW4lleLo0qbZR2hN2N8L8+o1FXhZuXhz4sa+db6cuhbPP0zVI8OoULGve/wCeqXJ+SaO2kXQxezdmRj0408hWPvO85y4V02+84vtDVkRjXnaXi2VrrwJxk/vIqFqmj34VayIzhfjN7K2t7orTR5Wu6bHT7cbTtMlQ7Y8MuOblHb0W/UzhYgACgAAAAAAAAAAAAAAAAAAAAAAAAAAJulWYEZzrz6XKE1srIt7wfnt4llfm6ZgYGRi6bbZkyyI8Mpzjw8KKAEwAAUAAAAAAAAAAAAAH1Skk0pNJ9Un1PgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//Z" alt="De Titi à Kikine">
+      </div>
+      <p class="hero-right-accroche">
+        « Chaque pièce est une évidence.<br>Elle ne ressemble qu'à vous. »
+      </p>
+    </div>
+    <div class="hero-right-bottom">
+      <div class="hero-stats-strip">
+        <div class="hero-stat">
+          <div class="hero-stat-num">100%</div>
+          <div class="hero-stat-lbl">Pièces uniques</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">5 ★</div>
+          <div class="hero-stat-lbl">Avis clients</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">À distance</div>
+          <div class="hero-stat-lbl">Consultation</div>
+        </div>
+      </div>
+      <div class="hero-creation-bar">
+        <div class="hero-creation-dot"></div>
+        <div class="hero-creation-text">Nouvelle création : <strong>Veste militaire sur-mesure</strong></div>
+        <a class="hero-creation-link" href="#">Voir l'atelier</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─ MARQUEE ─ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Vêtements sur-mesure</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Maroquinerie personnalisée</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Bilan colorimétrique</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Pièces uniques</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Façonnées à la main</span><span class="marquee-dot"></span>
+    <span class="marquee-item">La Ligne Juste</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Vêtements sur-mesure</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Maroquinerie personnalisée</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Bilan colorimétrique</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Pièces uniques</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Façonnées à la main</span><span class="marquee-dot"></span>
+    <span class="marquee-item">La Ligne Juste</span><span class="marquee-dot"></span>
+  </div>
+</div>
+
+<!-- ─ À PROPOS ─ -->
+<section class="section about reveal" id="about">
+  <div class="sec-label">Maison</div>
+  <h2 class="sec-title sec-title-anim">À propos</h2>
+  <div class="about-grid">
+    <div class="about-img-frame">
+      <div class="about-img-main parallax-img">
+        <!-- Photo atelier artisanal -->
+        <svg viewBox="0 0 500 640" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="object-fit:cover;">
+          <defs>
+            <radialGradient id="atelierAbout" cx="40%" cy="35%" r="60%">
+              <stop offset="0%" stop-color="#3d2510"/>
+              <stop offset="100%" stop-color="#1a1208"/>
+            </radialGradient>
+            <linearGradient id="tableAbout" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#5c3d1e"/>
+              <stop offset="100%" stop-color="#3a2210"/>
+            </linearGradient>
+          </defs>
+          <rect width="500" height="640" fill="url(#atelierAbout)"/>
+          <!-- Fenêtre lumière -->
+          <rect x="60" y="40" width="140" height="200" rx="2" fill="rgba(255,220,150,0.12)" stroke="rgba(184,151,106,0.2)" stroke-width="1"/>
+          <line x1="130" y1="40" x2="130" y2="240" stroke="rgba(184,151,106,0.15)" stroke-width="1"/>
+          <line x1="60" y1="140" x2="200" y2="140" stroke="rgba(184,151,106,0.15)" stroke-width="1"/>
+          <!-- Rayon lumineux -->
+          <path d="M60 40 L0 200 L60 200Z" fill="rgba(255,220,150,0.06)"/>
+          <!-- Surface atelier -->
+          <rect x="0" y="340" width="500" height="300" fill="url(#tableAbout)" opacity="0.8"/>
+          <!-- Pièce de cuir en cours -->
+          <path d="M40 370 L460 370 L450 560 L50 560Z" fill="#7a5230" opacity="0.9"/>
+          <!-- Texture -->
+          <g stroke="rgba(0,0,0,0.1)" stroke-width="0.7" fill="none">
+            <path d="M50 390 Q180 385 310 390 Q400 393 450 389"/>
+            <path d="M50 415 Q180 410 310 415 Q400 418 450 414"/>
+            <path d="M50 440 Q180 435 310 440 Q400 443 450 439"/>
+            <path d="M50 465 Q180 460 310 465 Q400 468 450 464"/>
+            <path d="M50 490 Q180 485 310 490 Q400 493 450 489"/>
+            <path d="M50 515 Q180 510 310 515 Q400 518 450 514"/>
+            <path d="M50 540 Q180 535 310 540 Q400 543 450 539"/>
+          </g>
+          <!-- Silhouette créatrice au travail -->
+          <!-- Corps / buste -->
+          <ellipse cx="280" cy="280" rx="55" ry="70" fill="#2a1a08"/>
+          <!-- Tête -->
+          <ellipse cx="280" cy="195" rx="32" ry="38" fill="#c49a72"/>
+          <!-- Cheveux -->
+          <path d="M248 185 Q260 158 280 155 Q300 158 312 185 L315 200 Q305 170 280 168 Q255 170 246 200Z" fill="#3a2010"/>
+          <path d="M248 185 L246 220 Q250 235 260 240 Q260 220 255 200Z" fill="#3a2010"/>
+          <!-- Bras gauche tendu vers la table -->
+          <path d="M230 280 Q200 310 170 350 Q155 370 165 380 Q175 388 188 372 Q215 335 240 305 Z" fill="#2a1a08"/>
+          <ellipse cx="168" cy="378" rx="18" ry="12" fill="#c49a72" transform="rotate(-30 168 378)"/>
+          <!-- Chemisier -->
+          <path d="M235 255 Q260 245 280 248 Q300 245 325 255 L330 330 Q310 340 280 342 Q250 340 230 330Z" fill="#3a2820"/>
+          <!-- Couture fine en cours -->
+          <path d="M100 430 Q200 422 310 430 Q380 435 440 428" stroke="rgba(200,160,80,0.8)" stroke-width="1.5" stroke-dasharray="6,4" fill="none"/>
+          <!-- Ciseaux -->
+          <g transform="translate(360,395) rotate(-25)">
+            <path d="M0 0 L50 0" stroke="#8a8070" stroke-width="5" stroke-linecap="round"/>
+            <path d="M0 0 L50 8" stroke="#8a8070" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="0" cy="0" r="6" fill="none" stroke="#b0a090" stroke-width="2"/>
+            <circle cx="0" cy="4" r="6" fill="none" stroke="#b0a090" stroke-width="2"/>
+          </g>
+          <!-- Ambiance lumière -->
+          <rect x="0" y="0" width="500" height="80" fill="rgba(26,18,8,0.3)"/>
+          <rect x="0" y="560" width="500" height="80" fill="rgba(0,0,0,0.4)"/>
+        </svg>
+      </div>
+      <div class="about-img-accent">
+        <div class="about-img-accent-text">Artisanat<br>fait main<br>en France</div>
+      </div>
+    </div>
+    <div class="about-content">
+      <div class="sec-label reveal reveal-delay-1">Justine</div>
+      <h3 class="sec-title reveal reveal-delay-2" style="font-size:36px;">Créatrice<br><em style="font-style:italic;color:var(--gold);">de mode & d'accessoires</em></h3>
+      <p class="about-body reveal reveal-delay-2">
+        Chaque vêtement et chaque accessoire naît d'une rencontre — la vôtre. Justine étudie votre morphologie, votre colorimétrie, votre manière d'habiter votre corps, pour créer des pièces qui ne ressemblent qu'à vous.
+      </p>
+      <p class="about-detail reveal reveal-delay-3">
+        De Titi à Kikine, c'est la certitude que le luxe n'est pas une question de prix affiché, mais de justesse : la juste couleur, la juste coupe, la juste matière. Une pièce unique, conçue à distance, livrée comme une évidence.
+      </p>
+      <button class="btn-prim reveal reveal-delay-4" style="margin-top:8px;">En savoir plus</button>
+    </div>
+  </div>
+</section>
+
+<!-- ─ VALEURS ─ -->
+<section class="section values" id="valeurs">
+  <div class="sec-label reveal">Engagement</div>
+  <h2 class="sec-title sec-title-anim reveal">Nos Valeurs</h2>
+  <div class="values-grid">
+    <div class="value-item reveal reveal-delay-1">
+      <div class="value-num">01</div>
+      <div class="value-line"></div>
+      <div class="value-name">Singularité</div>
+      <div class="value-desc">Chaque pièce est unique. Aucun patron, aucune coupe identique — seulement des créations pensées pour une personne, une seule.</div>
+    </div>
+    <div class="value-item reveal reveal-delay-2">
+      <div class="value-num">02</div>
+      <div class="value-line"></div>
+      <div class="value-name">Exigence</div>
+      <div class="value-desc">Des matières sélectionnées avec soin, des finitions irréprochables, un processus de création rigoureux du croquis à la livraison.</div>
+    </div>
+    <div class="value-item reveal reveal-delay-3">
+      <div class="value-num">03</div>
+      <div class="value-line"></div>
+      <div class="value-name">Intimité</div>
+      <div class="value-desc">Une relation de confiance, une écoute profonde. Vous êtes au cœur de chaque décision créative — jamais un numéro de commande.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─ SERVICES ─ -->
+<section class="section services" id="services">
+  <div class="services-layout">
+    <div class="services-intro reveal">
+      <div class="sec-label">Savoir-faire</div>
+      <h2 class="sec-title sec-title-anim">Nos<br>Créations</h2>
+      <p class="services-intro-body">
+        Une expertise mise au service de l'excellence. Chaque prestation est une expérience sur-mesure, pensée pour révéler ce qui vous est propre.
+      </p>
+    </div>
+    <div class="service-list">
+      <div class="service-item reveal reveal-delay-1" data-num="01">
+        <div class="service-head"><span class="service-tag">Analyse</span></div>
+        <div class="service-name">Bilan Morphologique & Colorimétrique</div>
+        <div class="service-desc">Nous révélons l'harmonie de votre silhouette à travers une lecture précise de votre morphologie, votre colorimétrie et votre posture — pour comprendre ce qui vous met en lumière, naturellement.</div>
+        <a class="service-cta" href="#">Découvrir ce service</a>
+      </div>
+      <div class="service-item reveal reveal-delay-2" data-num="02">
+        <div class="service-head"><span class="service-tag">Création</span></div>
+        <div class="service-name">Vêtement sur-mesure — La Ligne Juste</div>
+        <div class="service-desc">Nous concevons à distance des vêtements entièrement sur-mesure, pensés pour épouser votre silhouette et révéler votre singularité. De l'étude à la création, chaque pièce est façonnée comme une évidence. Une élégance unique, imaginée pour vous et réalisée avec exigence.</div>
+        <a class="service-cta" href="#">Découvrir ce service</a>
+      </div>
+      <div class="service-item reveal reveal-delay-3" data-num="03">
+        <div class="service-head"><span class="service-tag">Accessoires</span></div>
+        <div class="service-name">Maroquinerie Personnalisée</div>
+        <div class="service-desc">Vous composez une pièce singulière, façonnée selon vos envies et notre exigence : cuir, couleur, grain, doublure — chaque nuance est choisie ensemble. Sacs, portefeuilles, objets pensés dans les moindres détails pour vous ressembler.</div>
+        <a class="service-cta" href="#">Découvrir ce service</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─ APPROCHE ─ -->
+<section class="approche">
+  <div class="sec-label reveal">Méthode</div>
+  <h2 class="sec-title sec-title-anim reveal">Notre approche —<br><em style="font-style:italic;color:var(--gold);">La Ligne Juste</em></h2>
+  <div class="approche-steps">
+    <div class="approche-step reveal reveal-delay-1">
+      <div class="step-num">01</div><div class="step-rule"></div>
+      <div class="step-name">Compréhension</div>
+      <div class="step-desc">Analyse de votre morphologie, colorimétrie et posture avec précision.</div>
+    </div>
+    <div class="approche-step reveal reveal-delay-2">
+      <div class="step-num">02</div><div class="step-rule"></div>
+      <div class="step-name">Traduction</div>
+      <div class="step-desc">Lignes, volumes et couleurs adaptés à votre identité unique.</div>
+    </div>
+    <div class="approche-step reveal reveal-delay-3">
+      <div class="step-num">03</div><div class="step-rule"></div>
+      <div class="step-name">Création</div>
+      <div class="step-desc">Croquis, modélisation 3D, ajustements — la pièce prend forme avec rigueur.</div>
+    </div>
+    <div class="approche-step reveal reveal-delay-4">
+      <div class="step-num">04</div><div class="step-rule"></div>
+      <div class="step-name">Réalisation</div>
+      <div class="step-desc">Façonnée à la main, dans les matières choisies ensemble.</div>
+    </div>
+    <div class="approche-step reveal reveal-delay-4">
+      <div class="step-num">05</div><div class="step-rule"></div>
+      <div class="step-name">Évidence</div>
+      <div class="step-desc">La création finale confirme une seule chose : elle vous correspond.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─ PRIX ─ -->
+<section class="section pricing" id="prix">
+  <div class="sec-label reveal">Tarifs</div>
+  <h2 class="sec-title sec-title-anim reveal">Nos Collections</h2>
+  <p class="pricing-intro reveal">Chaque pièce est le fruit d'une conversation. Les prix ci-dessous vous offrent un premier repère — la création, elle, n'a pas de formule.</p>
+
+  <div class="pricing-tabs reveal">
+    <button class="ptab active" onclick="showPricingTab('vetements',this)">Vêtements</button>
+    <button class="ptab" onclick="showPricingTab('maroquinerie',this)">Maroquinerie</button>
+    <button class="ptab" onclick="showPricingTab('packs',this)">Compositions</button>
+  </div>
+
+  <!-- Vêtements -->
+  <div class="pricing-panel active" id="tab-vetements">
+    <div class="price-vetements">
+      <div class="price-vet-item reveal reveal-delay-1">
+        <div class="price-vet-name">Haut, Chemisier, Top</div>
+        <div class="price-vet-from">À partir de</div>
+        <div class="price-vet-amount">300 €</div>
+        <div class="price-vet-detail">Selon coupe, tissus, finitions.</div>
+        <a class="price-vet-cta" href="#">Prendre rendez-vous</a>
+      </div>
+      <div class="price-vet-item reveal reveal-delay-2">
+        <div class="price-vet-name">Jupe & Pantalon</div>
+        <div class="price-vet-from">À partir de</div>
+        <div class="price-vet-amount">650 €</div>
+        <div class="price-vet-detail">Avec ou sans doublure, plis, pinces.</div>
+        <a class="price-vet-cta" href="#">Prendre rendez-vous</a>
+      </div>
+      <div class="price-vet-item reveal reveal-delay-3">
+        <div class="price-vet-name">Robe</div>
+        <div class="price-vet-from">À partir de</div>
+        <div class="price-vet-amount">720 €</div>
+        <div class="price-vet-detail">Selon complexité, longueur, volume.</div>
+        <a class="price-vet-cta" href="#">Prendre rendez-vous</a>
+      </div>
+      <div class="price-vet-item reveal reveal-delay-3">
+        <div class="price-vet-name">Veste</div>
+        <div class="price-vet-from">À partir de</div>
+        <div class="price-vet-amount">790 €</div>
+        <div class="price-vet-detail">Entoilage, col tailleur, poches.</div>
+        <a class="price-vet-cta" href="#">Prendre rendez-vous</a>
+      </div>
+      <div class="price-vet-item reveal reveal-delay-4">
+        <div class="price-vet-name">Manteau</div>
+        <div class="price-vet-from">À partir de</div>
+        <div class="price-vet-amount">890 €</div>
+        <div class="price-vet-detail">Avec ou sans doublure, col, longueur.</div>
+        <a class="price-vet-cta" href="#">Prendre rendez-vous</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Maroquinerie -->
+  <div class="pricing-panel" id="tab-maroquinerie">
+    <div class="price-maroquinerie">
+      <div class="maro-card reveal reveal-delay-1">
+        <div class="maro-cat">Portefeuille Homme</div>
+        <div class="maro-name">Shire</div>
+        <div class="maro-from">À partir de</div>
+        <div class="maro-price">115 €</div>
+        <div class="maro-desc">Cartes et billets. Une pièce quotidienne d'une élégance discrète.</div>
+        <a class="maro-cta" href="#">Composer ma pièce</a>
+      </div>
+      <div class="maro-card reveal reveal-delay-2">
+        <div class="maro-cat">Portefeuille Homme</div>
+        <div class="maro-name">Elian</div>
+        <div class="maro-from">À partir de</div>
+        <div class="maro-price">180 €</div>
+        <div class="maro-desc">Papiers d'identité, cartes, billets, monnaie. La complétude du soin.</div>
+        <a class="maro-cta" href="#">Composer ma pièce</a>
+      </div>
+      <div class="maro-card reveal reveal-delay-3">
+        <div class="maro-cat">Portefeuille Femme</div>
+        <div class="maro-name">Hanovrien</div>
+        <div class="maro-from">À partir de</div>
+        <div class="maro-price">350 €</div>
+        <div class="maro-desc">Cartes, billets, monnaie. Une architecture pensée pour vous.</div>
+        <a class="maro-cta" href="#">Composer ma pièce</a>
+      </div>
+      <div class="maro-card reveal reveal-delay-1">
+        <div class="maro-cat">Sac à main</div>
+        <div class="maro-name">Sirius</div>
+        <div class="maro-from">À partir de</div>
+        <div class="maro-price">400 €</div>
+        <div class="maro-desc">Mini sac fermé par un rabat, poignée et bandoulière. Raffinement compact.</div>
+        <a class="maro-cta" href="#">Composer ma pièce</a>
+      </div>
+      <div class="maro-card reveal reveal-delay-2">
+        <div class="maro-cat">Sac à main</div>
+        <div class="maro-name">Orion</div>
+        <div class="maro-from">À partir de</div>
+        <div class="maro-price">600 €</div>
+        <div class="maro-desc">Fermeture glissière, poche avant, anses ou bandoulière. La liberté de porter.</div>
+        <a class="maro-cta" href="#">Composer ma pièce</a>
+      </div>
+      <div class="maro-card reveal reveal-delay-3">
+        <div class="maro-cat">Grand sac à main</div>
+        <div class="maro-name">Andromède</div>
+        <div class="maro-from">À partir de</div>
+        <div class="maro-price">800 €</div>
+        <div class="maro-desc">Contient un ordinateur. Fermeture glissière, poche avant, anses ou bandoulière.</div>
+        <a class="maro-cta" href="#">Composer ma pièce</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Packs / Compositions -->
+  <div class="pricing-panel" id="tab-packs">
+    <div class="price-packs">
+      <div class="pack-card reveal reveal-delay-1">
+        <div class="pack-tag">Composition Duo</div>
+        <div class="pack-name">Pack Essentiel</div>
+        <div class="pack-discount">− 7%</div>
+        <div class="pack-sub">Vêtement + Portefeuille. Une garde-robe pensée de A à Z — du tissus aux accessoires.</div>
+        <button class="pack-btn">Prendre rendez-vous</button>
+      </div>
+      <div class="pack-card featured reveal reveal-delay-2">
+        <div class="pack-tag">Composition Signature</div>
+        <div class="pack-name">Pack Héritage</div>
+        <div class="pack-discount">− 10%</div>
+        <div class="pack-sub">Vêtement + Sac à main. L'expression complète d'un style — une harmonie totale.</div>
+        <button class="pack-btn">Prendre rendez-vous</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─ VIP ─ -->
+<section class="vip section" id="vip">
+  <div class="vip-inner">
+    <div class="sec-label">Cercle privé</div>
+    <h2 class="sec-title reveal sec-title-anim" style="color:var(--parch);">Club <em style="font-style:italic;color:var(--gold);">VIP</em></h2>
+    <p class="vip-intro reveal">Un espace réservé à celles et ceux qui souhaitent vivre l'expérience De Titi à Kikine dans sa forme la plus aboutie.</p>
+    <div class="vip-layout">
+      <div class="vip-perks">
+        <div class="vip-perk reveal reveal-delay-1">
+          <div class="vip-perk-num">01</div>
+          <div class="vip-perk-body">
+            <div class="vip-perk-title">Accès Prioritaire</div>
+            <div class="vip-perk-desc">Réservez vos consultations avant toute ouverture au public. Vos créations passent en tête d'atelier — aucune attente.</div>
+          </div>
+        </div>
+        <div class="vip-perk reveal reveal-delay-2">
+          <div class="vip-perk-num">02</div>
+          <div class="vip-perk-body">
+            <div class="vip-perk-title">Matières Exclusives</div>
+            <div class="vip-perk-desc">Accédez à des cuirs et tissus rares, non proposés au catalogue, sélectionnés spécialement pour vous sur les meilleurs marchés.</div>
+          </div>
+        </div>
+        <div class="vip-perk reveal reveal-delay-3">
+          <div class="vip-perk-num">03</div>
+          <div class="vip-perk-body">
+            <div class="vip-perk-title">Suivi Personnalisé</div>
+            <div class="vip-perk-desc">Un carnet de style privé, des recommandations saisonnières, et des offres taillées à votre mesure tout au long de l'année.</div>
+          </div>
+        </div>
+        <div class="vip-perk reveal reveal-delay-4">
+          <div class="vip-perk-num">04</div>
+          <div class="vip-perk-body">
+            <div class="vip-perk-title">Conditions Privilégiées</div>
+            <div class="vip-perk-desc">En tant que membre, bénéficiez de conditions exclusives sur toutes vos créations et renouvellements.</div>
+          </div>
+        </div>
+      </div>
+      <div class="vip-cta-panel reveal reveal-delay-2">
+        <div class="vip-cta-label">Adhésion sur invitation</div>
+        <h3 class="vip-cta-title">Rejoindre<br>l'<em>Atelier Privé</em></h3>
+        <p class="vip-cta-text">Le Club VIP est accessible sur invitation ou sur demande, après une première création réalisée ensemble. C'est une relation durable, construite sur la confiance et l'exigence partagée.</p>
+        <button class="btn-vip">Demander mon accès</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─ AVIS ─ -->
+<section class="section reviews reveal" id="avis">
+  <div class="reviews-top">
+    <div>
+      <div class="sec-label">Expériences</div>
+      <h2 class="sec-title sec-title-anim">Ce que disent<br>nos clients</h2>
+    </div>
+    <div class="reviews-rating" style="text-align:right;">
+      <div class="reviews-stars">★★★★★</div>
+      <div class="reviews-score">5,0<span>/5</span></div>
+      <div class="reviews-count">Avis vérifiés</div>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card reveal reveal-delay-1">
+      <span class="review-open">"</span>
+      <p class="review-text">Un portefeuille incroyable, très pratique, avec des gravures que j'ai choisies moi-même. Une pièce qui me ressemble vraiment, dans chaque détail.</p>
+      <div class="review-footer">
+        <span class="review-author">Elian Prevot</span>
+        <span class="review-verified">Avis vérifié</span>
+      </div>
+    </div>
+    <div class="review-card reveal reveal-delay-2">
+      <span class="review-open">"</span>
+      <p class="review-text">Un sac entièrement personnalisé — cuir, couleur, doublure, fermetures. Coordonné avec un portefeuille assorti. Je suis très contente du travail effectué, fait entièrement à la main.</p>
+      <div class="review-footer">
+        <span class="review-author">Sylvie Prevot</span>
+        <span class="review-verified">Avis vérifié</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─ BLOG ─ -->
+<section class="section blog reveal" id="blog">
+  <div class="sec-label">Journal</div>
+  <h2 class="sec-title sec-title-anim">Inspirations</h2>
+  <div style="font-size:12.5px;color:var(--muted);margin-top:6px;">Réflexions, tendances et actualités de la maison</div>
+  <div class="blog-grid">
+    <div class="blog-featured" onclick="openArticle('elegance', 'Mode & Élégance', 'Quand l\'élégance renaît : le moment où la mode respire à nouveau', '5 avril 2026')">
+      <div class="blog-featured-bg">
+        <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="blogHeroGrad" cx="50%" cy="40%" r="70%">
+              <stop offset="0%" stop-color="#4a2e12"/>
+              <stop offset="100%" stop-color="#1a1208"/>
+            </radialGradient>
+          </defs>
+          <rect width="800" height="500" fill="url(#blogHeroGrad)"/>
+          <!-- Tissu drapé -->
+          <path d="M0 0 Q200 80 400 40 Q600 0 800 60 L800 200 Q600 140 400 180 Q200 220 0 160Z" fill="rgba(184,151,106,0.12)"/>
+          <path d="M0 150 Q200 230 400 190 Q600 150 800 210 L800 350 Q600 290 400 330 Q200 370 0 310Z" fill="rgba(184,151,106,0.08)"/>
+          <!-- Silhouette élégante -->
+          <ellipse cx="580" cy="160" rx="28" ry="34" fill="rgba(196,154,114,0.7)"/>
+          <path d="M555 195 Q558 240 552 320 L565 325 Q580 250 595 320 L608 315 Q602 240 605 195 Q595 188 580 186 Q565 188 555 195Z" fill="rgba(80,50,25,0.8)"/>
+          <!-- Robe longue -->
+          <path d="M552 280 Q540 380 530 480 L630 480 Q620 380 608 280Z" fill="rgba(60,38,18,0.7)"/>
+          <!-- Détails couture sur la robe -->
+          <path d="M560 290 Q570 285 580 290 Q590 295 600 290" stroke="rgba(184,151,106,0.5)" stroke-width="1" fill="none"/>
+          <!-- Lumière sur fond -->
+          <ellipse cx="200" cy="250" rx="300" ry="200" fill="rgba(255,200,120,0.06)"/>
+          <g stroke="rgba(184,151,106,0.08)" stroke-width="0.8" fill="none">
+            <line x1="0" y1="100" x2="500" y2="80"/>
+            <line x1="0" y1="200" x2="500" y2="180"/>
+            <line x1="0" y1="300" x2="500" y2="280"/>
+            <line x1="0" y1="400" x2="500" y2="380"/>
+          </g>
+        </svg>
+      </div>
+      <div class="blog-featured-overlay"></div>
+      <div class="blog-featured-content">
+        <div class="blog-cat">Mode & Élégance</div>
+        <h3 class="blog-featured-title">Quand l'élégance renaît : le moment où la mode respire à nouveau</h3>
+        <div class="blog-featured-date">5 avril 2026</div>
+        <a class="blog-read" href="#">Lire l'article</a>
+      </div>
+    </div>
+    <div class="blog-list">
+      <a class="blog-item reveal reveal-delay-1" href="#" onclick="openArticle('luxe','Haute couture','Pourquoi le luxe prend son temps : les secrets de la haute couture','5 avril 2026');return false;">
+        <div class="blog-item-num">02</div>
+        <div class="blog-item-body">
+          <div class="blog-item-cat">Haute couture</div>
+          <div class="blog-item-title">Pourquoi le luxe prend son temps : les secrets de la haute couture</div>
+          <div class="blog-item-date">5 avril 2026</div>
+        </div>
+      </a>
+      <a class="blog-item reveal reveal-delay-2" href="#" onclick="openArticle('morpho-h','Morphologie','Connaître la morphologie masculine','1 avril 2026');return false;">
+        <div class="blog-item-num">03</div>
+        <div class="blog-item-body">
+          <div class="blog-item-cat">Morphologie</div>
+          <div class="blog-item-title">Connaître la morphologie masculine</div>
+          <div class="blog-item-date">1 avril 2026</div>
+        </div>
+      </a>
+      <a class="blog-item reveal reveal-delay-3" href="#" onclick="openArticle('morpho-f','Morphologie','Connaître sa morphologie en tant que femme','26 mars 2026');return false;">
+        <div class="blog-item-num">04</div>
+        <div class="blog-item-body">
+          <div class="blog-item-cat">Morphologie</div>
+          <div class="blog-item-title">Connaître sa morphologie en tant que femme</div>
+          <div class="blog-item-date">26 mars 2026</div>
+        </div>
+      </a>
+      <a class="blog-item reveal reveal-delay-4" href="#" onclick="openArticle('maro','Maroquinerie','Votre maroquinerie personnalisée','19 mars 2026');return false;">
+        <div class="blog-item-num">05</div>
+        <div class="blog-item-body">
+          <div class="blog-item-cat">Maroquinerie</div>
+          <div class="blog-item-title">Votre maroquinerie personnalisée</div>
+          <div class="blog-item-date">19 mars 2026</div>
+        </div>
+      </a>
+      <a class="blog-item reveal reveal-delay-4" href="#" onclick="openArticle('process','Sur-mesure','Le process pour créer votre vêtement ensemble','19 mars 2026');return false;">
+        <div class="blog-item-num">06</div>
+        <div class="blog-item-body">
+          <div class="blog-item-cat">Sur-mesure</div>
+          <div class="blog-item-title">Le process pour créer votre vêtement ensemble</div>
+          <div class="blog-item-date">19 mars 2026</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─ INSTAGRAM ─ -->
+<section class="section instagram reveal">
+  <div class="insta-head">
+    <div>
+      <div class="sec-label">Univers</div>
+      <h2 class="sec-title sec-title-anim" style="font-size:32px;">Suivez-nous</h2>
+    </div>
+    <a class="insta-handle" href="https://www.instagram.com/detitiakikine" target="_blank">@detitiakikine</a>
+  </div>
+  <div class="insta-embed-wrap">
+    <div class="insta-embed-notice">
+      <p style="margin-bottom:14px;font-size:14px;font-family:'Cormorant Garamond',serif;font-style:italic;">Retrouvez nos créations au fil des jours sur Instagram.</p>
+      <p style="margin-bottom:20px;">Pour visualiser notre galerie directement ici, ajoutez un widget Instagram via un service tel que <a href="https://embedsocial.com" target="_blank">EmbedSocial</a> ou <a href="https://lightwidget.com" target="_blank">LightWidget</a> et collez le code d'intégration à cet emplacement.</p>
+      <a href="https://www.instagram.com/detitiakikine" target="_blank" style="display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--parch);padding:12px 28px;text-decoration:none;font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-family:'Jost',sans-serif;border:none;">
+        ↗ Voir notre Instagram
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─ CONTACT ─ -->
+<section class="section contact reveal" id="contact">
+  <div class="sec-label">Atelier</div>
+  <h2 class="sec-title sec-title-anim">Entrons en<br>conversation</h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-detail-block reveal reveal-delay-1">
+        <div class="contact-detail-label">Email</div>
+        <div class="contact-detail-val"><a href="mailto:contact@detitiakikine.fr">contact@detitiakikine.fr</a></div>
+      </div>
+      <div class="contact-separator"></div>
+      <div class="contact-detail-block reveal reveal-delay-2">
+        <div class="contact-detail-label">Adresse</div>
+        <div class="contact-detail-val">3 rue du Vieux Pont<br>43410 Lempdes sur Allagnon</div>
+      </div>
+      <div class="contact-separator"></div>
+      <div class="contact-detail-block reveal reveal-delay-3">
+        <div class="contact-detail-label">Consultations</div>
+        <div class="contact-detail-val">Sur rendez-vous uniquement<br>En visioconférence ou en atelier</div>
+      </div>
+    </div>
+    <div class="contact-form-side">
+      <div class="sec-label reveal" style="margin-bottom:28px;">Prendre rendez-vous</div>
+      <div class="form-row">
+        <div class="form-group reveal reveal-delay-1">
+          <label>Prénom</label>
+          <input type="text" placeholder="Votre prénom">
+        </div>
+        <div class="form-group reveal reveal-delay-2">
+          <label>Nom</label>
+          <input type="text" placeholder="Votre nom">
+        </div>
+      </div>
+      <div class="form-group reveal reveal-delay-2">
+        <label>Email</label>
+        <input type="email" placeholder="votre@email.fr">
+      </div>
+      <div class="form-group reveal reveal-delay-3">
+        <label>Désir de création</label>
+        <input type="text" placeholder="Bilan, vêtement sur-mesure, maroquinerie…">
+      </div>
+      <div class="form-group reveal reveal-delay-3">
+        <label>Votre projet</label>
+        <textarea placeholder="Décrivez votre vision en quelques mots…"></textarea>
+      </div>
+      <button class="form-submit reveal reveal-delay-4">Envoyer ma demande</button>
+    </div>
+  </div>
+</section>
+
+<!-- ─ FOOTER ─ -->
+<footer>
+  <div class="footer-main">
+    <div>
+      <div class="footer-brand-name">De Titi à Kikine</div>
+      <p class="footer-tagline">
+        Là où chaque fil tient une promesse,<br>
+        et chaque pièce raconte votre histoire.
+      </p>
+      <div class="footer-newsletter">
+        <label>Lettres de l'atelier — Restez inspiré</label>
+        <div class="footer-newsletter-row">
+          <input type="email" placeholder="Votre adresse email">
+          <button>S'abonner</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigation</div>
+      <ul class="footer-links">
+        <li><a href="#">Accueil</a></li>
+        <li><a href="#about">À propos</a></li>
+        <li><a href="#services">Créations</a></li>
+        <li><a href="#prix">Tarifs</a></li>
+        <li><a href="#vip">Atelier Privé</a></li>
+        <li><a href="#blog">Journal</a></li>
+        <li><a href="#avis">Témoignages</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <ul class="footer-links">
+        <li><a href="mailto:contact@detitiakikine.fr">contact@detitiakikine.fr</a></li>
+        <li><a href="#">3 rue du Vieux Pont</a></li>
+        <li><a href="#">43410 Lempdes sur Allagnon</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Informations</div>
+      <ul class="footer-links">
+        <li><a href="#">Mentions légales</a></li>
+        <li><a href="#">Confidentialité</a></li>
+        <li><a href="#">CGV</a></li>
+        <li><a href="#">CGU</a></li>
+        <li><a href="#">Cookies</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 De Titi à Kikine. Tous droits réservés.</span>
+    <span class="footer-mention">Chaque pièce, une promesse tenue.</span>
+  </div>
+</footer>
+
+</div><!-- end main-site -->
+
+<script>
+  // ─── CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+    setTimeout(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top  = e.clientY + 'px';
+    }, 60);
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width  = '10px'; cursor.style.height = '10px';
+      ring.style.width    = '48px'; ring.style.height   = '48px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width  = '6px'; cursor.style.height = '6px';
+      ring.style.width    = '32px'; ring.style.height   = '32px';
+    });
+  });
+
+  // ─── NAV SCROLL COLOR TRANSITION
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+
+  // ─── SCROLL REVEAL
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+        // Trigger letter animation if applicable
+        if (e.target.classList.contains('sec-title-anim')) {
+          animateLetters(e.target);
+        }
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ─── LETTER-BY-LETTER TITLE ANIMATION
+  function wrapLetters(el) {
+    const nodes = Array.from(el.childNodes);
+    nodes.forEach(node => {
+      if (node.nodeType === 3) { // text node
+        const text = node.textContent;
+        const wrapped = text.split('').map((ch, i) => {
+          if (ch === ' ') return '<span style="display:inline-block;width:.25em;"></span>';
+          return `<span class="letter-wrap"><span style="transition-delay:${i * 0.03}s">${ch}</span></span>`;
+        }).join('');
+        const span = document.createElement('span');
+        span.innerHTML = wrapped;
+        node.parentNode.replaceChild(span, node);
+      }
+    });
+  }
+  function animateLetters(el) {
+    el.querySelectorAll('.letter-wrap span').forEach(s => {
+      s.style.transform = 'translateY(0)';
+    });
+  }
+  document.querySelectorAll('.sec-title-anim').forEach(el => wrapLetters(el));
+
+  // ─── PARALLAX
+  window.addEventListener('scroll', () => {
+    const sy = window.scrollY;
+    const hero = document.getElementById('heroParallax');
+    if (hero) {
+      hero.style.transform = `scale(1.04) translateY(${sy * 0.08}px)`;
+    }
+    document.querySelectorAll('.parallax-img').forEach(img => {
+      const rect = img.closest('section') ? img.closest('section').getBoundingClientRect() : null;
+      if (rect && rect.top < window.innerHeight && rect.bottom > 0) {
+        const offset = (window.innerHeight - rect.top) * 0.06;
+        if (img.id !== 'heroParallax') img.style.transform = `translateY(${offset}px)`;
+      }
+    });
+  });
+
+  // ─── PRICING TABS
+  function showPricingTab(tab, btn) {
+    document.querySelectorAll('.pricing-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ─── BLOG ARTICLE SYSTEM
+  const articles = {
+    elegance: {
+      lead: "L'élégance n'a jamais disparu. Elle a simplement choisi de respirer autrement — dans le geste juste, la matière choisie, la ligne qui s'impose sans chercher à convaincre.",
+      content: `<p class="article-text">Il y a des moments dans l'histoire de la mode où l'on sent que quelque chose se dépose. Les silhouettes se calment. Les couleurs retrouvent leur densité. Les matières reprennent leurs droits sur l'image.</p>
+      <h2>La lenteur comme posture</h2>
+      <p class="article-text">Ce n'est pas un retour en arrière. C'est une manière de réaffirmer que la beauté n'a pas besoin de se justifier. Qu'un vêtement bien coupé, porté par quelqu'un qui se sent juste en lui, est en soi une déclaration.</p>
+      <div class="article-quote"><p>"La ligne juste n'est pas celle qui suit la tendance — c'est celle qui révèle qui vous êtes."</p></div>
+      <p class="article-text">Chez De Titi à Kikine, cette conviction guide chaque création. Comprendre votre morphologie, votre colorimétrie, votre façon d'habiter l'espace — et de là, dessiner ce qui s'impose comme une évidence.</p>
+      <h2>L'élégance est personnelle</h2>
+      <p class="article-text">Elle ne réside pas dans un prix, une étiquette, ou un défilé. Elle naît d'une cohérence entre soi et ce que l'on porte. C'est ce que nous cherchons dans chaque pièce — cette justesse tranquille qui fait que l'on n'a plus à se demander si l'on est bien habillé.</p>`
+    },
+    luxe: {
+      lead: "Dans un monde où tout s'accélère, la haute couture choisit délibérément la lenteur. Non par nostalgie, mais parce que la perfection exige du temps.",
+      content: `<p class="article-text">Une veste sur-mesure prend plusieurs semaines à naître. Entre l'analyse des mensurations, le choix du tissu, les essayages imaginaires à distance, les ajustements, et la réalisation finale — chaque étape est irremplaçable.</p>
+      <h2>Le temps comme matière première</h2>
+      <p class="article-text">Le luxe véritable n'est pas dans l'ostentation. Il est dans l'attention portée à chaque détail, la qualité des mains qui travaillent, la persistance du soin jusqu'à la dernière couture.</p>
+      <div class="article-quote"><p>"Ce que vous portez devrait durer — pas seulement dans le tissu, mais dans la façon dont il vous accompagne."</p></div>
+      <p class="article-text">C'est pourquoi nous refusons les raccourcis. Le processus de création chez De Titi à Kikine est une conversation — continue, attentive, patiente. Parce que le résultat mérite ce respect.</p>`
+    },
+    'morpho-h': {
+      lead: "Comprendre sa morphologie, c'est arrêter de se battre contre son corps pour commencer à l'habiller avec intelligence et bienveillance.",
+      content: `<p class="article-text">La morphologie masculine se décline en plusieurs profils : trapèze, rectangle, triangle inversé, ovale... Chaque silhouette a ses atouts, ses zones à équilibrer, ses lignes à valoriser.</p>
+      <h2>Épaules, taille, hanches : le triangle fondateur</h2>
+      <p class="article-text">L'objectif n'est jamais de « corriger » quoi que ce soit — mais de créer une harmonie visuelle qui met en valeur la stature naturelle. Un col, une épaule structurée, une coupe de pantalon : les détails font tout.</p>
+      <div class="article-quote"><p>"Le vêtement n'est pas là pour déguiser. Il est là pour révéler."</p></div>
+      <p class="article-text">Lors de notre bilan morphologique, nous analysons votre silhouette en profondeur pour définir les coupes, les volumes et les proportions qui vous correspondent le mieux.</p>`
+    },
+    'morpho-f': {
+      lead: "Connaître sa morphologie féminine, c'est accéder à une forme de liberté — celle de savoir, enfin, ce qui vous met en lumière.",
+      content: `<p class="article-text">Sablier, H, A, V, O... les morphologies féminines sont aussi diverses que les femmes elles-mêmes. Ce qui compte n'est pas d'entrer dans une case, mais de comprendre comment les lignes de votre corps dialoguent avec celles du vêtement.</p>
+      <h2>L'harmonie des proportions</h2>
+      <p class="article-text">Une encolure bien choisie, une ceinture placée au bon endroit, une longueur pensée pour votre hauteur : ces choix ne relèvent pas du hasard. Ils résultent d'une lecture fine de votre silhouette.</p>
+      <div class="article-quote"><p>"Le vêtement parfait n'existe pas. Mais celui qui vous correspond, oui."</p></div>
+      <p class="article-text">Chez De Titi à Kikine, chaque bilan morphologique et colorimétrique est un moment de découverte — pour vous comprendre autrement, et habiller cette compréhension.</p>`
+    },
+    maro: {
+      lead: "Une pièce de maroquinerie sur-mesure, c'est bien plus qu'un accessoire. C'est un objet choisi, façonné, pensé pour traverser les années avec vous.",
+      content: `<p class="article-text">Le cuir a cette particularité rare : il vieillit bien. Avec le temps, il se patine, il prend votre empreinte, il devient véritablement vôtre. C'est pourquoi nous prenons tant de soin dans sa sélection.</p>
+      <h2>Le choix du cuir</h2>
+      <p class="article-text">Grain, souplesse, épaisseur, couleur, teinture — chaque variable est discutée ensemble. Le cuir que vous choisissez doit s'accorder à votre quotidien, à vos couleurs naturelles, à ce que vous souhaitez qu'il évoque.</p>
+      <div class="article-quote"><p>"Une belle pièce de maroquinerie se choisit pour toute une vie — pas pour une saison."</p></div>
+      <p class="article-text">Nos portefeuilles, sacs et accessoires sont tous réalisés à la main, dans notre atelier. Chaque couture est une décision — et chaque décision est la vôtre.</p>`
+    },
+    process: {
+      lead: "Créer un vêtement ensemble, c'est une aventure à plusieurs voix. La vôtre, la nôtre — et celle du tissu qui finit par parler à son tour.",
+      content: `<p class="article-text">Tout commence par une conversation. Pas un formulaire, pas une liste de cases à cocher — une vraie discussion sur qui vous êtes, comment vous vous habillez, ce que vous cherchez à changer ou à affirmer.</p>
+      <h2>Les cinq étapes de La Ligne Juste</h2>
+      <p class="article-text"><strong>1. Compréhension</strong> — Analyse morphologique et colorimétrique approfondie. Nous prenons le temps de vous lire.</p>
+      <p class="article-text"><strong>2. Traduction</strong> — Vos caractéristiques deviennent des intentions stylistiques. Lignes, volumes, couleurs.</p>
+      <p class="article-text"><strong>3. Création</strong> — Croquis, modélisation, échanges. La pièce se dessine, s'ajuste, se précise.</p>
+      <p class="article-text"><strong>4. Réalisation</strong> — Les mains au travail. Chaque couture, chaque finition, chaque détail.</p>
+      <div class="article-quote"><p>"Une pièce réussie ne surprend pas. Elle s'impose, simplement — comme si elle avait toujours été là."</p></div>
+      <p class="article-text"><strong>5. L'évidence</strong> — Vous recevez votre création. Et vous comprenez pourquoi ça ne pouvait être que ça.</p>`
+    }
+  };
+
+  function openArticle(id, cat, title, date) {
+    const data = articles[id];
+    if (!data) return;
+    document.getElementById('articleCat').textContent = cat;
+    document.getElementById('articleTitle').textContent = title;
+    document.getElementById('articleDate').textContent = date;
+    document.getElementById('articleLead').textContent = data.lead;
+    document.getElementById('articleContent').innerHTML = data.content;
+    document.getElementById('articlePage').classList.add('active');
+    document.getElementById('mainSite').classList.add('hidden');
+    window.scrollTo(0, 0);
+  }
+  function closeArticle() {
+    document.getElementById('articlePage').classList.remove('active');
+    document.getElementById('mainSite').classList.remove('hidden');
+  }
+  // Make blog featured clickable
+  document.querySelector('.blog-featured')?.addEventListener('click', function() {
+    openArticle('elegance','Mode & Élégance','Quand l\'élégance renaît : le moment où la mode respire à nouveau','5 avril 2026');
+  });
+</script>
+</body>
+</html>
