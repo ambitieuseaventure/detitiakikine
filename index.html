@@ -72,6 +72,10 @@
   .nav-links {
     display: flex; gap: 32px; list-style: none;
   }
+  .nav-actions {
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+  }
   .nav-links a {
     font-size: 9px; letter-spacing: .24em; text-transform: uppercase;
     color: var(--muted); text-decoration: none;
@@ -95,6 +99,153 @@
     transition: background .3s, color .3s;
   }
   .nav-cta:hover { background: var(--gold); color: var(--ink); }
+  .nav-client-btn {
+    font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--ink); background: transparent;
+    padding: 10px 18px; border: 1px solid var(--rule); cursor: pointer;
+    font-family: 'Jost', sans-serif; font-weight: 300;
+    transition: border-color .3s, color .3s, background .3s;
+  }
+  .nav-client-btn:hover { border-color: var(--gold); color: var(--gold); }
+  nav.scrolled .nav-client-btn {
+    color: var(--parch);
+    border-color: rgba(245,240,232,.25);
+  }
+  nav.scrolled .nav-client-btn:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+  @media (max-width: 1280px) {
+    .nav-links { display: none; }
+    nav { padding: 0 24px; }
+  }
+
+  /* ─── ESPACE CLIENT ─── */
+  .client-space {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(circle at 85% 15%, rgba(184,151,106,.16), transparent 45%),
+      linear-gradient(135deg, #1d1814 0%, #13100d 100%);
+    z-index: 400;
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s ease;
+    display: block;
+    padding: 0;
+  }
+  .client-space.active { opacity: 1; pointer-events: auto; }
+  .client-panel {
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    background: transparent;
+    color: var(--parch);
+  }
+  .client-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 36px;
+    border-bottom: 1px solid rgba(184,151,106,.22);
+    background: rgba(19,16,13,.7);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .client-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px; font-weight: 400;
+    color: var(--parch);
+  }
+  .client-close {
+    border: 1px solid rgba(184,151,106,.3); background: transparent;
+    color: rgba(245,240,232,.7); width: 34px; height: 34px; cursor: pointer;
+    transition: border-color .2s, color .2s;
+  }
+  .client-close:hover { border-color: var(--gold); color: var(--gold); }
+  .client-login {
+    padding: 56px 60px;
+    display: grid; grid-template-columns: 1.2fr .8fr;
+    gap: 30px;
+    min-height: calc(100vh - 88px);
+    align-content: center;
+  }
+  .client-login-card {
+    background: rgba(245,240,232,.96);
+    color: var(--ink);
+    border: 1px solid rgba(184,151,106,.3);
+    padding: 34px;
+  }
+  .client-field { margin-bottom: 16px; }
+  .client-field label {
+    display: block;
+    font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  .client-field input, .client-field textarea, .client-field select {
+    width: 100%; border: 1px solid rgba(184,151,106,.24);
+    background: #fff; padding: 12px 14px;
+    font-family: 'Jost', sans-serif; font-size: 12px;
+  }
+  .client-btn {
+    border: none; background: var(--ink); color: var(--parch);
+    padding: 12px 20px;
+    font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+    font-family: 'Jost', sans-serif; cursor: pointer;
+  }
+  .client-btn:hover { background: var(--gold); color: var(--ink); }
+  .client-note {
+    font-size: 12px; color: var(--muted); line-height: 1.8;
+  }
+  .client-demo {
+    margin-top: 14px;
+    border-left: 1px solid var(--gold); padding-left: 14px;
+    font-size: 12px; color: #5e4f3f; line-height: 1.8;
+  }
+  .client-error {
+    margin-top: 10px;
+    font-size: 12px; color: #8a2f2f;
+    min-height: 20px;
+  }
+  .client-app { display: none; }
+  .client-app.active { display: block; }
+  .client-tabs {
+    padding: 16px 36px 0;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    border-bottom: 1px solid rgba(184,151,106,.22);
+  }
+  .client-tab {
+    border: 1px solid rgba(184,151,106,.24);
+    background: rgba(245,240,232,.05); color: rgba(245,240,232,.72);
+    padding: 12px 16px; cursor: pointer; border-radius: 999px;
+    font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
+    font-family: 'Jost', sans-serif;
+  }
+  .client-tab.active {
+    color: var(--ink); border-color: var(--gold); background: var(--gold);
+  }
+  .client-tab-content { padding: 28px 36px 40px; }
+  .client-view { display: none; }
+  .client-view.active { display: block; }
+  .client-cards {
+    display: grid; grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 14px;
+  }
+  .client-card {
+    border: 1px solid rgba(184,151,106,.28);
+    background: rgba(245,240,232,.97);
+    padding: 22px;
+    color: var(--ink);
+  }
+  .client-card h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 400; margin-bottom: 8px;
+  }
+  .client-card p { font-size: 12px; color: var(--muted); line-height: 1.8; }
+  @media (max-width: 900px) {
+    .client-login { grid-template-columns: 1fr; padding: 26px; min-height: auto; }
+    .client-cards { grid-template-columns: 1fr; }
+    .client-tab-content { padding: 22px 20px 30px; }
+    .client-head, .client-tabs { padding-left: 20px; padding-right: 20px; }
+  }
 
   /* ─── HERO ─── */
   .hero {
@@ -105,8 +256,8 @@
   .hero-left {
     background: var(--ink);
     display: flex; flex-direction: column;
-    justify-content: flex-end;
-    padding: 120px 64px 80px;
+    justify-content: center;
+    padding: 80px 64px;
     position: relative;
     overflow: hidden;
   }
@@ -189,12 +340,14 @@
     background: var(--ink);
     overflow: hidden;
   }
+  .hero-right-photo img,
   .hero-right-photo svg {
     width: 100%; height: 100%;
     object-fit: cover;
     transform: scale(1.04);
     transition: transform 8s ease;
   }
+  .hero-right-photo:hover img,
   .hero-right-photo:hover svg { transform: scale(1); }
   /* Parallax layer */
   .hero-right-overlay {
@@ -229,7 +382,7 @@
     border: 1px solid rgba(184,151,106,.25); border-radius: 50%;
   }
   .hero-logo-circle img {
-    width: 110px; height: 110px; object-fit: contain;
+    width: 148px; height: 148px; object-fit: contain;
     filter: brightness(10);
   }
   .hero-right-accroche {
@@ -238,6 +391,7 @@
     color: rgba(245,240,232,.85);
     letter-spacing: .04em; text-align: center;
     max-width: 260px; line-height: 1.6;
+    margin-top: 14px;
     text-shadow: 0 2px 12px rgba(0,0,0,.4);
   }
   /* bottom bar */
@@ -352,11 +506,11 @@
   }
 
   /* ─── À PROPOS ─── */
-  .about { background: var(--parch); }
+  .about { background: var(--parch); padding-top: 48px; }
   .about-grid {
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 100px; align-items: center;
-    margin-top: 80px;
+    margin-top: 40px;
   }
   .about-img-frame {
     position: relative;
@@ -1238,7 +1392,10 @@
     <li><a href="#avis">Avis</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Prendre RDV</button>
+  <div class="nav-actions">
+    <button class="nav-client-btn" onclick="openClientSpace()">Espace client</button>
+    <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Prendre RDV</button>
+  </div>
 </nav>
 
 <!-- ─ HERO ─ -->
@@ -1833,6 +1990,94 @@
 
 </div><!-- end main-site -->
 
+<!-- ─ ESPACE CLIENT ─ -->
+<div class="client-space" id="clientSpace" aria-hidden="true">
+  <div class="client-panel">
+    <div class="client-head">
+      <div class="client-title">Espace Client</div>
+      <button class="client-close" onclick="closeClientSpace()" aria-label="Fermer">✕</button>
+    </div>
+
+    <div class="client-login" id="clientLogin">
+      <div class="client-login-card">
+        <div class="sec-label" style="margin-bottom:16px;">Connexion</div>
+        <h3 class="sec-title" style="font-size:34px;margin-bottom:14px;">Accéder à<br>votre espace privé</h3>
+        <div class="client-field">
+          <label for="clientIdentifiant">Identifiant</label>
+          <input id="clientIdentifiant" type="text" placeholder="Votre identifiant">
+        </div>
+        <div class="client-field">
+          <label for="clientCode">Code d'accès</label>
+          <input id="clientCode" type="password" placeholder="Votre code d'accès">
+        </div>
+        <button class="client-btn" onclick="loginClient()">Se connecter</button>
+        <div class="client-error" id="clientError"></div>
+      </div>
+      <div class="client-login-card">
+        <div class="sec-label" style="margin-bottom:16px;">Démo</div>
+        <p class="client-note">Un accès de démonstration est disponible pour tester le parcours client sans créer de compte.</p>
+        <div class="client-demo">
+          <div><strong>Identifiant :</strong> demo-client</div>
+          <div><strong>Code :</strong> kikine2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="client-app" id="clientApp">
+      <div class="client-tabs">
+        <button class="client-tab active" onclick="showClientTab('historique', this)">Historique</button>
+        <button class="client-tab" onclick="showClientTab('favoris', this)">Mes favoris</button>
+        <button class="client-tab" onclick="showClientTab('profil', this)">Mon profil</button>
+        <button class="client-tab" onclick="showClientTab('avis', this)">Laisser un avis</button>
+        <button class="client-tab" onclick="showClientTab('rdv', this)">Prendre un rdv</button>
+      </div>
+      <div class="client-tab-content">
+        <div class="client-view active" id="client-historique">
+          <div class="client-cards">
+            <div class="client-card"><h4>Historique #01</h4><p>Bilan morphologique & colorimétrique — 22 février 2026.</p></div>
+            <div class="client-card"><h4>Historique #02</h4><p>Commande « Veste sur-mesure » — livraison prévue le 18 mai 2026.</p></div>
+          </div>
+        </div>
+        <div class="client-view" id="client-favoris">
+          <div class="client-cards">
+            <div class="client-card"><h4>Favori</h4><p>Pack Héritage — association veste + maroquinerie, en cuir brun profond.</p></div>
+            <div class="client-card"><h4>Favori</h4><p>Palette « Automne doux » enregistrée dans votre carnet de style.</p></div>
+          </div>
+        </div>
+        <div class="client-view" id="client-profil">
+          <div class="client-login-card" style="padding:0;border:none;background:transparent;">
+            <div class="client-field"><label>Nom complet</label><input type="text" value="Client Démo"></div>
+            <div class="client-field"><label>Email</label><input type="email" value="demo@detitiakikine.fr"></div>
+            <div class="client-field"><label>Téléphone</label><input type="text" value="+33 6 12 34 56 78"></div>
+            <button class="client-btn">Enregistrer</button>
+          </div>
+        </div>
+        <div class="client-view" id="client-avis">
+          <div class="client-login-card" style="padding:0;border:none;background:transparent;">
+            <div class="client-field">
+              <label>Votre note</label>
+              <select><option>★★★★★</option><option>★★★★☆</option><option>★★★☆☆</option></select>
+            </div>
+            <div class="client-field">
+              <label>Votre avis</label>
+              <textarea rows="5" placeholder="Partagez votre expérience avec la maison..."></textarea>
+            </div>
+            <button class="client-btn">Publier mon avis</button>
+          </div>
+        </div>
+        <div class="client-view" id="client-rdv">
+          <div class="client-login-card" style="padding:0;border:none;background:transparent;">
+            <div class="client-field"><label>Date souhaitée</label><input type="date"></div>
+            <div class="client-field"><label>Type de rendez-vous</label><select><option>Visioconférence</option><option>Atelier</option></select></div>
+            <div class="client-field"><label>Détails</label><textarea rows="4" placeholder="Décrivez votre besoin pour ce rendez-vous."></textarea></div>
+            <button class="client-btn">Confirmer le rendez-vous</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   // ─── CURSOR
   const cursor = document.getElementById('cursor');
@@ -1927,6 +2172,42 @@
     document.getElementById('tab-' + tab).classList.add('active');
     btn.classList.add('active');
   }
+
+  // ─── ESPACE CLIENT
+  function openClientSpace() {
+    const modal = document.getElementById('clientSpace');
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+  function closeClientSpace() {
+    const modal = document.getElementById('clientSpace');
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+  function loginClient() {
+    const identifiant = document.getElementById('clientIdentifiant').value.trim();
+    const code = document.getElementById('clientCode').value.trim();
+    const error = document.getElementById('clientError');
+    if (identifiant === 'demo-client' && code === 'kikine2026') {
+      document.getElementById('clientLogin').style.display = 'none';
+      document.getElementById('clientApp').classList.add('active');
+      error.textContent = '';
+    } else {
+      error.textContent = 'Identifiants invalides. Utilisez le compte démo indiqué à droite.';
+    }
+  }
+  function showClientTab(tab, btn) {
+    document.querySelectorAll('.client-view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.client-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('client-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
+  document.getElementById('clientSpace')?.addEventListener('click', e => {
+    if (e.target.id === 'clientSpace') closeClientSpace();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeClientSpace();
+  });
 
   // ─── BLOG ARTICLE SYSTEM
   const articles = {
