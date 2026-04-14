@@ -148,6 +148,17 @@
     .btn { border:none; background:var(--ink); color:var(--parch); padding:10px 14px; font-size:9px; letter-spacing:.2em; text-transform:uppercase; cursor:pointer; }
     .btn.ghost { background:transparent; border:1px solid var(--rule); color:var(--ink); }
 
+    .admin-form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:10px; }
+    .admin-form-grid .field.full { grid-column: 1 / -1; }
+    .section-actions { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+    .table-like { border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin-top:14px; }
+    .table-row { display:grid; grid-template-columns:1.3fr .8fr .8fr .6fr; background:#fff; border-top:1px solid var(--rule); }
+    .table-row:first-child { border-top:none; background:#f6f0e4; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#7e705f; }
+    .table-row > div { padding:10px 12px; font-size:12px; color:#625445; }
+    .badge { display:inline-block; padding:4px 8px; border-radius:999px; font-size:9px; letter-spacing:.14em; text-transform:uppercase; border:1px solid var(--rule); }
+    .badge.ok { background:rgba(110,162,96,.16); color:#385f33; border-color:rgba(110,162,96,.35); }
+    .badge.wait { background:rgba(184,151,106,.16); color:#7d5b2d; }
+
     @media (max-width:1100px) {
       .admin-layout { grid-template-columns:1fr; }
       .sidebar { border-right:none; border-bottom:1px solid rgba(184,151,106,.3); }
@@ -189,7 +200,7 @@
     </aside>
 
     <main class="main">
-      <section class="panel active" id="panel-dashboard">
+      <section class="panel active" id="panel-dashboard" data-storage="dashboard">
         <h1>Tableau de bord</h1><p class="sub">Pilotage de la maison, de l’éditorial et des demandes clients.</p>
         <div class="stats">
           <div class="stat"><div class="lbl">Articles publiés</div><div class="val">6</div></div>
@@ -197,59 +208,155 @@
           <div class="stat"><div class="lbl">Newsletters planifiées</div><div class="val">3</div></div>
         </div>
       </section>
-      <section class="panel" id="panel-articles"><h1>Articles</h1><p class="sub">Gestion des contenus éditoriaux.</p></section>
-      <section class="panel" id="panel-services"><h1>Services</h1><p class="sub">Contenus des prestations.</p></section>
-      <section class="panel" id="panel-tarifs"><h1>Tarifs</h1><p class="sub">Gestion des grilles prix.</p></section>
-      <section class="panel" id="panel-apropos"><h1>À propos</h1><p class="sub">Édition de la page maison.</p></section>
-      <section class="panel" id="panel-valeurs"><h1>Nos Valeurs</h1><p class="sub">Manifeste de la marque.</p></section>
-      <section class="panel" id="panel-newsletters"><h1>Newsletters</h1><p class="sub">Campagnes et segmentations.</p></section>
-      <section class="panel" id="panel-temoignages"><h1>Témoignages</h1><p class="sub">Validation des avis clients.</p></section>
-      <section class="panel" id="panel-instagram"><h1>Instagram</h1><p class="sub">Programmation des publications.</p></section>
-      <section class="panel" id="panel-messages"><h1>Messages</h1><p class="sub">Gestion de la messagerie entrante.</p></section>
-      <section class="panel" id="panel-utilisateurs"><h1>Utilisateurs</h1><p class="sub">Comptes et permissions.</p></section>
-      <section class="panel" id="panel-parametres"><h1>Paramètres</h1><p class="sub">Réglages généraux de l’admin.</p></section>
 
-      <section class="panel" id="panel-metadonnees">
+      <section class="panel" id="panel-articles" data-storage="articles">
+        <h1>Articles</h1><p class="sub">Création et gestion du journal éditorial.</p>
+        <div class="admin-form-grid">
+          <div class="field"><label>Titre article</label><input name="title" value="Comment porter la coupe parfaite"></div>
+          <div class="field"><label>Slug</label><input name="slug" value="comment-porter-coupe-parfaite"></div>
+          <div class="field"><label>Catégorie</label><select name="category"><option>Mode</option><option>Morphologie</option><option>Maroquinerie</option></select></div>
+          <div class="field"><label>Date publication</label><input name="publish_date" type="date" value="2026-04-20"></div>
+          <div class="field full"><label>Extrait</label><textarea name="excerpt">Un guide pratique pour structurer sa silhouette sans renoncer à son style personnel.</textarea></div>
+        </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button><button class="btn ghost">Publier</button></div>
+        <div class="table-like">
+          <div class="table-row"><div>Titre</div><div>Statut</div><div>Date</div><div>Auteur</div></div>
+          <div class="table-row"><div>Quand l'élégance renaît</div><div><span class="badge ok">Publié</span></div><div>05/04/2026</div><div>Ana J</div></div>
+          <div class="table-row"><div>Le luxe prend son temps</div><div><span class="badge ok">Publié</span></div><div>05/04/2026</div><div>Ana J</div></div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-services" data-storage="services">
+        <h1>Services</h1><p class="sub">Mettez à jour les prestations de la maison.</p>
+        <div class="admin-form-grid">
+          <div class="field"><label>Service principal</label><input name="service_main" value="Création sur-mesure"></div>
+          <div class="field"><label>Service secondaire</label><input name="service_secondary" value="Maroquinerie personnalisée"></div>
+          <div class="field full"><label>Description</label><textarea name="service_desc">Accompagnement personnalisé de la première intention à la livraison finale.</textarea></div>
+        </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button></div>
+      </section>
+
+      <section class="panel" id="panel-tarifs" data-storage="tarifs">
+        <h1>Tarifs</h1><p class="sub">Gestion des prix et formules.</p>
+        <div class="admin-form-grid">
+          <div class="field"><label>Entrée de gamme</label><input name="entry" value="115"></div>
+          <div class="field"><label>Pack Héritage</label><input name="pack" value="-10%"></div>
+          <div class="field"><label>Monnaie</label><select name="currency"><option>EUR (€)</option><option>USD ($)</option></select></div>
+          <div class="field"><label>Mise à jour</label><input name="updated" type="date" value="2026-04-14"></div>
+        </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button></div>
+      </section>
+
+      <section class="panel" id="panel-apropos" data-storage="apropos">
+        <h1>À propos</h1><p class="sub">Texte éditorial de la maison.</p>
+        <div class="admin-form-grid">
+          <div class="field full"><label>Texte principal</label><textarea name="about_text">De Titi à Kikine est une maison de création dédiée à l’expression intime de l’élégance...</textarea></div>
+        </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button></div>
+      </section>
+
+      <section class="panel" id="panel-valeurs" data-storage="valeurs">
+        <h1>Nos Valeurs</h1><p class="sub">Piliers de marque.</p>
+        <div class="admin-form-grid">
+          <div class="field"><label>Valeur #1</label><input name="v1" value="Exigence"></div>
+          <div class="field"><label>Valeur #2</label><input name="v2" value="Écoute"></div>
+          <div class="field"><label>Valeur #3</label><input name="v3" value="Transmission"></div>
+          <div class="field"><label>Valeur #4</label><input name="v4" value="Intemporalité"></div>
+        </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button></div>
+      </section>
+
+      <section class="panel" id="panel-newsletters" data-storage="newsletters">
+        <h1>Newsletters</h1><p class="sub">Pilotage des campagnes.</p>
+        <div class="admin-form-grid">
+          <div class="field"><label>Objet</label><input name="subject" value="Les nouveautés de l'atelier"></div>
+          <div class="field"><label>Date d'envoi</label><input type="date" name="send_date" value="2026-04-22"></div>
+          <div class="field full"><label>Message</label><textarea name="body">Découvrez les nouvelles créations et les coulisses de l’atelier.</textarea></div>
+        </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button><button class="btn ghost">Programmer</button></div>
+      </section>
+
+      <section class="panel" id="panel-temoignages" data-storage="temoignages">
+        <h1>Témoignages</h1><p class="sub">Validation/modération des avis.</p>
+        <div class="table-like">
+          <div class="table-row"><div>Auteur</div><div>Note</div><div>Statut</div><div>Action</div></div>
+          <div class="table-row"><div>Elian Prevot</div><div>★★★★★</div><div><span class="badge ok">Publié</span></div><div>Modifier</div></div>
+          <div class="table-row"><div>Cliente atelier</div><div>★★★★☆</div><div><span class="badge wait">En attente</span></div><div>Valider</div></div>
+        </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button></div>
+      </section>
+
+      <section class="panel" id="panel-instagram" data-storage="instagram">
+        <h1>Instagram</h1><p class="sub">Gestion du flux visuel affiché.</p>
+        <div class="admin-form-grid">
+          <div class="field"><label>Compte</label><input name="account" value="@detitiakikine"></div>
+          <div class="field"><label>Mode d’affichage</label><select name="display"><option>Galerie interne</option><option>Lien externe</option></select></div>
+          <div class="field full"><label>Lien profil</label><input name="link" value="https://www.instagram.com/detitiakikine"></div>
+        </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button></div>
+      </section>
+
+      <section class="panel" id="panel-messages" data-storage="messages">
+        <h1>Messages</h1><p class="sub">Traitement des demandes reçues.</p>
+        <div class="table-like">
+          <div class="table-row"><div>Client</div><div>Sujet</div><div>Priorité</div><div>Statut</div></div>
+          <div class="table-row"><div>Sylvie P.</div><div>Retouche prototype</div><div>Haute</div><div>Ouvert</div></div>
+          <div class="table-row"><div>Camille A.</div><div>Demande rdv</div><div>Normale</div><div>Répondu</div></div>
+        </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button></div>
+      </section>
+
+      <section class="panel" id="panel-utilisateurs" data-storage="utilisateurs">
+        <h1>Utilisateurs</h1><p class="sub">Gestion des comptes et rôles.</p>
+        <div class="admin-form-grid">
+          <div class="field"><label>Nom</label><input name="user_name" value="Ana J"></div>
+          <div class="field"><label>Rôle</label><select name="role"><option>Admin</option><option>Éditeur</option><option>Support</option></select></div>
+          <div class="field"><label>Email</label><input name="email" value="admin@detitiakikine.fr"></div>
+          <div class="field"><label>Statut</label><select name="status"><option>Actif</option><option>Suspendu</option></select></div>
+        </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button></div>
+      </section>
+
+      <section class="panel" id="panel-parametres" data-storage="parametres">
+        <h1>Paramètres</h1><p class="sub">Réglages globaux du site.</p>
+        <div class="admin-form-grid">
+          <div class="field"><label>Nom du site</label><input name="site_name" value="De Titi à Kikine"></div>
+          <div class="field"><label>Email contact</label><input name="site_email" value="contact@detitiakikine.fr"></div>
+          <div class="field"><label>Téléphone</label><input name="phone" value="+33 6 12 34 56 78"></div>
+          <div class="field"><label>Langue</label><select name="lang"><option>Français</option><option>English</option></select></div>
+        </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button></div>
+      </section>
+
+      <section class="panel" id="panel-metadonnees" data-storage="metadonnees">
         <h1>Métadonnées</h1>
         <p class="sub">Mettez à jour les métadonnées SEO pour chaque page du site.</p>
         <div class="meta-list">
           <article class="meta-card">
             <div class="meta-head"><div class="meta-title">index.html</div><span class="meta-tag">Accueil</span></div>
             <div class="meta-grid">
-              <div class="field"><label>Title</label><input value="De Titi à Kikine — Maison de Création"></div>
-              <div class="field"><label>Canonical</label><input value="https://detitiakikine.fr/"></div>
-              <div class="field"><label>Meta description</label><textarea>Maison de création française : sur-mesure, maroquinerie et conseil d’image.</textarea></div>
-              <div class="field"><label>Keywords</label><input value="sur-mesure, maroquinerie, luxe, atelier"></div>
-              <div class="field"><label>OG title</label><input value="De Titi à Kikine — Maison de Création"></div>
-              <div class="field"><label>OG description</label><textarea>Une élégance sur mesure, du premier croquis à la pièce finale.</textarea></div>
+              <div class="field"><label>Title</label><input name="index_title" value="De Titi à Kikine — Maison de Création"></div>
+              <div class="field"><label>Canonical</label><input name="index_canonical" value="https://detitiakikine.fr/"></div>
+              <div class="field"><label>Meta description</label><textarea name="index_desc">Maison de création française : sur-mesure, maroquinerie et conseil d’image.</textarea></div>
+              <div class="field"><label>Keywords</label><input name="index_keywords" value="sur-mesure, maroquinerie, luxe, atelier"></div>
+              <div class="field"><label>OG title</label><input name="index_og_title" value="De Titi à Kikine — Maison de Création"></div>
+              <div class="field"><label>OG description</label><textarea name="index_og_desc">Une élégance sur mesure, du premier croquis à la pièce finale.</textarea></div>
             </div>
-            <div class="actions"><button class="btn">Enregistrer</button><button class="btn ghost">Publier</button></div>
           </article>
-
           <article class="meta-card">
             <div class="meta-head"><div class="meta-title">about.html</div><span class="meta-tag">À propos</span></div>
             <div class="meta-grid">
-              <div class="field"><label>Title</label><input value="À propos — De Titi à Kikine"></div>
-              <div class="field"><label>Canonical</label><input value="https://detitiakikine.fr/about"></div>
-              <div class="field"><label>Meta description</label><textarea>Découvrez la maison De Titi à Kikine et sa méthode signature La Ligne Juste.</textarea></div>
-              <div class="field"><label>Robots</label><select><option>index,follow</option><option>noindex,nofollow</option></select></div>
+              <div class="field"><label>Title</label><input name="about_title" value="À propos — De Titi à Kikine"></div>
+              <div class="field"><label>Canonical</label><input name="about_canonical" value="https://detitiakikine.fr/about"></div>
+              <div class="field"><label>Meta description</label><textarea name="about_desc">Découvrez la maison De Titi à Kikine et sa méthode signature La Ligne Juste.</textarea></div>
+              <div class="field"><label>Robots</label><select name="about_robots"><option>index,follow</option><option>noindex,nofollow</option></select></div>
             </div>
-            <div class="actions"><button class="btn">Enregistrer</button><button class="btn ghost">Publier</button></div>
-          </article>
-
-          <article class="meta-card">
-            <div class="meta-head"><div class="meta-title">blog + articles</div><span class="meta-tag">Journal</span></div>
-            <div class="meta-grid">
-              <div class="field"><label>Template title</label><input value="{Titre article} — De Titi à Kikine"></div>
-              <div class="field"><label>Template canonical</label><input value="https://detitiakikine.fr/{slug}"></div>
-              <div class="field"><label>Meta description par défaut</label><textarea>Réflexions et inspirations de la maison De Titi à Kikine.</textarea></div>
-              <div class="field"><label>OpenGraph image</label><input value="https://detitiakikine.fr/blog.png"></div>
-            </div>
-            <div class="actions"><button class="btn">Enregistrer</button><button class="btn ghost">Appliquer à toutes les pages</button></div>
           </article>
         </div>
+        <div class="section-actions"><button class="btn save-btn">Enregistrer</button><button class="btn ghost">Publier</button></div>
       </section>
     </main>
+
   </div>
 
   <script>
@@ -265,6 +372,40 @@
       document.getElementById('panel-' + name).classList.add('active');
       btn.classList.add('active');
     }
+
+    function savePanel(panel) {
+      const key = panel.dataset.storage;
+      if (!key) return;
+      const data = {};
+      panel.querySelectorAll('input[name], textarea[name], select[name]').forEach(el => {
+        data[el.name] = el.value;
+      });
+      localStorage.setItem('dtk_admin_' + key, JSON.stringify(data));
+      alert('Modifications enregistrées pour : ' + key);
+    }
+
+    function loadPanels() {
+      document.querySelectorAll('.panel[data-storage]').forEach(panel => {
+        const key = panel.dataset.storage;
+        const raw = localStorage.getItem('dtk_admin_' + key);
+        if (!raw) return;
+        try {
+          const data = JSON.parse(raw);
+          panel.querySelectorAll('input[name], textarea[name], select[name]').forEach(el => {
+            if (data[el.name] !== undefined) el.value = data[el.name];
+          });
+        } catch (e) {
+          console.warn('Données admin invalides pour', key);
+        }
+      });
+    }
+
+    document.querySelectorAll('.save-btn').forEach(btn => {
+      btn.addEventListener('click', () => savePanel(btn.closest('.panel')));
+    });
+
+    loadPanels();
   </script>
+
 </body>
 </html>
