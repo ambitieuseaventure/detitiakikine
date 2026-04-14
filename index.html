@@ -820,9 +820,27 @@
     margin-top: 2px;
   }
   .maro-card {
-    background: var(--parch); padding: 40px 36px;
+    background: var(--parch); padding: 26px 26px 30px;
     position: relative; overflow: hidden;
     transition: background .25s;
+  }
+  .maro-media {
+    background: #fff;
+    border: 1px solid rgba(184,151,106,.28);
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    padding: 10px;
+  }
+  .maro-media img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
   }
   .maro-card:hover { background: #fff; }
   .maro-card::after {
@@ -1089,37 +1107,102 @@
     font-size: 10px; letter-spacing: .1em; color: var(--muted);
   }
 
-  /* ─── INSTAGRAM ─── */
+  /* ─── GALERIE PHOTOS ─── */
   .instagram { background: var(--parch); padding-top: 80px; padding-bottom: 80px; }
   .insta-head {
     display: flex; justify-content: space-between; align-items: flex-end;
-    margin-bottom: 48px;
+    margin-bottom: 36px;
   }
-  .insta-handle {
-    font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--muted); text-decoration: none;
-    border-bottom: 1px solid var(--rule); padding-bottom: 4px;
-    transition: color .2s, border-color .2s;
+  .photo-gallery {
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 22px 0;
   }
-  .insta-handle:hover { color: var(--gold); border-color: var(--gold); }
-  /* Instagram embed wrapper */
-  .insta-embed-wrap {
-    display: flex; flex-direction: column; align-items: center;
-    gap: 24px;
+  .photo-gallery::before,
+  .photo-gallery::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 80px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
   }
-  .insta-embed-notice {
-    font-size: 12px; color: var(--muted); font-style: italic;
-    text-align: center; line-height: 1.7;
-    max-width: 480px;
-    padding: 32px;
+  .photo-gallery::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--parch) 0%, rgba(245,240,232,0) 100%);
+  }
+  .photo-gallery::after {
+    right: 0;
+    background: linear-gradient(270deg, var(--parch) 0%, rgba(245,240,232,0) 100%);
+  }
+  .photo-gallery-track {
+    display: flex;
+    gap: 18px;
+    width: max-content;
+    animation: gallery-scroll 36s linear infinite;
+  }
+  .photo-gallery:hover .photo-gallery-track {
+    animation-play-state: paused;
+  }
+  .photo-card {
+    width: 320px;
+    padding: 12px;
     border: 1px solid var(--rule);
-    background: var(--warm);
+    background: linear-gradient(180deg, #f8f4ec 0%, var(--warm) 100%);
+    box-shadow: 0 8px 24px rgba(26,22,18,.06);
   }
-  .insta-embed-notice a {
-    color: var(--gold); text-decoration: none;
-    border-bottom: 1px solid rgba(184,151,106,.4);
+  .photo-media {
+    height: 280px;
+    background: #fff;
+    border: 1px solid rgba(184,151,106,.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
   }
-  .insta-embed-notice a:hover { border-color: var(--gold); }
+  .photo-card img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+  .photo-card figcaption {
+    margin-top: 10px;
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.6;
+    text-align: center;
+  }
+  @keyframes gallery-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - 9px)); }
+  }
+  @media (max-width: 900px) {
+    .photo-gallery {
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scrollbar-width: thin;
+    }
+    .photo-gallery::before,
+    .photo-gallery::after { display: none; }
+    .photo-gallery-track {
+      animation: none;
+      padding: 0 4px;
+    }
+    .photo-card {
+      width: 78vw;
+      min-width: 260px;
+      scroll-snap-align: start;
+    }
+    .photo-gallery { scroll-snap-type: x proximity; }
+  }
 
   /* ─── CONTACT ─── */
   .contact { background: var(--ink); }
@@ -1649,6 +1732,9 @@
   <div class="pricing-panel" id="tab-maroquinerie">
     <div class="price-maroquinerie">
       <div class="maro-card reveal reveal-delay-1">
+        <div class="maro-media">
+          <img src="Portefeuille en cuir gris et dragon.png" alt="Portefeuille Shire">
+        </div>
         <div class="maro-cat">Portefeuille Homme</div>
         <div class="maro-name">Shire</div>
         <div class="maro-from">À partir de</div>
@@ -1657,6 +1743,9 @@
         <a class="maro-cta" href="#">Composer ma pièce</a>
       </div>
       <div class="maro-card reveal reveal-delay-2">
+        <div class="maro-media">
+          <img src="Portefeuille en cuir gravé avec un chien.png" alt="Portefeuille Elian">
+        </div>
         <div class="maro-cat">Portefeuille Homme</div>
         <div class="maro-name">Elian</div>
         <div class="maro-from">À partir de</div>
@@ -1665,6 +1754,9 @@
         <a class="maro-cta" href="#">Composer ma pièce</a>
       </div>
       <div class="maro-card reveal reveal-delay-3">
+        <div class="maro-media">
+          <img src="Portefeuille en cuir gris et dragon.png" alt="Portefeuille Hanovrien">
+        </div>
         <div class="maro-cat">Portefeuille Femme</div>
         <div class="maro-name">Hanovrien</div>
         <div class="maro-from">À partir de</div>
@@ -1673,6 +1765,9 @@
         <a class="maro-cta" href="#">Composer ma pièce</a>
       </div>
       <div class="maro-card reveal reveal-delay-1">
+        <div class="maro-media">
+          <img src="Sac a main cuir beige et bleu petit format.png" alt="Sac à main Sirius">
+        </div>
         <div class="maro-cat">Sac à main</div>
         <div class="maro-name">Sirius</div>
         <div class="maro-from">À partir de</div>
@@ -1681,6 +1776,9 @@
         <a class="maro-cta" href="#">Composer ma pièce</a>
       </div>
       <div class="maro-card reveal reveal-delay-2">
+        <div class="maro-media">
+          <img src="Sac a main cuir beige et bleu.png" alt="Sac à main Orion">
+        </div>
         <div class="maro-cat">Sac à main</div>
         <div class="maro-name">Orion</div>
         <div class="maro-from">À partir de</div>
@@ -1689,6 +1787,9 @@
         <a class="maro-cta" href="#">Composer ma pièce</a>
       </div>
       <div class="maro-card reveal reveal-delay-3">
+        <div class="maro-media">
+          <img src="Sac a main cuir beige et bleu.png" alt="Grand sac à main Andromède">
+        </div>
         <div class="maro-cat">Grand sac à main</div>
         <div class="maro-name">Andromède</div>
         <div class="maro-from">À partir de</div>
@@ -1863,22 +1964,77 @@
   </div>
 </section>
 
-<!-- ─ INSTAGRAM ─ -->
+<!-- ─ GALERIE PHOTOS ─ -->
 <section class="section instagram reveal">
   <div class="insta-head">
     <div>
       <div class="sec-label">Univers</div>
-      <h2 class="sec-title sec-title-anim" style="font-size:32px;">Suivez-nous</h2>
+      <h2 class="sec-title sec-title-anim" style="font-size:32px;">Galerie photos</h2>
     </div>
-    <a class="insta-handle" href="https://www.instagram.com/detitiakikine" target="_blank">@detitiakikine</a>
   </div>
-  <div class="insta-embed-wrap">
-    <div class="insta-embed-notice">
-      <p style="margin-bottom:14px;font-size:14px;font-family:'Cormorant Garamond',serif;font-style:italic;">Retrouvez nos créations au fil des jours sur Instagram.</p>
-      <p style="margin-bottom:20px;">Pour visualiser notre galerie directement ici, ajoutez un widget Instagram via un service tel que <a href="https://embedsocial.com" target="_blank">EmbedSocial</a> ou <a href="https://lightwidget.com" target="_blank">LightWidget</a> et collez le code d'intégration à cet emplacement.</p>
-      <a href="https://www.instagram.com/detitiakikine" target="_blank" style="display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--parch);padding:12px 28px;text-decoration:none;font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-family:'Jost',sans-serif;border:none;">
-        ↗ Voir notre Instagram
-      </a>
+  <div class="photo-gallery reveal" aria-label="Galerie des créations">
+    <div class="photo-gallery-track">
+      <figure class="photo-card">
+        <div class="photo-media">
+          <img src="Sac a main cuir beige et bleu.png" alt="Sac à main cuir beige et bleu">
+        </div>
+        <figcaption>Sac à main cuir beige et bleu</figcaption>
+      </figure>
+      <figure class="photo-card">
+        <div class="photo-media">
+          <img src="Sac a main cuir beige et bleu petit format.png" alt="Sac à main cuir beige et bleu petit format">
+        </div>
+        <figcaption>Sac à main cuir beige et bleu petit format</figcaption>
+      </figure>
+      <figure class="photo-card">
+        <div class="photo-media">
+          <img src="Portefeuille en cuir gris et dragon.png" alt="Portefeuille en cuir gris et dragon">
+        </div>
+        <figcaption>Portefeuille en cuir gris et dragon</figcaption>
+      </figure>
+      <figure class="photo-card">
+        <div class="photo-media">
+          <img src="Mug festif avec chats joyeux.png" alt="Mug festif avec chats joyeux">
+        </div>
+        <figcaption>Mug festif avec chats joyeux</figcaption>
+      </figure>
+      <figure class="photo-card">
+        <div class="photo-media">
+          <img src="Portefeuille en cuir gravé avec un chien.png" alt="Portefeuille en cuir gravé avec un chien">
+        </div>
+        <figcaption>Portefeuille en cuir gravé avec un chien</figcaption>
+      </figure>
+
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-media">
+          <img src="Sac a main cuir beige et bleu.png" alt="">
+        </div>
+        <figcaption>Sac à main cuir beige et bleu</figcaption>
+      </figure>
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-media">
+          <img src="Sac a main cuir beige et bleu petit format.png" alt="">
+        </div>
+        <figcaption>Sac à main cuir beige et bleu petit format</figcaption>
+      </figure>
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-media">
+          <img src="Portefeuille en cuir gris et dragon.png" alt="">
+        </div>
+        <figcaption>Portefeuille en cuir gris et dragon</figcaption>
+      </figure>
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-media">
+          <img src="Mug festif avec chats joyeux.png" alt="">
+        </div>
+        <figcaption>Mug festif avec chats joyeux</figcaption>
+      </figure>
+      <figure class="photo-card" aria-hidden="true">
+        <div class="photo-media">
+          <img src="Portefeuille en cuir gravé avec un chien.png" alt="">
+        </div>
+        <figcaption>Portefeuille en cuir gravé avec un chien</figcaption>
+      </figure>
     </div>
   </div>
 </section>
