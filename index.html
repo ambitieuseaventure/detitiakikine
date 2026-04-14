@@ -2382,8 +2382,8 @@
         <div class="sec-label" style="margin-bottom:16px;">Démo</div>
         <p class="client-note">Un accès de démonstration est disponible pour tester le parcours client sans créer de compte.</p>
         <div class="client-demo">
-          <div><strong>Identifiant :</strong> demo-client</div>
-          <div><strong>Code :</strong> kikine2026</div>
+          <div><strong>Client :</strong> demo-client / kikine2026</div>
+          <div><strong>Admin :</strong> admin-maison / admin2026</div>
         </div>
       </div>
     </div>
@@ -2669,12 +2669,18 @@
     const identifiant = document.getElementById('clientIdentifiant').value.trim();
     const code = document.getElementById('clientCode').value.trim();
     const error = document.getElementById('clientError');
+
+    if (identifiant === 'admin-maison' && code === 'admin2026') {
+      window.location.href = 'admin.html';
+      return;
+    }
+
     if (identifiant === 'demo-client' && code === 'kikine2026') {
       document.getElementById('clientLogin').style.display = 'none';
       document.getElementById('clientApp').classList.add('active');
       error.textContent = '';
     } else {
-      error.textContent = 'Identifiants invalides. Utilisez le compte démo indiqué à droite.';
+      error.textContent = 'Identifiants invalides. Utilisez les accès de démo affichés à droite.';
     }
   }
   function showClientTab(tab, btn) {
