@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — De Titi à Kikine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:#1a1612;
+      --parch:#f5f0e8;
+      --warm:#eee6d7;
+      --gold:#b8976a;
+      --muted:#837361;
+      --rule:rgba(184,151,106,.26);
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      background:
+        radial-gradient(circle at 88% 6%, rgba(184,151,106,.16), transparent 34%),
+        linear-gradient(180deg, #f6f1e8 0%, #eee5d6 100%);
+      color:var(--ink);
+      font-family:'Jost',sans-serif;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 68px;
+      background: rgba(245,240,232,0.97);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+      transition: background .4s, box-shadow .4s;
+    }
+    nav.scrolled {
+      background: rgba(26,22,18,0.96);
+      box-shadow: 0 4px 32px rgba(0,0,0,.18);
+    }
+    nav.scrolled .nav-links a { color: rgba(245,240,232,.58); }
+    nav.scrolled .nav-links a:hover { color: var(--gold); }
+    nav.scrolled .nav-cta { background: var(--gold); color: var(--ink); }
+    .nav-brand img { height:42px; width:auto; transition:.3s; }
+    nav.scrolled .nav-brand img { filter: invert(1) brightness(1.2); }
+    .nav-links { display:flex; gap:32px; list-style:none; }
+    .nav-links a { font-size:9px; letter-spacing:.24em; text-transform:uppercase; color:#847a6d; text-decoration:none; }
+    .nav-actions { display:flex; gap:10px; }
+    .nav-client-btn, .nav-cta {
+      font-size:9px; letter-spacing:.22em; text-transform:uppercase; padding:10px 18px; font-family:'Jost',sans-serif; cursor:pointer;
+    }
+    .nav-client-btn { color:var(--ink); background:transparent; border:1px solid var(--rule); }
+    .nav-cta { color:var(--parch); background:var(--ink); border:none; }
+    @media (max-width:1280px){ .nav-links{display:none;} nav{padding:0 24px;} }
+
+    .admin-layout {
+      margin-top: 68px;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      min-height: calc(100vh - 68px);
+    }
+    .sidebar {
+      background: linear-gradient(180deg, #17130f 0%, #0f0d0b 100%);
+      color: #d8cfbf;
+      border-right: 1px solid rgba(184,151,106,.28);
+      padding: 20px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .menu { list-style:none; display:flex; flex-direction:column; gap:8px; }
+    .menu button {
+      width:100%; border:none; background:transparent;
+      color:#c9bfaf; text-align:left;
+      display:flex; align-items:center; gap:12px;
+      border-radius:12px;
+      padding:12px 14px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:20px;
+      cursor:pointer;
+      transition:background .25s, color .25s, transform .25s;
+    }
+    .menu button:hover { background:rgba(184,151,106,.12); color:#fff7ea; transform:translateX(1px); }
+    .menu button.active {
+      background: linear-gradient(90deg, rgba(184,151,106,.24) 0%, rgba(184,151,106,.08) 100%);
+      color:#fff9ee;
+      box-shadow: inset 0 0 0 1px rgba(184,151,106,.35);
+    }
+    .ic { width:24px; text-align:center; }
+
+    .admin-profile {
+      border-top: 1px solid rgba(184,151,106,.28);
+      padding-top: 14px;
+      color:#beb4a4;
+    }
+    .admin-identity { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+    .admin-avatar { width:44px; height:44px; border-radius:50%; background:#f7f2e7; color:#1b1713; display:grid; place-items:center; font-weight:600; }
+    .admin-name { font-family:'Cormorant Garamond',serif; font-size:36px; line-height:1; }
+    .admin-links { display:flex; flex-direction:column; gap:8px; }
+    .admin-links a { color:#c9bfaf; text-decoration:none; font-size:15px; }
+
+    .main {
+      padding: 26px;
+    }
+    .panel {
+      display:none;
+      border:1px solid var(--rule);
+      border-radius:18px;
+      background: linear-gradient(180deg, rgba(250,246,239,.95) 0%, rgba(241,232,218,.95) 100%);
+      box-shadow: 0 22px 50px rgba(0,0,0,.12);
+      padding: 26px;
+    }
+    .panel.active { display:block; }
+    .panel h1 {
+      font-family:'Cormorant Garamond',serif;
+      font-size:50px;
+      font-weight:400;
+      margin-bottom:6px;
+    }
+    .sub { color:var(--muted); margin-bottom:20px; line-height:1.8; }
+
+    .stats { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px; }
+    .stat {
+      background:#fff;
+      border:1px solid var(--rule);
+      border-radius:12px;
+      padding:14px;
+    }
+    .stat .lbl { font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:#82725f; margin-bottom:6px; }
+    .stat .val { font-family:'Cormorant Garamond',serif; font-size:34px; }
+
+    .meta-list { display:grid; gap:12px; }
+    .meta-card {
+      border:1px solid var(--rule);
+      background:#fff;
+      border-radius:12px;
+      padding:16px;
+    }
+    .meta-head { display:flex; justify-content:space-between; margin-bottom:10px; align-items:center; }
+    .meta-title { font-family:'Cormorant Garamond',serif; font-size:30px; }
+    .meta-tag { font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7d6e5d; }
+    .meta-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .field label { display:block; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:#857562; margin-bottom:6px; }
+    .field input, .field textarea, .field select {
+      width:100%; border:1px solid rgba(184,151,106,.36); background:#fdfbf8; padding:10px 12px; font-family:'Jost',sans-serif; font-size:12px;
+    }
+    .field textarea { min-height:84px; }
+    .actions { margin-top:10px; display:flex; gap:8px; }
+    .btn { border:none; background:var(--ink); color:var(--parch); padding:10px 14px; font-size:9px; letter-spacing:.2em; text-transform:uppercase; cursor:pointer; }
+    .btn.ghost { background:transparent; border:1px solid var(--rule); color:var(--ink); }
+
+    @media (max-width:1100px) {
+      .admin-layout { grid-template-columns:1fr; }
+      .sidebar { border-right:none; border-bottom:1px solid rgba(184,151,106,.3); }
+      .stats, .meta-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav id="mainNav">
+    <a class="nav-brand" href="index.html"><img src="logo-transparent-svg.svg" alt="De Titi à Kikine" style="mix-blend-mode:multiply;"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">À propos</a></li><li><a href="index.html#valeurs">Valeurs</a></li><li><a href="index.html#services">Services</a></li><li><a href="index.html#prix">Prix</a></li><li><a href="index.html#vip">Club VIP</a></li><li><a href="blog.html">Blog</a></li><li><a href="index.html#avis">Avis</a></li><li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions"><button class="nav-client-btn" onclick="window.location.href='index.html'">Voir le site</button><button class="nav-cta">Admin</button></div>
+  </nav>
+
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <ul class="menu">
+        <li><button class="active" onclick="showPanel('dashboard', this)"><span class="ic">▦</span>Tableau de bord</button></li>
+        <li><button onclick="showPanel('articles', this)"><span class="ic">🗎</span>Articles</button></li>
+        <li><button onclick="showPanel('services', this)"><span class="ic">🧳</span>Services</button></li>
+        <li><button onclick="showPanel('tarifs', this)"><span class="ic">🏷</span>Tarifs</button></li>
+        <li><button onclick="showPanel('apropos', this)"><span class="ic">ⓘ</span>À propos</button></li>
+        <li><button onclick="showPanel('valeurs', this)"><span class="ic">♡</span>Nos Valeurs</button></li>
+        <li><button onclick="showPanel('newsletters', this)"><span class="ic">✈</span>Newsletters</button></li>
+        <li><button onclick="showPanel('temoignages', this)"><span class="ic">☆</span>Témoignages</button></li>
+        <li><button onclick="showPanel('instagram', this)"><span class="ic">◉</span>Instagram</button></li>
+        <li><button onclick="showPanel('messages', this)"><span class="ic">✉</span>Messages</button></li>
+        <li><button onclick="showPanel('utilisateurs', this)"><span class="ic">◌</span>Utilisateurs</button></li>
+        <li><button onclick="showPanel('parametres', this)"><span class="ic">⚙</span>Paramètres</button></li>
+        <li><button onclick="showPanel('metadonnees', this)"><span class="ic">⌗</span>Métadonnées</button></li>
+      </ul>
+
+      <div class="admin-profile">
+        <div class="admin-identity"><div class="admin-avatar">AJ</div><div><div class="admin-name">Ana J</div><small>Admin</small></div></div>
+        <div class="admin-links"><a href="index.html">⌂ Voir le site</a><a href="#">↩ Déconnexion</a></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="panel active" id="panel-dashboard">
+        <h1>Tableau de bord</h1><p class="sub">Pilotage de la maison, de l’éditorial et des demandes clients.</p>
+        <div class="stats">
+          <div class="stat"><div class="lbl">Articles publiés</div><div class="val">6</div></div>
+          <div class="stat"><div class="lbl">Demandes clients</div><div class="val">12</div></div>
+          <div class="stat"><div class="lbl">Newsletters planifiées</div><div class="val">3</div></div>
+        </div>
+      </section>
+      <section class="panel" id="panel-articles"><h1>Articles</h1><p class="sub">Gestion des contenus éditoriaux.</p></section>
+      <section class="panel" id="panel-services"><h1>Services</h1><p class="sub">Contenus des prestations.</p></section>
+      <section class="panel" id="panel-tarifs"><h1>Tarifs</h1><p class="sub">Gestion des grilles prix.</p></section>
+      <section class="panel" id="panel-apropos"><h1>À propos</h1><p class="sub">Édition de la page maison.</p></section>
+      <section class="panel" id="panel-valeurs"><h1>Nos Valeurs</h1><p class="sub">Manifeste de la marque.</p></section>
+      <section class="panel" id="panel-newsletters"><h1>Newsletters</h1><p class="sub">Campagnes et segmentations.</p></section>
+      <section class="panel" id="panel-temoignages"><h1>Témoignages</h1><p class="sub">Validation des avis clients.</p></section>
+      <section class="panel" id="panel-instagram"><h1>Instagram</h1><p class="sub">Programmation des publications.</p></section>
+      <section class="panel" id="panel-messages"><h1>Messages</h1><p class="sub">Gestion de la messagerie entrante.</p></section>
+      <section class="panel" id="panel-utilisateurs"><h1>Utilisateurs</h1><p class="sub">Comptes et permissions.</p></section>
+      <section class="panel" id="panel-parametres"><h1>Paramètres</h1><p class="sub">Réglages généraux de l’admin.</p></section>
+
+      <section class="panel" id="panel-metadonnees">
+        <h1>Métadonnées</h1>
+        <p class="sub">Mettez à jour les métadonnées SEO pour chaque page du site.</p>
+        <div class="meta-list">
+          <article class="meta-card">
+            <div class="meta-head"><div class="meta-title">index.html</div><span class="meta-tag">Accueil</span></div>
+            <div class="meta-grid">
+              <div class="field"><label>Title</label><input value="De Titi à Kikine — Maison de Création"></div>
+              <div class="field"><label>Canonical</label><input value="https://detitiakikine.fr/"></div>
+              <div class="field"><label>Meta description</label><textarea>Maison de création française : sur-mesure, maroquinerie et conseil d’image.</textarea></div>
+              <div class="field"><label>Keywords</label><input value="sur-mesure, maroquinerie, luxe, atelier"></div>
+              <div class="field"><label>OG title</label><input value="De Titi à Kikine — Maison de Création"></div>
+              <div class="field"><label>OG description</label><textarea>Une élégance sur mesure, du premier croquis à la pièce finale.</textarea></div>
+            </div>
+            <div class="actions"><button class="btn">Enregistrer</button><button class="btn ghost">Publier</button></div>
+          </article>
+
+          <article class="meta-card">
+            <div class="meta-head"><div class="meta-title">about.html</div><span class="meta-tag">À propos</span></div>
+            <div class="meta-grid">
+              <div class="field"><label>Title</label><input value="À propos — De Titi à Kikine"></div>
+              <div class="field"><label>Canonical</label><input value="https://detitiakikine.fr/about"></div>
+              <div class="field"><label>Meta description</label><textarea>Découvrez la maison De Titi à Kikine et sa méthode signature La Ligne Juste.</textarea></div>
+              <div class="field"><label>Robots</label><select><option>index,follow</option><option>noindex,nofollow</option></select></div>
+            </div>
+            <div class="actions"><button class="btn">Enregistrer</button><button class="btn ghost">Publier</button></div>
+          </article>
+
+          <article class="meta-card">
+            <div class="meta-head"><div class="meta-title">blog + articles</div><span class="meta-tag">Journal</span></div>
+            <div class="meta-grid">
+              <div class="field"><label>Template title</label><input value="{Titre article} — De Titi à Kikine"></div>
+              <div class="field"><label>Template canonical</label><input value="https://detitiakikine.fr/{slug}"></div>
+              <div class="field"><label>Meta description par défaut</label><textarea>Réflexions et inspirations de la maison De Titi à Kikine.</textarea></div>
+              <div class="field"><label>OpenGraph image</label><input value="https://detitiakikine.fr/blog.png"></div>
+            </div>
+            <div class="actions"><button class="btn">Enregistrer</button><button class="btn ghost">Appliquer à toutes les pages</button></div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 8) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    });
+
+    function showPanel(name, btn) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active'));
+      document.getElementById('panel-' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+</html>
