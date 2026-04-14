@@ -982,15 +982,28 @@
   .reviews-score span { font-size: 24px; color: var(--muted); }
   .reviews-stars { color: var(--gold); font-size: 18px; letter-spacing: 4px; margin-bottom: 4px; }
   .reviews-count { font-size: 11px; color: var(--muted); letter-spacing: .1em; }
-  .reviews-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 2px; background: var(--rule);
+  .reviews-carousel {
+    position: relative;
+    overflow: hidden;
     border: 1px solid var(--rule);
+    background: var(--rule);
+    padding: 2px 0;
+  }
+  .reviews-track {
+    display: flex;
+    gap: 2px;
+    width: max-content;
+    animation: reviews-scroll 36s linear infinite;
+  }
+  .reviews-carousel:hover .reviews-track {
+    animation-play-state: paused;
   }
   .review-card {
+    width: 520px;
     background: var(--parch); padding: 44px;
     transition: background .25s;
     position: relative; overflow: hidden;
+    flex-shrink: 0;
   }
   .review-card:hover { background: #fff; }
   /* Reflet doré hover */
@@ -1024,6 +1037,23 @@
     font-size: 8.5px; letter-spacing: .15em; text-transform: uppercase;
     color: var(--gold); background: rgba(184,151,106,.1);
     padding: 4px 10px;
+  }
+  @keyframes reviews-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - 1px)); }
+  }
+  @media (max-width: 980px) {
+    .reviews-carousel {
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+    .reviews-track {
+      animation: none;
+    }
+    .review-card {
+      width: 85vw;
+      min-width: 280px;
+    }
   }
 
   /* ─── BLOG ─── */
@@ -1886,21 +1916,39 @@
       <div class="reviews-count">Avis vérifiés</div>
     </div>
   </div>
-  <div class="reviews-grid">
-    <div class="review-card reveal reveal-delay-1">
-      <span class="review-open">"</span>
-      <p class="review-text">Un portefeuille incroyable, très pratique, avec des gravures que j'ai choisies moi-même. Une pièce qui me ressemble vraiment, dans chaque détail.</p>
-      <div class="review-footer">
-        <span class="review-author">Elian Prevot</span>
-        <span class="review-verified">Avis vérifié</span>
+  <div class="reviews-carousel">
+    <div class="reviews-track">
+      <div class="review-card reveal reveal-delay-1">
+        <span class="review-open">"</span>
+        <p class="review-text">Un portefeuille incroyable, très pratique, avec des gravures que j'ai choisies moi-même. Une pièce qui me ressemble vraiment, dans chaque détail.</p>
+        <div class="review-footer">
+          <span class="review-author">Elian Prevot</span>
+          <span class="review-verified">Avis vérifié</span>
+        </div>
       </div>
-    </div>
-    <div class="review-card reveal reveal-delay-2">
-      <span class="review-open">"</span>
-      <p class="review-text">Un sac entièrement personnalisé — cuir, couleur, doublure, fermetures. Coordonné avec un portefeuille assorti. Je suis très contente du travail effectué, fait entièrement à la main.</p>
-      <div class="review-footer">
-        <span class="review-author">Sylvie Prevot</span>
-        <span class="review-verified">Avis vérifié</span>
+      <div class="review-card reveal reveal-delay-2">
+        <span class="review-open">"</span>
+        <p class="review-text">Un sac entièrement personnalisé — cuir, couleur, doublure, fermetures. Coordonné avec un portefeuille assorti. Je suis très contente du travail effectué, fait entièrement à la main.</p>
+        <div class="review-footer">
+          <span class="review-author">Sylvie Prevot</span>
+          <span class="review-verified">Avis vérifié</span>
+        </div>
+      </div>
+      <div class="review-card" aria-hidden="true">
+        <span class="review-open">"</span>
+        <p class="review-text">Un portefeuille incroyable, très pratique, avec des gravures que j'ai choisies moi-même. Une pièce qui me ressemble vraiment, dans chaque détail.</p>
+        <div class="review-footer">
+          <span class="review-author">Elian Prevot</span>
+          <span class="review-verified">Avis vérifié</span>
+        </div>
+      </div>
+      <div class="review-card" aria-hidden="true">
+        <span class="review-open">"</span>
+        <p class="review-text">Un sac entièrement personnalisé — cuir, couleur, doublure, fermetures. Coordonné avec un portefeuille assorti. Je suis très contente du travail effectué, fait entièrement à la main.</p>
+        <div class="review-footer">
+          <span class="review-author">Sylvie Prevot</span>
+          <span class="review-verified">Avis vérifié</span>
+        </div>
       </div>
     </div>
   </div>
