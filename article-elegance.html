@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quand l'élégance renaît : le moment où la mode respire à nouveau — De Titi à Kikine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#1a1612; --parch:#f5f0e8; --gold:#b8976a; --muted:#6f6354; --rule:rgba(184,151,106,.32); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--parch); color:var(--ink); font-family:'Jost',sans-serif; line-height:1.9; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 68px;
+      background: rgba(245,240,232,0.97);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+      transition: background .4s, box-shadow .4s;
+    }
+    nav.scrolled {
+      background: rgba(26,22,18,0.96);
+      border-bottom-color: rgba(184,151,106,.2);
+      box-shadow: 0 4px 32px rgba(0,0,0,.18);
+    }
+    nav.scrolled .nav-links a { color: rgba(245,240,232,.55); }
+    nav.scrolled .nav-links a:hover { color: var(--gold); }
+    nav.scrolled .nav-cta { background: var(--gold); color: var(--ink); }
+    .nav-brand img {
+      height: 42px; width: auto;
+      filter: contrast(1.05);
+      transition: opacity .3s;
+    }
+    nav.scrolled .nav-brand img { filter: invert(1) brightness(1.2); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .nav-links a {
+      font-size: 9px; letter-spacing: .24em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; position: relative; transition: color .25s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0; right: 0; height: 1px;
+      background: var(--gold); transform: scaleX(0); transition: transform .3s ease;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    nav.scrolled .nav-links a::after { background: var(--gold); }
+    .nav-cta {
+      font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--parch); background: var(--ink); padding: 10px 22px; border: none; cursor: pointer;
+      font-family: 'Jost', sans-serif; font-weight: 300; transition: background .3s, color .3s;
+    }
+    .nav-cta:hover { background: var(--gold); color: var(--ink); }
+    .nav-client-btn {
+      font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--ink); background: transparent; padding: 10px 18px; border: 1px solid var(--rule); cursor: pointer;
+      font-family: 'Jost', sans-serif; font-weight: 300; transition: border-color .3s, color .3s, background .3s;
+    }
+    .nav-client-btn:hover { border-color: var(--gold); color: var(--gold); }
+    nav.scrolled .nav-client-btn { color: var(--parch); border-color: rgba(245,240,232,.25); }
+    nav.scrolled .nav-client-btn:hover { color: var(--gold); border-color: var(--gold); }
+    @media (max-width: 1280px) { .nav-links { display: none; } nav { padding: 0 24px; } }
+
+    article { max-width:860px; margin:0 auto; padding:128px 24px 90px; }
+    .cat { font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+    h1 { font-family:'Cormorant Garamond',serif; font-size:52px; line-height:1.1; font-weight:400; margin-bottom:12px; }
+    .date { color:var(--muted); letter-spacing:.1em; font-size:11px; margin-bottom:24px; }
+    .lead { border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:22px 0; margin-bottom:28px; color:var(--muted); font-size:15px; }
+    h2 { font-family:'Cormorant Garamond',serif; font-size:34px; margin:26px 0 8px; font-weight:400; }
+    p { color:var(--muted); font-size:14px; margin-bottom:14px; }
+    blockquote { border-left:2px solid var(--gold); padding:8px 0 8px 16px; font-style:italic; color:#4a3d2e; margin:22px 0; }
+    .back { display:inline-block; margin-top:24px; text-decoration:none; color:var(--ink); border:1px solid var(--rule); padding:10px 18px; font-size:10px; letter-spacing:.18em; text-transform:uppercase; }
+    .back:hover { color:var(--gold); border-color:var(--gold); }
+  </style>
+</head>
+<body>
+
+  <nav id="mainNav">
+    <a class="nav-brand" href="index.html">
+      <img src="logo-transparent-svg.svg" alt="De Titi à Kikine" style="mix-blend-mode:multiply;">
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">À propos</a></li>
+      <li><a href="index.html#valeurs">Valeurs</a></li>
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="index.html#prix">Prix</a></li>
+      <li><a href="index.html#vip">Club VIP</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="index.html#avis">Avis</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-client-btn" onclick="window.location.href='index.html'">Espace client</button>
+      <button class="nav-cta" onclick="window.location.href='index.html#contact'">Prendre RDV</button>
+    </div>
+  </nav>
+
+  <article>
+    <div class="cat">Mode & Élégance</div>
+    <h1>Quand l'élégance renaît : le moment où la mode respire à nouveau</h1>
+    <div class="date">5 avril 2026</div>
+    <p class="lead">L'élégance n'a jamais disparu. Elle a simplement choisi de respirer autrement — dans le geste juste, la matière choisie, la ligne qui s'impose sans chercher à convaincre.</p>
+    
+<p>Il y a des moments dans l'histoire de la mode où l'on sent que quelque chose se dépose. Les silhouettes se calment. Les couleurs retrouvent leur densité. Les matières reprennent leurs droits sur l'image.</p>
+<h2>La lenteur comme posture</h2>
+<p>Ce n'est pas un retour en arrière. C'est une manière de réaffirmer que la beauté n'a pas besoin de se justifier. Qu'un vêtement bien coupé, porté par quelqu'un qui se sent juste en lui, est en soi une déclaration.</p>
+<blockquote>"La ligne juste n'est pas celle qui suit la tendance — c'est celle qui révèle qui vous êtes."</blockquote>
+<p>Chez De Titi à Kikine, cette conviction guide chaque création. Comprendre votre morphologie, votre colorimétrie, votre façon d'habiter l'espace — et de là, dessiner ce qui s'impose comme une évidence.</p>
+
+    <a class="back" href="blog.html">Retour au blog</a>
+  </article>
+
+  <script>
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 8) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    });
+  </script>
+
+</body>
+</html>
