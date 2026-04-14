@@ -22,6 +22,45 @@
       font-weight: 300;
       line-height: 1.9;
     }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(245,240,232,.96);
+      border-bottom: 1px solid var(--rule);
+      backdrop-filter: blur(8px);
+    }
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .nav-brand {
+      text-decoration: none;
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      letter-spacing: .04em;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 22px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+    .nav-links a:hover { color: var(--gold); }
     main {
       max-width: 920px;
       margin: 0 auto;
@@ -73,9 +112,25 @@
       letter-spacing: .2em;
     }
     .back:hover { border-color: var(--gold); color: var(--gold); }
+    @media (max-width: 820px) {
+      .nav-inner { flex-direction: column; align-items: flex-start; }
+      .nav-links { gap: 12px; }
+      main { padding-top: 48px; }
+    }
   </style>
 </head>
 <body>
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html">De Titi à Kikine</a>
+      <ul class="nav-links">
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#pricing">Tarifs</a></li>
+        <li><a href="index.html#about">À propos</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
   <main>
     <div class="label">Maison</div>
     <h1>De Titi à Kikine</h1>
