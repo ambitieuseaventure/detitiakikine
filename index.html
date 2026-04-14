@@ -1089,37 +1089,47 @@
     font-size: 10px; letter-spacing: .1em; color: var(--muted);
   }
 
-  /* ─── INSTAGRAM ─── */
+  /* ─── GALERIE PHOTOS ─── */
   .instagram { background: var(--parch); padding-top: 80px; padding-bottom: 80px; }
   .insta-head {
     display: flex; justify-content: space-between; align-items: flex-end;
     margin-bottom: 48px;
   }
-  .insta-handle {
-    font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--muted); text-decoration: none;
-    border-bottom: 1px solid var(--rule); padding-bottom: 4px;
-    transition: color .2s, border-color .2s;
+  .photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
   }
-  .insta-handle:hover { color: var(--gold); border-color: var(--gold); }
-  /* Instagram embed wrapper */
-  .insta-embed-wrap {
-    display: flex; flex-direction: column; align-items: center;
-    gap: 24px;
-  }
-  .insta-embed-notice {
-    font-size: 12px; color: var(--muted); font-style: italic;
-    text-align: center; line-height: 1.7;
-    max-width: 480px;
-    padding: 32px;
-    border: 1px solid var(--rule);
+  .photo-card {
     background: var(--warm);
+    border: 1px solid var(--rule);
+    padding: 12px;
   }
-  .insta-embed-notice a {
-    color: var(--gold); text-decoration: none;
-    border-bottom: 1px solid rgba(184,151,106,.4);
+  .photo-card img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
   }
-  .insta-embed-notice a:hover { border-color: var(--gold); }
+  .photo-card figcaption {
+    margin-top: 10px;
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .photo-card.photo-wide {
+    grid-column: span 2;
+  }
+  @media (max-width: 1100px) {
+    .photo-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .photo-card.photo-wide { grid-column: auto; }
+  }
+  @media (max-width: 680px) {
+    .photo-gallery { grid-template-columns: 1fr; }
+    .photo-card img { height: auto; }
+  }
 
   /* ─── CONTACT ─── */
   .contact { background: var(--ink); }
@@ -1863,23 +1873,35 @@
   </div>
 </section>
 
-<!-- ─ INSTAGRAM ─ -->
+<!-- ─ GALERIE PHOTOS ─ -->
 <section class="section instagram reveal">
   <div class="insta-head">
     <div>
       <div class="sec-label">Univers</div>
-      <h2 class="sec-title sec-title-anim" style="font-size:32px;">Suivez-nous</h2>
+      <h2 class="sec-title sec-title-anim" style="font-size:32px;">Galerie photos</h2>
     </div>
-    <a class="insta-handle" href="https://www.instagram.com/detitiakikine" target="_blank">@detitiakikine</a>
   </div>
-  <div class="insta-embed-wrap">
-    <div class="insta-embed-notice">
-      <p style="margin-bottom:14px;font-size:14px;font-family:'Cormorant Garamond',serif;font-style:italic;">Retrouvez nos créations au fil des jours sur Instagram.</p>
-      <p style="margin-bottom:20px;">Pour visualiser notre galerie directement ici, ajoutez un widget Instagram via un service tel que <a href="https://embedsocial.com" target="_blank">EmbedSocial</a> ou <a href="https://lightwidget.com" target="_blank">LightWidget</a> et collez le code d'intégration à cet emplacement.</p>
-      <a href="https://www.instagram.com/detitiakikine" target="_blank" style="display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--parch);padding:12px 28px;text-decoration:none;font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-family:'Jost',sans-serif;border:none;">
-        ↗ Voir notre Instagram
-      </a>
-    </div>
+  <div class="photo-gallery">
+    <figure class="photo-card reveal reveal-delay-1">
+      <img src="Sac a main cuir beige et bleu.png" alt="Sac à main cuir beige et bleu">
+      <figcaption>Sac à main cuir beige et bleu</figcaption>
+    </figure>
+    <figure class="photo-card reveal reveal-delay-2">
+      <img src="Sac a main cuir beige et bleu petit format.png" alt="Sac à main cuir beige et bleu petit format">
+      <figcaption>Sac à main cuir beige et bleu petit format</figcaption>
+    </figure>
+    <figure class="photo-card photo-wide reveal reveal-delay-3">
+      <img src="Portefeuille en cuir gris et dragon.png" alt="Portefeuille en cuir gris et dragon">
+      <figcaption>Portefeuille en cuir gris et dragon</figcaption>
+    </figure>
+    <figure class="photo-card reveal reveal-delay-1">
+      <img src="Mug festif avec chats joyeux.png" alt="Mug festif avec chats joyeux">
+      <figcaption>Mug festif avec chats joyeux</figcaption>
+    </figure>
+    <figure class="photo-card reveal reveal-delay-2">
+      <img src="Portefeuille en cuir gravé avec un chien.png" alt="Portefeuille en cuir gravé avec un chien">
+      <figcaption>Portefeuille en cuir gravé avec un chien</figcaption>
+    </figure>
   </div>
 </section>
 
