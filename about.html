@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>À propos — De Titi à Kikine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a1612;
+      --parch: #f5f0e8;
+      --gold: #b8976a;
+      --muted: #6f6354;
+      --rule: rgba(184,151,106,.32);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--parch);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      line-height: 1.9;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(245,240,232,.96);
+      border-bottom: 1px solid var(--rule);
+      backdrop-filter: blur(8px);
+    }
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .nav-brand {
+      text-decoration: none;
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      letter-spacing: .04em;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 22px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 80px 24px 90px;
+    }
+    .label {
+      font-size: 10px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 6vw, 66px);
+      font-weight: 400;
+      margin-bottom: 28px;
+      line-height: 1.05;
+    }
+    .intro {
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 24px 0;
+      margin-bottom: 30px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    p {
+      margin-bottom: 18px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .outro {
+      margin-top: 36px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+    .back {
+      display: inline-block;
+      margin-top: 36px;
+      padding: 12px 22px;
+      border: 1px solid var(--rule);
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .2em;
+    }
+    .back:hover { border-color: var(--gold); color: var(--gold); }
+    @media (max-width: 820px) {
+      .nav-inner { flex-direction: column; align-items: flex-start; }
+      .nav-links { gap: 12px; }
+      main { padding-top: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html">De Titi à Kikine</a>
+      <ul class="nav-links">
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#pricing">Tarifs</a></li>
+        <li><a href="index.html#about">À propos</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main>
+    <div class="label">Maison</div>
+    <h1>De Titi à Kikine</h1>
+
+    <p class="intro">De Titi à Kikine est une maison de création dédiée à l'expression la plus intime de l'élégance.</p>
+
+    <p>Fondée sur la conviction que le véritable luxe réside dans l’unicité, nous concevons des pièces sur-mesure qui ne répondent à aucune tendance, sinon à celle de l’individu. Elles prennent vie selon notre méthode signature, La Ligne Juste, née de notre expertise en conception et enrichie par une expérience au sein d’une maison de luxe.</p>
+
+    <p>Pensée comme une empreinte singulière, chaque pièce réunit le corps, l’allure et la personnalité dans une harmonie presque instinctive. Notre approche repose sur une écoute rare et une exigence absolue, où rien n’est laissé au hasard.</p>
+
+    <p>De la première intention jusqu'à la réalisation finale, nous orchestrons un dialogue subtil entre tradition artisanale et innovation technologique, permettant une précision presque invisible, mais toujours perceptible.
+Nos lignes puisent dans l'héritage des silhouettes des années 50 et 60, dont nous retenons la rigueur, la grâce et l'intemporalité. Elles sont ensuite réinterprétées avec retenue, pour donner naissance à des pièces à la fois structurées et profondément vivantes.</p>
+
+    <p>En maroquinerie, chaque création s'inscrit dans la même quête d’excellence. Matières choisies avec discernement, gestes maîtrisés et des finitions irréprochables ; Rien n'est laissé au hasard, car tout participe à l'allure.
+Nous ne produisons pas ; Nous composons.</p>
+
+    <p>À celles et ceux qui considèrent le vêtement comme un langage, De Titi à Kikine offre une écriture sur mesure : discrète, précise et essentielle.</p>
+
+    <p class="outro">De l'écran à votre garde-robe, une élégance sur mesure.</p>
+
+    <a class="back" href="index.html#about">Retour à l'accueil</a>
+  </main>
+</body>
+</html>
