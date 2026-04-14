@@ -2,9 +2,9 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog — De Titi à Kikine</title>
+  <title>Journal — De Titi à Kikine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400&display=swap" rel="stylesheet">
   <style>
     :root { --ink:#1a1612; --parch:#f5f0e8; --gold:#b8976a; --muted:#6f6354; --rule:rgba(184,151,106,.32); }
     * { box-sizing:border-box; margin:0; padding:0; }
@@ -27,11 +27,7 @@
     nav.scrolled .nav-links a { color: rgba(245,240,232,.55); }
     nav.scrolled .nav-links a:hover { color: var(--gold); }
     nav.scrolled .nav-cta { background: var(--gold); color: var(--ink); }
-    .nav-brand img {
-      height: 42px; width: auto;
-      filter: contrast(1.05);
-      transition: opacity .3s;
-    }
+    .nav-brand img { height: 42px; width: auto; filter: contrast(1.05); transition: opacity .3s; }
     nav.scrolled .nav-brand img { filter: invert(1) brightness(1.2); }
     .nav-links { display: flex; gap: 32px; list-style: none; }
     .nav-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
@@ -39,10 +35,7 @@
       font-size: 9px; letter-spacing: .24em; text-transform: uppercase;
       color: var(--muted); text-decoration: none; position: relative; transition: color .25s;
     }
-    .nav-links a::after {
-      content: ''; position: absolute; bottom: -3px; left: 0; right: 0; height: 1px;
-      background: var(--gold); transform: scaleX(0); transition: transform .3s ease;
-    }
+    .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; right: 0; height: 1px; background: var(--gold); transform: scaleX(0); transition: transform .3s ease; }
     .nav-links a:hover { color: var(--ink); }
     .nav-links a:hover::after { transform: scaleX(1); }
     nav.scrolled .nav-links a::after { background: var(--gold); }
@@ -62,21 +55,62 @@
     nav.scrolled .nav-client-btn:hover { color: var(--gold); border-color: var(--gold); }
     @media (max-width: 1280px) { .nav-links { display: none; } nav { padding: 0 24px; } }
 
-    main { max-width:1100px; margin:0 auto; padding:128px 24px 90px; }
-    .label { font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
-    h1 { font-family:'Cormorant Garamond',serif; font-size:56px; font-weight:400; margin-bottom:12px; }
-    .sub { color:var(--muted); margin-bottom:34px; }
-    .posts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
-    .post-card { border:1px solid var(--rule); background:#faf7f1; padding:24px; text-decoration:none; color:inherit; transition:transform .25s, box-shadow .25s; }
-    .post-card:hover { transform:translateY(-4px); box-shadow:0 14px 28px rgba(26,22,18,.08); }
-    .post-cat { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
-    .post-card h2 { font-family:'Cormorant Garamond',serif; font-size:31px; font-weight:400; line-height:1.2; margin-bottom:12px; }
-    .post-date { font-size:11px; color:var(--muted); letter-spacing:.08em; }
-    @media (max-width: 840px) { .posts { grid-template-columns:1fr; } h1 { font-size:42px; } }
+    .hero {
+      margin-top: 68px;
+      min-height: 48vh;
+      padding: 70px 24px;
+      background:
+        linear-gradient(to top, rgba(26,22,18,.88) 0%, rgba(26,22,18,.35) 55%, rgba(26,22,18,.5) 100%),
+        url('blog.png') center/cover no-repeat;
+      display: flex;
+      align-items: flex-end;
+    }
+    .hero-inner { max-width: 1100px; width: 100%; margin: 0 auto; }
+    .hero-label { font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(44px, 6.4vw, 76px); color: var(--parch); font-weight: 400; line-height: 1.05; }
+    .hero-sub { margin-top: 14px; color: rgba(245,240,232,.74); max-width: 640px; line-height: 1.9; }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 70px 24px 90px; }
+    .editorial-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 22px; margin-bottom: 24px; }
+    .featured-article {
+      position: relative; overflow: hidden; min-height: 390px;
+      border: 1px solid var(--rule); text-decoration: none; color: inherit;
+      display: flex; align-items: flex-end;
+      background: linear-gradient(to top, rgba(26,22,18,.84), rgba(26,22,18,.05)), url('blog.png') center/cover no-repeat;
+      padding: 30px;
+    }
+    .featured-article h2 { font-family: 'Cormorant Garamond', serif; color: var(--parch); font-weight: 400; font-size: 40px; line-height: 1.1; margin: 8px 0 10px; max-width: 560px; }
+    .tag { font-size: 9px; letter-spacing: .24em; text-transform: uppercase; color: var(--gold); }
+    .meta { color: rgba(245,240,232,.58); font-size: 10px; letter-spacing: .1em; }
+
+    .side-panel { border: 1px solid var(--rule); background: #fbf8f2; padding: 28px; }
+    .side-title { font-family: 'Cormorant Garamond', serif; font-size: 34px; margin-bottom: 14px; }
+    .side-copy { color: var(--muted); font-size: 13px; line-height: 1.85; margin-bottom: 20px; }
+    .gold-link { color: var(--gold); text-decoration: none; letter-spacing: .16em; text-transform: uppercase; font-size: 9px; border-bottom: 1px solid var(--gold); padding-bottom: 2px; }
+
+    .post-list { border: 1px solid var(--rule); background: #fbf8f2; }
+    .post-item {
+      display: grid; grid-template-columns: 78px 1fr auto; gap: 20px;
+      padding: 24px 28px; border-bottom: 1px solid var(--rule);
+      text-decoration: none; color: inherit; align-items: center;
+      transition: background .25s;
+    }
+    .post-item:last-child { border-bottom: none; }
+    .post-item:hover { background: #f4ede1; }
+    .post-num { font-family: 'Cormorant Garamond', serif; font-size: 42px; color: rgba(184,151,106,.3); line-height: 1; }
+    .post-cat { font-size: 8px; letter-spacing: .24em; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; }
+    .post-title { font-family: 'Cormorant Garamond', serif; font-size: 30px; line-height: 1.08; color: var(--ink); }
+    .post-date { font-size: 10px; letter-spacing: .12em; color: var(--muted); white-space: nowrap; }
+
+    @media (max-width: 980px) {
+      .editorial-grid { grid-template-columns: 1fr; }
+      .post-item { grid-template-columns: 56px 1fr; }
+      .post-date { grid-column: 2; }
+      .post-title { font-size: 26px; }
+    }
   </style>
 </head>
 <body>
-
   <nav id="mainNav">
     <a class="nav-brand" href="index.html">
       <img src="logo-transparent-svg.svg" alt="De Titi à Kikine" style="mix-blend-mode:multiply;">
@@ -97,39 +131,69 @@
     </div>
   </nav>
 
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-label">Journal</div>
+      <h1>Le regard De Titi à Kikine</h1>
+      <p class="hero-sub">Réflexions sur l'élégance, la morphologie, la haute couture et la maroquinerie d'exception. Un journal pensé comme un prolongement de notre atelier.</p>
+    </div>
+  </section>
+
   <main>
-    <div class="label">Journal</div>
-    <h1>Tous les articles</h1>
-    <p class="sub">Réflexions, tendances et actualités de la maison De Titi à Kikine.</p>
-    <div class="posts">
-      <a class="post-card" href="article-elegance.html">
-        <div class="post-cat">Mode & Élégance</div>
-        <h2>Quand l'élégance renaît : le moment où la mode respire à nouveau</h2>
+    <div class="editorial-grid">
+      <a class="featured-article" href="article-elegance.html">
+        <div>
+          <div class="tag">Mode & Élégance</div>
+          <h2>Quand l'élégance renaît : le moment où la mode respire à nouveau</h2>
+          <div class="meta">5 avril 2026</div>
+        </div>
+      </a>
+      <aside class="side-panel">
+        <h3 class="side-title">Éditorial</h3>
+        <p class="side-copy">Chaque article est écrit pour vous guider vers une garde-robe plus juste, plus durable et profondément personnelle.</p>
+        <a class="gold-link" href="article-process-sur-mesure.html">Découvrir notre méthode</a>
+      </aside>
+    </div>
+
+    <div class="post-list">
+      <a class="post-item" href="article-luxe.html">
+        <div class="post-num">02</div>
+        <div>
+          <div class="post-cat">Haute couture</div>
+          <h3 class="post-title">Pourquoi le luxe prend son temps : les secrets de la haute couture</h3>
+        </div>
         <div class="post-date">5 avril 2026</div>
       </a>
-      <a class="post-card" href="article-luxe.html">
-        <div class="post-cat">Haute couture</div>
-        <h2>Pourquoi le luxe prend son temps : les secrets de la haute couture</h2>
-        <div class="post-date">5 avril 2026</div>
-      </a>
-      <a class="post-card" href="article-morphologie-masculine.html">
-        <div class="post-cat">Morphologie</div>
-        <h2>Connaître la morphologie masculine</h2>
+      <a class="post-item" href="article-morphologie-masculine.html">
+        <div class="post-num">03</div>
+        <div>
+          <div class="post-cat">Morphologie</div>
+          <h3 class="post-title">Connaître la morphologie masculine</h3>
+        </div>
         <div class="post-date">1 avril 2026</div>
       </a>
-      <a class="post-card" href="article-morphologie-feminine.html">
-        <div class="post-cat">Morphologie</div>
-        <h2>Connaître sa morphologie en tant que femme</h2>
+      <a class="post-item" href="article-morphologie-feminine.html">
+        <div class="post-num">04</div>
+        <div>
+          <div class="post-cat">Morphologie</div>
+          <h3 class="post-title">Connaître sa morphologie en tant que femme</h3>
+        </div>
         <div class="post-date">26 mars 2026</div>
       </a>
-      <a class="post-card" href="article-maroquinerie-personnalisee.html">
-        <div class="post-cat">Maroquinerie</div>
-        <h2>Votre maroquinerie personnalisée</h2>
+      <a class="post-item" href="article-maroquinerie-personnalisee.html">
+        <div class="post-num">05</div>
+        <div>
+          <div class="post-cat">Maroquinerie</div>
+          <h3 class="post-title">Votre maroquinerie personnalisée</h3>
+        </div>
         <div class="post-date">19 mars 2026</div>
       </a>
-      <a class="post-card" href="article-process-sur-mesure.html">
-        <div class="post-cat">Sur-mesure</div>
-        <h2>Le process pour créer votre vêtement ensemble</h2>
+      <a class="post-item" href="article-process-sur-mesure.html">
+        <div class="post-num">06</div>
+        <div>
+          <div class="post-cat">Sur-mesure</div>
+          <h3 class="post-title">Le process pour créer votre vêtement ensemble</h3>
+        </div>
         <div class="post-date">19 mars 2026</div>
       </a>
     </div>
@@ -142,6 +206,5 @@
       else nav.classList.remove('scrolled');
     });
   </script>
-
 </body>
 </html>
