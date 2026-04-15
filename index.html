@@ -2434,7 +2434,9 @@
                     <button class="client-btn" onclick="validateClientStep('sketches')">Valider</button>
                   </div>
                   <textarea class="creation-comment" id="comment-sketches" placeholder="Ajoutez vos observations sur les croquis..."></textarea>
-                  <div class="creation-actions"><button class="client-btn secondary" onclick="saveClientComment('sketches')">Enregistrer commentaire</button></div>
+                  <div class="creation-actions"><button class="client-btn secondary" onclick="addClientComment('sketches')">Enregistrer commentaire</button></div>
+                  <div id="gallery-sketches" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px;"></div>
+                  <div id="history-sketches" style="margin-top:8px;"></div>
                 </div>
 
                 <div class="creation-step">
@@ -2448,7 +2450,9 @@
                     <button class="client-btn" onclick="validateClientStep('drawing3d')">Valider le 3D</button>
                   </div>
                   <textarea class="creation-comment" id="comment-drawing3d" placeholder="Commentaires sur le rendu 3D..."></textarea>
-                  <div class="creation-actions"><button class="client-btn secondary" onclick="saveClientComment('drawing3d')">Enregistrer commentaire</button></div>
+                  <div class="creation-actions"><button class="client-btn secondary" onclick="addClientComment('drawing3d')">Enregistrer commentaire</button></div>
+                  <div id="gallery-drawing3d" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px;"></div>
+                  <div id="history-drawing3d" style="margin-top:8px;"></div>
                 </div>
 
                 <div class="creation-step">
@@ -2462,7 +2466,8 @@
                     <button class="client-btn secondary" id="btn-tracking-prototype">Suivi colis prototype</button>
                   </div>
                   <textarea class="creation-comment" id="comment-prototype" placeholder="Décrivez les modifications nécessaires après essayage..."></textarea>
-                  <div class="creation-actions"><button class="client-btn secondary" onclick="saveClientComment('prototype')">Enregistrer retour prototype</button></div>
+                  <div class="creation-actions"><button class="client-btn secondary" onclick="addClientComment('prototype')">Enregistrer retour prototype</button></div>
+                  <div id="history-prototype" style="margin-top:8px;"></div>
                 </div>
 
                 <div class="creation-step">
@@ -2697,34 +2702,71 @@
       clientName: 'Client Démo',
       projectName: 'Projet #S-2026-014 — Veste sur-mesure',
       steps: {
-        sketches: { status: 'pending', note: 'Croquis en préparation par l’atelier.', comment: '', validated: false, asset: '#' },
-        drawing3d: { status: 'pending', note: 'Le dessin final 3D sera transmis après validation croquis.', comment: '', validated: false, asset: '#' },
-        prototype: { status: 'pending', note: 'Envoi prototype après validation 3D.', comment: '', tracking: '', returnRequested: false },
-        final: { status: 'pending', note: 'Création finale non démarrée.', tracking: '' }
+        sketches: { status: 'pending', note: 'Croquis en préparation par l’atelier.', comment: '', comments: [], validated: false, assets: [], updatedAt: '' },
+        drawing3d: { status: 'pending', note: 'Le dessin final 3D sera transmis après validation croquis.', comment: '', comments: [], validated: false, assets: [], updatedAt: '' },
+        prototype: { status: 'pending', note: 'Envoi prototype après validation 3D.', comment: '', comments: [], tracking: '', returnTracking: '', returnRequested: false, updatedAt: '' },
+        final: { status: 'pending', note: 'Création finale non démarrée.', tracking: '', updatedAt: '' }
       },
-      shipments: [
-        { date: '03 avril 2026', text: 'Ouverture du projet sur-mesure.' }
-      ]
+      shipments: [{ date: '03 avril 2026', text: 'Ouverture du projet sur-mesure.' }]
     }
   };
+
+  function normalizeOrder(o) {
+    const d = JSON.parse(JSON.stringify(DEFAULT_ORDERS['demo-client']));
+    const out = { ...d, ...o, steps: { ...d.steps, ...(o?.steps || {}) } };
+    ['sketches','drawing3d','prototype'].forEach(step => {
+      out.steps[step].comments = Array.isArray(out.steps[step].comments) ? out.steps[step].comments : [];
+      out.steps[step].assets = Array.isArray(out.steps[step].assets) ? out.steps[step].assets : [];
+    });
+    out.shipments = Array.isArray(out.shipments) ? out.shipments : [];
+    return out;
+  }
 
   function getOrders() {
     const raw = localStorage.getItem('dtk_orders');
     if (!raw) return JSON.parse(JSON.stringify(DEFAULT_ORDERS));
-    try { return JSON.parse(raw); } catch { return JSON.parse(JSON.stringify(DEFAULT_ORDERS)); }
+    try {
+      const parsed = JSON.parse(raw);
+      Object.keys(parsed).forEach(id => parsed[id] = normalizeOrder(parsed[id]));
+      return parsed;
+    } catch { return JSON.parse(JSON.stringify(DEFAULT_ORDERS)); }
   }
   function saveOrders(data) { localStorage.setItem('dtk_orders', JSON.stringify(data)); }
   function getCurrentOrder() {
     const id = window.currentClientId || 'demo-client';
     const orders = getOrders();
     if (!orders[id]) orders[id] = JSON.parse(JSON.stringify(DEFAULT_ORDERS['demo-client']));
+    orders[id] = normalizeOrder(orders[id]);
     saveOrders(orders);
     return { orders, id, order: orders[id] };
   }
   function mapStatus(status) {
     if (status === 'done') return ['Validé', 'done'];
+    if (status === 'rework') return ['Modifications en cours', 'progress'];
     if (status === 'progress') return ['En cours', 'progress'];
     return ['En attente', 'pending'];
+  }
+  function renderCommentHistory(targetId, comments=[]) {
+    const wrap = document.getElementById(targetId);
+    if (!wrap) return;
+    if (!comments.length) { wrap.innerHTML = ''; return; }
+    wrap.innerHTML = comments.map(c => `<div style="border-top:1px dashed rgba(184,151,106,.25);padding-top:6px;margin-top:6px;font-size:12px;color:#6d5d4b;"><strong style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#7d6b58;">${c.date}</strong><div>${c.text}</div></div>`).join('');
+  }
+  function renderImageGallery(targetId, assets=[]) {
+    const wrap = document.getElementById(targetId);
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    assets.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'Aperçu étape';
+      img.style.width = '100%';
+      img.style.height = '82px';
+      img.style.objectFit = 'cover';
+      img.style.border = '1px solid rgba(184,151,106,.25)';
+      img.style.borderRadius = '8px';
+      wrap.appendChild(img);
+    });
   }
   function renderClientCreation() {
     const { order } = getCurrentOrder();
@@ -2735,12 +2777,18 @@
       const el = document.getElementById('status-' + step);
       if (el) { el.textContent = label; el.className = 'creation-status ' + cls; }
       const note = document.getElementById('note-' + step);
-      if (note) note.textContent = data.note || '';
+      if (note) note.textContent = (data.note || '') + (data.updatedAt ? ' (maj ' + data.updatedAt + ')' : '');
       const comment = document.getElementById('comment-' + step);
-      if (comment) comment.value = data.comment || '';
+      if (comment) comment.value = '';
     });
-    document.getElementById('btn-view-sketches').onclick = () => window.open(order.steps.sketches.asset || '#', '_blank');
-    document.getElementById('btn-view-drawing3d').onclick = () => window.open(order.steps.drawing3d.asset || '#', '_blank');
+    renderImageGallery('gallery-sketches', order.steps.sketches.assets || []);
+    renderImageGallery('gallery-drawing3d', order.steps.drawing3d.assets || []);
+    renderCommentHistory('history-sketches', order.steps.sketches.comments || []);
+    renderCommentHistory('history-drawing3d', order.steps.drawing3d.comments || []);
+    renderCommentHistory('history-prototype', order.steps.prototype.comments || []);
+
+    document.getElementById('btn-view-sketches').onclick = () => alert((order.steps.sketches.assets||[]).length ? 'Les croquis sont visibles juste en dessous.' : 'Aucun croquis disponible pour le moment.');
+    document.getElementById('btn-view-drawing3d').onclick = () => alert((order.steps.drawing3d.assets||[]).length ? 'Les rendus 3D sont visibles juste en dessous.' : 'Aucun rendu 3D disponible pour le moment.');
     document.getElementById('btn-tracking-prototype').onclick = () => alert(order.steps.prototype.tracking ? 'Suivi prototype : ' + order.steps.prototype.tracking : 'Aucun numéro de suivi prototype pour le moment.');
     document.getElementById('btn-tracking-final').onclick = () => alert(order.steps.final.tracking ? 'Suivi final : ' + order.steps.final.tracking : 'Aucun numéro de suivi final pour le moment.');
 
@@ -2757,16 +2805,21 @@
     const ctx = getCurrentOrder();
     ctx.order.steps[step].validated = true;
     ctx.order.steps[step].status = 'done';
-    ctx.order.steps[step].note = 'Validation client enregistrée le ' + new Date().toLocaleDateString('fr-FR');
+    ctx.order.steps[step].updatedAt = new Date().toLocaleString('fr-FR');
+    ctx.order.steps[step].note = 'Validation client enregistrée.';
     ctx.orders[ctx.id] = ctx.order;
     saveOrders(ctx.orders);
     renderClientCreation();
   }
-  function saveClientComment(step) {
+  function addClientComment(step) {
     const ctx = getCurrentOrder();
-    const val = document.getElementById('comment-' + step)?.value || '';
+    const val = document.getElementById('comment-' + step)?.value?.trim() || '';
+    if (!val) return;
     ctx.order.steps[step].comment = val;
-    ctx.order.steps[step].status = 'progress';
+    ctx.order.steps[step].comments = ctx.order.steps[step].comments || [];
+    ctx.order.steps[step].comments.push({ text: val, date: new Date().toLocaleString('fr-FR') });
+    ctx.order.steps[step].status = 'rework';
+    ctx.order.steps[step].updatedAt = new Date().toLocaleString('fr-FR');
     ctx.orders[ctx.id] = ctx.order;
     saveOrders(ctx.orders);
     renderClientCreation();
@@ -2774,7 +2827,8 @@
   function requestPrototypeReturn() {
     const ctx = getCurrentOrder();
     ctx.order.steps.prototype.returnRequested = true;
-    ctx.order.steps.prototype.status = 'progress';
+    ctx.order.steps.prototype.status = 'rework';
+    ctx.order.steps.prototype.updatedAt = new Date().toLocaleString('fr-FR');
     ctx.order.steps.prototype.note = 'Retour prototype demandé. Bon de retour fourni par l’atelier.';
     ctx.order.shipments.push({ date: new Date().toLocaleDateString('fr-FR'), text: 'Demande de retour prototype enregistrée côté client.' });
     ctx.orders[ctx.id] = ctx.order;

@@ -323,7 +323,7 @@
       </section>
       <section class="panel" id="panel-commandes">
         <h1>Commandes</h1><p class="sub">Suivi opérationnel des commandes sur-mesure (synchronisé avec l’onglet “Mes créations” côté client).</p>
-        <div class="admin-form-grid" style="grid-template-columns: .9fr 1.1fr; align-items:start;">
+        <div class="admin-form-grid" style="grid-template-columns: .85fr 1.15fr; align-items:start;">
           <div class="meta-card">
             <div class="meta-head"><div class="meta-title" style="font-size:28px;">Clients</div><span class="meta-tag">Sélection</span></div>
             <div id="orderClientCards" style="display:grid;gap:8px;"></div>
@@ -333,25 +333,37 @@
             <div class="admin-form-grid">
               <div class="field full"><label>Nom du projet</label><input id="o_project" value=""></div>
 
-              <div class="field"><label>Statut croquis</label><select id="o_sketch_status"><option value="pending">En attente</option><option value="progress">En cours</option><option value="done">Validé</option></select></div>
-              <div class="field"><label>Lien croquis</label><input id="o_sketch_asset" placeholder="https://..."></div>
+              <div class="field"><label>Statut croquis</label><select id="o_sketch_status"><option value="pending">En attente</option><option value="progress">En cours</option><option value="rework">Modifications en cours</option><option value="done">Validé</option></select></div>
+              <div class="field"><label>Dernière mise à jour</label><input id="o_sketch_updated" readonly></div>
               <div class="field full"><label>Note atelier croquis</label><textarea id="o_sketch_note"></textarea></div>
+              <div class="field full"><label>Photos croquis</label><input id="o_sketch_files" type="file" accept="image/*" multiple></div>
+              <div class="field full"><div id="o_sketch_gallery" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;"></div></div>
+              <div class="field full"><label>Historique commentaires client (croquis)</label><div id="o_sketch_comments" style="max-height:130px;overflow:auto;border:1px solid var(--rule);padding:10px;border-radius:8px;background:#fcf8f1;"></div></div>
+              <div class="section-actions"><button class="btn" onclick="saveSketchesStep()">Enregistrer croquis</button></div>
 
-              <div class="field"><label>Statut dessin 3D</label><select id="o_3d_status"><option value="pending">En attente</option><option value="progress">En cours</option><option value="done">Validé</option></select></div>
-              <div class="field"><label>Lien rendu 3D</label><input id="o_3d_asset" placeholder="https://..."></div>
+              <div class="field"><label>Statut dessin 3D</label><select id="o_3d_status"><option value="pending">En attente</option><option value="progress">En cours</option><option value="rework">Modifications en cours</option><option value="done">Validé</option></select></div>
+              <div class="field"><label>Dernière mise à jour</label><input id="o_3d_updated" readonly></div>
               <div class="field full"><label>Note atelier 3D</label><textarea id="o_3d_note"></textarea></div>
+              <div class="field full"><label>Photos dessin 3D</label><input id="o_3d_files" type="file" accept="image/*" multiple></div>
+              <div class="field full"><div id="o_3d_gallery" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;"></div></div>
+              <div class="field full"><label>Historique commentaires client (3D)</label><div id="o_3d_comments" style="max-height:130px;overflow:auto;border:1px solid var(--rule);padding:10px;border-radius:8px;background:#fcf8f1;"></div></div>
+              <div class="section-actions"><button class="btn" onclick="save3DStep()">Enregistrer dessin 3D</button></div>
 
-              <div class="field"><label>Statut prototype</label><select id="o_proto_status"><option value="pending">En attente</option><option value="progress">En cours</option><option value="done">Validé</option></select></div>
+              <div class="field"><label>Statut prototype</label><select id="o_proto_status"><option value="pending">En attente</option><option value="progress">En cours</option><option value="rework">Modifications en cours</option><option value="done">Validé</option></select></div>
+              <div class="field"><label>Dernière mise à jour</label><input id="o_proto_updated" readonly></div>
               <div class="field"><label>Tracking prototype</label><input id="o_proto_tracking" placeholder="N° suivi"></div>
+              <div class="field"><label>Tracking retour prototype</label><input id="o_proto_return_tracking" placeholder="N° suivi retour"></div>
               <div class="field full"><label>Consignes prototype</label><textarea id="o_proto_note"></textarea></div>
+              <div class="field full"><label>Historique commentaires client (prototype)</label><div id="o_proto_comments" style="max-height:130px;overflow:auto;border:1px solid var(--rule);padding:10px;border-radius:8px;background:#fcf8f1;"></div></div>
+              <div class="section-actions"><button class="btn" onclick="savePrototypeStep()">Enregistrer prototype</button></div>
 
               <div class="field"><label>Statut final</label><select id="o_final_status"><option value="pending">En attente</option><option value="progress">En cours</option><option value="done">Terminé</option></select></div>
+              <div class="field"><label>Dernière mise à jour</label><input id="o_final_updated" readonly></div>
               <div class="field"><label>Tracking final</label><input id="o_final_tracking" placeholder="N° suivi"></div>
               <div class="field full"><label>Note finale</label><textarea id="o_final_note"></textarea></div>
-            </div>
-            <div class="section-actions">
-              <button class="btn" onclick="saveOrderFromForm()">Enregistrer commande</button>
-              <button class="btn ghost" onclick="appendShipmentEvent()">Ajouter événement logistique</button>
+              <div class="section-actions"><button class="btn" onclick="saveFinalStep()">Enregistrer création finale</button></div>
+
+              <div class="section-actions"><button class="btn ghost" onclick="appendShipmentEvent()">Ajouter événement logistique</button></div>
             </div>
           </div>
         </div>
@@ -463,22 +475,38 @@
         clientName: 'Client Démo',
         projectName: 'Projet #S-2026-014 — Veste sur-mesure',
         steps: {
-          sketches: { status: 'pending', note: 'Croquis en préparation par l’atelier.', comment: '', validated: false, asset: '#' },
-          drawing3d: { status: 'pending', note: 'Le dessin final 3D sera transmis après validation croquis.', comment: '', validated: false, asset: '#' },
-          prototype: { status: 'pending', note: 'Envoi prototype après validation 3D.', comment: '', tracking: '', returnRequested: false },
-          final: { status: 'pending', note: 'Création finale non démarrée.', tracking: '' }
+          sketches: { status: 'pending', note: 'Croquis en préparation par l’atelier.', comment: '', comments: [], validated: false, assets: [], updatedAt: '' },
+          drawing3d: { status: 'pending', note: 'Le dessin final 3D sera transmis après validation croquis.', comment: '', comments: [], validated: false, assets: [], updatedAt: '' },
+          prototype: { status: 'pending', note: 'Envoi prototype après validation 3D.', comment: '', comments: [], tracking: '', returnTracking: '', returnRequested: false, updatedAt: '' },
+          final: { status: 'pending', note: 'Création finale non démarrée.', tracking: '', updatedAt: '' }
         },
         shipments: [{ date: '03 avril 2026', text: 'Ouverture du projet sur-mesure.' }]
       }
     };
     let selectedOrderId = 'demo-client';
 
+    function normalizeOrder(o) {
+      const d = JSON.parse(JSON.stringify(DEFAULT_ORDERS['demo-client']));
+      const out = { ...d, ...o, steps: { ...d.steps, ...(o?.steps || {}) } };
+      ['sketches','drawing3d','prototype'].forEach(step => {
+        out.steps[step].comments = Array.isArray(out.steps[step].comments) ? out.steps[step].comments : [];
+        out.steps[step].assets = Array.isArray(out.steps[step].assets) ? out.steps[step].assets : [];
+      });
+      out.shipments = Array.isArray(out.shipments) ? out.shipments : [];
+      return out;
+    }
+
     function getOrdersStore() {
       const raw = localStorage.getItem('dtk_orders');
       if (!raw) return JSON.parse(JSON.stringify(DEFAULT_ORDERS));
-      try { return JSON.parse(raw); } catch { return JSON.parse(JSON.stringify(DEFAULT_ORDERS)); }
+      try {
+        const parsed = JSON.parse(raw);
+        Object.keys(parsed).forEach(id => parsed[id] = normalizeOrder(parsed[id]));
+        return parsed;
+      } catch { return JSON.parse(JSON.stringify(DEFAULT_ORDERS)); }
     }
     function setOrdersStore(data) { localStorage.setItem('dtk_orders', JSON.stringify(data)); }
+    function formatNow() { return new Date().toLocaleString('fr-FR'); }
 
     function renderOrderCards() {
       const orders = getOrdersStore();
@@ -494,57 +522,143 @@
       });
     }
 
+    function renderImageGallery(targetId, assets=[]) {
+      const wrap = document.getElementById(targetId);
+      if (!wrap) return;
+      wrap.innerHTML = '';
+      assets.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'Pièce visuelle';
+        img.style.width = '100%';
+        img.style.height = '92px';
+        img.style.objectFit = 'cover';
+        img.style.border = '1px solid rgba(184,151,106,.3)';
+        img.style.borderRadius = '8px';
+        wrap.appendChild(img);
+      });
+    }
+
+    function renderComments(targetId, comments=[]) {
+      const wrap = document.getElementById(targetId);
+      if (!wrap) return;
+      if (!comments.length) { wrap.innerHTML = '<em style="color:#8d7d6a;font-size:12px;">Aucun commentaire pour le moment.</em>'; return; }
+      wrap.innerHTML = comments.map(c => `<div style="margin-bottom:10px;border-bottom:1px dashed rgba(184,151,106,.28);padding-bottom:8px;"><div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#7b6b58;">${c.date}</div><div style="font-size:12px;color:#4d4236;line-height:1.7;">${c.text}</div></div>`).join('');
+    }
+
     function loadOrderToForm() {
       const orders = getOrdersStore();
-      const o = orders[selectedOrderId];
+      const o = normalizeOrder(orders[selectedOrderId]);
       if (!o) return;
       document.getElementById('orderEditorTitle').textContent = 'Commande — ' + o.clientName;
       document.getElementById('o_project').value = o.projectName || '';
+
       document.getElementById('o_sketch_status').value = o.steps.sketches.status || 'pending';
-      document.getElementById('o_sketch_asset').value = o.steps.sketches.asset || '';
       document.getElementById('o_sketch_note').value = o.steps.sketches.note || '';
+      document.getElementById('o_sketch_updated').value = o.steps.sketches.updatedAt || '—';
+      renderImageGallery('o_sketch_gallery', o.steps.sketches.assets || []);
+      renderComments('o_sketch_comments', o.steps.sketches.comments || []);
+
       document.getElementById('o_3d_status').value = o.steps.drawing3d.status || 'pending';
-      document.getElementById('o_3d_asset').value = o.steps.drawing3d.asset || '';
       document.getElementById('o_3d_note').value = o.steps.drawing3d.note || '';
+      document.getElementById('o_3d_updated').value = o.steps.drawing3d.updatedAt || '—';
+      renderImageGallery('o_3d_gallery', o.steps.drawing3d.assets || []);
+      renderComments('o_3d_comments', o.steps.drawing3d.comments || []);
+
       document.getElementById('o_proto_status').value = o.steps.prototype.status || 'pending';
       document.getElementById('o_proto_tracking').value = o.steps.prototype.tracking || '';
+      document.getElementById('o_proto_return_tracking').value = o.steps.prototype.returnTracking || '';
       document.getElementById('o_proto_note').value = o.steps.prototype.note || '';
+      document.getElementById('o_proto_updated').value = o.steps.prototype.updatedAt || '—';
+      renderComments('o_proto_comments', o.steps.prototype.comments || []);
+
       document.getElementById('o_final_status').value = o.steps.final.status || 'pending';
       document.getElementById('o_final_tracking').value = o.steps.final.tracking || '';
       document.getElementById('o_final_note').value = o.steps.final.note || '';
+      document.getElementById('o_final_updated').value = o.steps.final.updatedAt || '—';
     }
 
-    function saveOrderFromForm() {
+    function fileToDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+    async function collectFiles(inputId) {
+      const input = document.getElementById(inputId);
+      if (!input || !input.files?.length) return [];
+      const urls = [];
+      for (const file of input.files) urls.push(await fileToDataURL(file));
+      input.value = '';
+      return urls;
+    }
+
+    function getSelectedOrder() {
       const orders = getOrdersStore();
-      const o = orders[selectedOrderId];
-      if (!o) return;
-      o.projectName = document.getElementById('o_project').value;
-      o.steps.sketches.status = document.getElementById('o_sketch_status').value;
-      o.steps.sketches.asset = document.getElementById('o_sketch_asset').value || '#';
-      o.steps.sketches.note = document.getElementById('o_sketch_note').value;
-      o.steps.drawing3d.status = document.getElementById('o_3d_status').value;
-      o.steps.drawing3d.asset = document.getElementById('o_3d_asset').value || '#';
-      o.steps.drawing3d.note = document.getElementById('o_3d_note').value;
-      o.steps.prototype.status = document.getElementById('o_proto_status').value;
-      o.steps.prototype.tracking = document.getElementById('o_proto_tracking').value;
-      o.steps.prototype.note = document.getElementById('o_proto_note').value;
-      o.steps.final.status = document.getElementById('o_final_status').value;
-      o.steps.final.tracking = document.getElementById('o_final_tracking').value;
-      o.steps.final.note = document.getElementById('o_final_note').value;
-      orders[selectedOrderId] = o;
+      orders[selectedOrderId] = normalizeOrder(orders[selectedOrderId]);
+      return { orders, order: orders[selectedOrderId] };
+    }
+
+    async function saveSketchesStep() {
+      const { orders, order } = getSelectedOrder();
+      order.projectName = document.getElementById('o_project').value;
+      order.steps.sketches.status = document.getElementById('o_sketch_status').value;
+      order.steps.sketches.note = document.getElementById('o_sketch_note').value;
+      order.steps.sketches.updatedAt = formatNow();
+      const files = await collectFiles('o_sketch_files');
+      if (files.length) order.steps.sketches.assets = [...(order.steps.sketches.assets || []), ...files];
       setOrdersStore(orders);
+      loadOrderToForm();
       renderOrderCards();
-      alert('Commande enregistrée et synchronisée côté client.');
+      alert('Étape croquis enregistrée.');
+    }
+
+    async function save3DStep() {
+      const { orders, order } = getSelectedOrder();
+      order.projectName = document.getElementById('o_project').value;
+      order.steps.drawing3d.status = document.getElementById('o_3d_status').value;
+      order.steps.drawing3d.note = document.getElementById('o_3d_note').value;
+      order.steps.drawing3d.updatedAt = formatNow();
+      const files = await collectFiles('o_3d_files');
+      if (files.length) order.steps.drawing3d.assets = [...(order.steps.drawing3d.assets || []), ...files];
+      setOrdersStore(orders);
+      loadOrderToForm();
+      alert('Étape dessin 3D enregistrée.');
+    }
+
+    function savePrototypeStep() {
+      const { orders, order } = getSelectedOrder();
+      order.projectName = document.getElementById('o_project').value;
+      order.steps.prototype.status = document.getElementById('o_proto_status').value;
+      order.steps.prototype.tracking = document.getElementById('o_proto_tracking').value;
+      order.steps.prototype.returnTracking = document.getElementById('o_proto_return_tracking').value;
+      order.steps.prototype.note = document.getElementById('o_proto_note').value;
+      order.steps.prototype.updatedAt = formatNow();
+      setOrdersStore(orders);
+      loadOrderToForm();
+      alert('Étape prototype enregistrée.');
+    }
+
+    function saveFinalStep() {
+      const { orders, order } = getSelectedOrder();
+      order.projectName = document.getElementById('o_project').value;
+      order.steps.final.status = document.getElementById('o_final_status').value;
+      order.steps.final.tracking = document.getElementById('o_final_tracking').value;
+      order.steps.final.note = document.getElementById('o_final_note').value;
+      order.steps.final.updatedAt = formatNow();
+      setOrdersStore(orders);
+      loadOrderToForm();
+      alert('Étape création finale enregistrée.');
     }
 
     function appendShipmentEvent() {
       const text = prompt('Indiquez l’événement logistique à ajouter :');
       if (!text) return;
-      const orders = getOrdersStore();
-      const o = orders[selectedOrderId];
-      o.shipments = o.shipments || [];
-      o.shipments.push({ date: new Date().toLocaleDateString('fr-FR'), text });
-      orders[selectedOrderId] = o;
+      const { orders, order } = getSelectedOrder();
+      order.shipments = order.shipments || [];
+      order.shipments.push({ date: new Date().toLocaleDateString('fr-FR'), text });
       setOrdersStore(orders);
       alert('Événement logistique ajouté.');
     }
