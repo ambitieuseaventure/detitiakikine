@@ -159,6 +159,21 @@
     .badge.ok { background:rgba(110,162,96,.16); color:#385f33; border-color:rgba(110,162,96,.35); }
     .badge.wait { background:rgba(184,151,106,.16); color:#7d5b2d; }
 
+    
+    .order-card-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--rule);
+      background: #fdfaf6;
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .order-card-btn.active { border-color: var(--gold); background: #f7efdf; }
+    .order-card-btn strong { display:block; font-family:'Cormorant Garamond',serif; font-size:24px; }
+    .order-card-btn span { font-size:11px; color:#7f705f; }
+
     @media (max-width:1100px) {
       .admin-layout { grid-template-columns:1fr; }
       .sidebar { border-right:none; border-bottom:1px solid rgba(184,151,106,.3); }
@@ -188,6 +203,7 @@
         <li><button onclick="showPanel('temoignages', this)"><span class="ic">☆</span>Témoignages</button></li>
         <li><button onclick="showPanel('instagram', this)"><span class="ic">◉</span>Instagram</button></li>
         <li><button onclick="showPanel('messages', this)"><span class="ic">✉</span>Messages</button></li>
+        <li><button onclick="showPanel('commandes', this)"><span class="ic">◧</span>Commandes</button></li>
         <li><button onclick="showPanel('utilisateurs', this)"><span class="ic">◌</span>Utilisateurs</button></li>
         <li><button onclick="showPanel('parametres', this)"><span class="ic">⚙</span>Paramètres</button></li>
         <li><button onclick="showPanel('metadonnees', this)"><span class="ic">⌗</span>Métadonnées</button></li>
@@ -305,6 +321,41 @@
         </div>
         <div class="section-actions"><button class="btn save-btn">Enregistrer</button></div>
       </section>
+      <section class="panel" id="panel-commandes">
+        <h1>Commandes</h1><p class="sub">Suivi opérationnel des commandes sur-mesure (synchronisé avec l’onglet “Mes créations” côté client).</p>
+        <div class="admin-form-grid" style="grid-template-columns: .9fr 1.1fr; align-items:start;">
+          <div class="meta-card">
+            <div class="meta-head"><div class="meta-title" style="font-size:28px;">Clients</div><span class="meta-tag">Sélection</span></div>
+            <div id="orderClientCards" style="display:grid;gap:8px;"></div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-head"><div class="meta-title" style="font-size:28px;" id="orderEditorTitle">Commande client</div><span class="meta-tag">Édition</span></div>
+            <div class="admin-form-grid">
+              <div class="field full"><label>Nom du projet</label><input id="o_project" value=""></div>
+
+              <div class="field"><label>Statut croquis</label><select id="o_sketch_status"><option value="pending">En attente</option><option value="progress">En cours</option><option value="done">Validé</option></select></div>
+              <div class="field"><label>Lien croquis</label><input id="o_sketch_asset" placeholder="https://..."></div>
+              <div class="field full"><label>Note atelier croquis</label><textarea id="o_sketch_note"></textarea></div>
+
+              <div class="field"><label>Statut dessin 3D</label><select id="o_3d_status"><option value="pending">En attente</option><option value="progress">En cours</option><option value="done">Validé</option></select></div>
+              <div class="field"><label>Lien rendu 3D</label><input id="o_3d_asset" placeholder="https://..."></div>
+              <div class="field full"><label>Note atelier 3D</label><textarea id="o_3d_note"></textarea></div>
+
+              <div class="field"><label>Statut prototype</label><select id="o_proto_status"><option value="pending">En attente</option><option value="progress">En cours</option><option value="done">Validé</option></select></div>
+              <div class="field"><label>Tracking prototype</label><input id="o_proto_tracking" placeholder="N° suivi"></div>
+              <div class="field full"><label>Consignes prototype</label><textarea id="o_proto_note"></textarea></div>
+
+              <div class="field"><label>Statut final</label><select id="o_final_status"><option value="pending">En attente</option><option value="progress">En cours</option><option value="done">Terminé</option></select></div>
+              <div class="field"><label>Tracking final</label><input id="o_final_tracking" placeholder="N° suivi"></div>
+              <div class="field full"><label>Note finale</label><textarea id="o_final_note"></textarea></div>
+            </div>
+            <div class="section-actions">
+              <button class="btn" onclick="saveOrderFromForm()">Enregistrer commande</button>
+              <button class="btn ghost" onclick="appendShipmentEvent()">Ajouter événement logistique</button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section class="panel" id="panel-utilisateurs" data-storage="utilisateurs">
         <h1>Utilisateurs</h1><p class="sub">Gestion des comptes et rôles.</p>
@@ -405,6 +456,101 @@
     });
 
     loadPanels();
+
+
+    const DEFAULT_ORDERS = {
+      'demo-client': {
+        clientName: 'Client Démo',
+        projectName: 'Projet #S-2026-014 — Veste sur-mesure',
+        steps: {
+          sketches: { status: 'pending', note: 'Croquis en préparation par l’atelier.', comment: '', validated: false, asset: '#' },
+          drawing3d: { status: 'pending', note: 'Le dessin final 3D sera transmis après validation croquis.', comment: '', validated: false, asset: '#' },
+          prototype: { status: 'pending', note: 'Envoi prototype après validation 3D.', comment: '', tracking: '', returnRequested: false },
+          final: { status: 'pending', note: 'Création finale non démarrée.', tracking: '' }
+        },
+        shipments: [{ date: '03 avril 2026', text: 'Ouverture du projet sur-mesure.' }]
+      }
+    };
+    let selectedOrderId = 'demo-client';
+
+    function getOrdersStore() {
+      const raw = localStorage.getItem('dtk_orders');
+      if (!raw) return JSON.parse(JSON.stringify(DEFAULT_ORDERS));
+      try { return JSON.parse(raw); } catch { return JSON.parse(JSON.stringify(DEFAULT_ORDERS)); }
+    }
+    function setOrdersStore(data) { localStorage.setItem('dtk_orders', JSON.stringify(data)); }
+
+    function renderOrderCards() {
+      const orders = getOrdersStore();
+      const wrap = document.getElementById('orderClientCards');
+      if (!wrap) return;
+      wrap.innerHTML = '';
+      Object.entries(orders).forEach(([id, order]) => {
+        const btn = document.createElement('button');
+        btn.className = 'order-card-btn' + (id === selectedOrderId ? ' active' : '');
+        btn.innerHTML = `<strong>${order.clientName}</strong><span>${order.projectName}</span>`;
+        btn.onclick = () => { selectedOrderId = id; renderOrderCards(); loadOrderToForm(); };
+        wrap.appendChild(btn);
+      });
+    }
+
+    function loadOrderToForm() {
+      const orders = getOrdersStore();
+      const o = orders[selectedOrderId];
+      if (!o) return;
+      document.getElementById('orderEditorTitle').textContent = 'Commande — ' + o.clientName;
+      document.getElementById('o_project').value = o.projectName || '';
+      document.getElementById('o_sketch_status').value = o.steps.sketches.status || 'pending';
+      document.getElementById('o_sketch_asset').value = o.steps.sketches.asset || '';
+      document.getElementById('o_sketch_note').value = o.steps.sketches.note || '';
+      document.getElementById('o_3d_status').value = o.steps.drawing3d.status || 'pending';
+      document.getElementById('o_3d_asset').value = o.steps.drawing3d.asset || '';
+      document.getElementById('o_3d_note').value = o.steps.drawing3d.note || '';
+      document.getElementById('o_proto_status').value = o.steps.prototype.status || 'pending';
+      document.getElementById('o_proto_tracking').value = o.steps.prototype.tracking || '';
+      document.getElementById('o_proto_note').value = o.steps.prototype.note || '';
+      document.getElementById('o_final_status').value = o.steps.final.status || 'pending';
+      document.getElementById('o_final_tracking').value = o.steps.final.tracking || '';
+      document.getElementById('o_final_note').value = o.steps.final.note || '';
+    }
+
+    function saveOrderFromForm() {
+      const orders = getOrdersStore();
+      const o = orders[selectedOrderId];
+      if (!o) return;
+      o.projectName = document.getElementById('o_project').value;
+      o.steps.sketches.status = document.getElementById('o_sketch_status').value;
+      o.steps.sketches.asset = document.getElementById('o_sketch_asset').value || '#';
+      o.steps.sketches.note = document.getElementById('o_sketch_note').value;
+      o.steps.drawing3d.status = document.getElementById('o_3d_status').value;
+      o.steps.drawing3d.asset = document.getElementById('o_3d_asset').value || '#';
+      o.steps.drawing3d.note = document.getElementById('o_3d_note').value;
+      o.steps.prototype.status = document.getElementById('o_proto_status').value;
+      o.steps.prototype.tracking = document.getElementById('o_proto_tracking').value;
+      o.steps.prototype.note = document.getElementById('o_proto_note').value;
+      o.steps.final.status = document.getElementById('o_final_status').value;
+      o.steps.final.tracking = document.getElementById('o_final_tracking').value;
+      o.steps.final.note = document.getElementById('o_final_note').value;
+      orders[selectedOrderId] = o;
+      setOrdersStore(orders);
+      renderOrderCards();
+      alert('Commande enregistrée et synchronisée côté client.');
+    }
+
+    function appendShipmentEvent() {
+      const text = prompt('Indiquez l’événement logistique à ajouter :');
+      if (!text) return;
+      const orders = getOrdersStore();
+      const o = orders[selectedOrderId];
+      o.shipments = o.shipments || [];
+      o.shipments.push({ date: new Date().toLocaleDateString('fr-FR'), text });
+      orders[selectedOrderId] = o;
+      setOrdersStore(orders);
+      alert('Événement logistique ajouté.');
+    }
+
+    renderOrderCards();
+    loadOrderToForm();
   </script>
 
 </body>

@@ -2420,74 +2420,66 @@
         <div class="client-view" id="client-creations">
           <div class="creation-board">
             <div class="creation-main">
-              <h3 class="creation-title">Projet #S-2026-014 — Veste sur-mesure</h3>
-              <p class="creation-sub">Suivi complet du projet : validation des visuels, commentaires, prototype et envois postaux.</p>
+              <h3 class="creation-title" id="creationProjectTitle">Projet sur-mesure</h3>
+              <p class="creation-sub" id="creationProjectSub">Suivi complet du projet : validation des visuels, commentaires, prototype et envois postaux.</p>
               <div class="creation-timeline">
                 <div class="creation-step">
                   <div class="creation-step-head">
                     <div class="creation-step-name">1. Premiers croquis</div>
-                    <span class="creation-status done">Validé</span>
+                    <span class="creation-status" id="status-sketches">En attente</span>
                   </div>
-                  <p>Croquis initiaux envoyés le 03 avril 2026. Vous avez validé la silhouette générale avec une demande d’ajustement de la ligne d’épaule.</p>
+                  <p id="note-sketches">En attente d’envoi des croquis par l’atelier.</p>
                   <div class="creation-actions">
-                    <button class="client-btn secondary">Voir les croquis</button>
-                    <button class="client-btn">Valider</button>
+                    <button class="client-btn secondary" id="btn-view-sketches">Voir les croquis</button>
+                    <button class="client-btn" onclick="validateClientStep('sketches')">Valider</button>
                   </div>
-                  <textarea class="creation-comment" placeholder="Ajoutez vos observations sur les croquis..."></textarea>
+                  <textarea class="creation-comment" id="comment-sketches" placeholder="Ajoutez vos observations sur les croquis..."></textarea>
+                  <div class="creation-actions"><button class="client-btn secondary" onclick="saveClientComment('sketches')">Enregistrer commentaire</button></div>
                 </div>
 
                 <div class="creation-step">
                   <div class="creation-step-head">
                     <div class="creation-step-name">2. Dessin final 3D</div>
-                    <span class="creation-status progress">En attente de retour</span>
+                    <span class="creation-status" id="status-drawing3d">En attente</span>
                   </div>
-                  <p>Le rendu final 3D a été déposé le 10 avril 2026. Merci de valider ou de nous transmettre vos commentaires avant lancement du prototype.</p>
+                  <p id="note-drawing3d">Le dessin final 3D sera affiché ici pour validation.</p>
                   <div class="creation-actions">
-                    <button class="client-btn secondary">Voir le rendu 3D</button>
-                    <button class="client-btn">Valider le 3D</button>
+                    <button class="client-btn secondary" id="btn-view-drawing3d">Voir le rendu 3D</button>
+                    <button class="client-btn" onclick="validateClientStep('drawing3d')">Valider le 3D</button>
                   </div>
-                  <textarea class="creation-comment" placeholder="Commentaires sur le rendu 3D..."></textarea>
+                  <textarea class="creation-comment" id="comment-drawing3d" placeholder="Commentaires sur le rendu 3D..."></textarea>
+                  <div class="creation-actions"><button class="client-btn secondary" onclick="saveClientComment('drawing3d')">Enregistrer commentaire</button></div>
                 </div>
 
                 <div class="creation-step">
                   <div class="creation-step-head">
                     <div class="creation-step-name">3. Prototype réel</div>
-                    <span class="creation-status pending">À venir</span>
+                    <span class="creation-status" id="status-prototype">En attente</span>
                   </div>
-                  <p>Prototype envoyé par colis dès validation 3D. Essayage à domicile, retour possible pour modifications (frais de retour pris en charge par Justine).</p>
+                  <p id="note-prototype">Suivi de l’envoi prototype, essayage et retour postal.</p>
                   <div class="creation-actions">
-                    <button class="client-btn secondary">Signaler une modification</button>
-                    <button class="client-btn secondary">Télécharger bon de retour</button>
+                    <button class="client-btn secondary" onclick="requestPrototypeReturn()">Demander un retour prototype</button>
+                    <button class="client-btn secondary" id="btn-tracking-prototype">Suivi colis prototype</button>
                   </div>
+                  <textarea class="creation-comment" id="comment-prototype" placeholder="Décrivez les modifications nécessaires après essayage..."></textarea>
+                  <div class="creation-actions"><button class="client-btn secondary" onclick="saveClientComment('prototype')">Enregistrer retour prototype</button></div>
                 </div>
 
                 <div class="creation-step">
                   <div class="creation-step-head">
                     <div class="creation-step-name">4. Création finale</div>
-                    <span class="creation-status pending">Planifié</span>
+                    <span class="creation-status" id="status-final">Planifié</span>
                   </div>
-                  <p>Après validation du prototype ajusté, la création finale sera confectionnée puis expédiée par colis postal sécurisé.</p>
+                  <p id="note-final">La création finale sera suivie ici jusqu’à réception du colis.</p>
+                  <div class="creation-actions">
+                    <button class="client-btn secondary" id="btn-tracking-final">Suivi colis final</button>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="creation-side">
               <h4>Suivi logistique</h4>
-              <div class="shipment-line">
-                <div class="date">03 avril 2026</div>
-                <div class="text">Envoi des premiers croquis dans votre espace privé.</div>
-              </div>
-              <div class="shipment-line">
-                <div class="date">10 avril 2026</div>
-                <div class="text">Dépôt du dessin final 3D — en attente de validation client.</div>
-              </div>
-              <div class="shipment-line">
-                <div class="date">Prochaine étape</div>
-                <div class="text">Expédition du prototype réel via Colissimo suivi avec assurance.</div>
-              </div>
-              <div class="shipment-line">
-                <div class="date">Clôture de projet</div>
-                <div class="text">Expédition de la création terminée + certificat d’atelier.</div>
-              </div>
+              <div id="creationShipments"></div>
             </div>
           </div>
         </div>
@@ -2676,9 +2668,11 @@
     }
 
     if (identifiant === 'demo-client' && code === 'kikine2026') {
+      window.currentClientId = 'demo-client';
       document.getElementById('clientLogin').style.display = 'none';
       document.getElementById('clientApp').classList.add('active');
       error.textContent = '';
+      renderClientCreation();
     } else {
       error.textContent = 'Identifiants invalides. Utilisez les accès de démo affichés à droite.';
     }
@@ -2688,6 +2682,7 @@
     document.querySelectorAll('.client-tab').forEach(t => t.classList.remove('active'));
     document.getElementById('client-' + tab).classList.add('active');
     btn.classList.add('active');
+    if (tab === 'creations') renderClientCreation();
   }
   document.getElementById('clientSpace')?.addEventListener('click', e => {
     if (e.target.id === 'clientSpace') closeClientSpace();
@@ -2695,6 +2690,97 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeClientSpace();
   });
+
+
+  const DEFAULT_ORDERS = {
+    'demo-client': {
+      clientName: 'Client Démo',
+      projectName: 'Projet #S-2026-014 — Veste sur-mesure',
+      steps: {
+        sketches: { status: 'pending', note: 'Croquis en préparation par l’atelier.', comment: '', validated: false, asset: '#' },
+        drawing3d: { status: 'pending', note: 'Le dessin final 3D sera transmis après validation croquis.', comment: '', validated: false, asset: '#' },
+        prototype: { status: 'pending', note: 'Envoi prototype après validation 3D.', comment: '', tracking: '', returnRequested: false },
+        final: { status: 'pending', note: 'Création finale non démarrée.', tracking: '' }
+      },
+      shipments: [
+        { date: '03 avril 2026', text: 'Ouverture du projet sur-mesure.' }
+      ]
+    }
+  };
+
+  function getOrders() {
+    const raw = localStorage.getItem('dtk_orders');
+    if (!raw) return JSON.parse(JSON.stringify(DEFAULT_ORDERS));
+    try { return JSON.parse(raw); } catch { return JSON.parse(JSON.stringify(DEFAULT_ORDERS)); }
+  }
+  function saveOrders(data) { localStorage.setItem('dtk_orders', JSON.stringify(data)); }
+  function getCurrentOrder() {
+    const id = window.currentClientId || 'demo-client';
+    const orders = getOrders();
+    if (!orders[id]) orders[id] = JSON.parse(JSON.stringify(DEFAULT_ORDERS['demo-client']));
+    saveOrders(orders);
+    return { orders, id, order: orders[id] };
+  }
+  function mapStatus(status) {
+    if (status === 'done') return ['Validé', 'done'];
+    if (status === 'progress') return ['En cours', 'progress'];
+    return ['En attente', 'pending'];
+  }
+  function renderClientCreation() {
+    const { order } = getCurrentOrder();
+    document.getElementById('creationProjectTitle').textContent = order.projectName;
+    ['sketches','drawing3d','prototype','final'].forEach(step => {
+      const data = order.steps[step];
+      const [label, cls] = mapStatus(data.status);
+      const el = document.getElementById('status-' + step);
+      if (el) { el.textContent = label; el.className = 'creation-status ' + cls; }
+      const note = document.getElementById('note-' + step);
+      if (note) note.textContent = data.note || '';
+      const comment = document.getElementById('comment-' + step);
+      if (comment) comment.value = data.comment || '';
+    });
+    document.getElementById('btn-view-sketches').onclick = () => window.open(order.steps.sketches.asset || '#', '_blank');
+    document.getElementById('btn-view-drawing3d').onclick = () => window.open(order.steps.drawing3d.asset || '#', '_blank');
+    document.getElementById('btn-tracking-prototype').onclick = () => alert(order.steps.prototype.tracking ? 'Suivi prototype : ' + order.steps.prototype.tracking : 'Aucun numéro de suivi prototype pour le moment.');
+    document.getElementById('btn-tracking-final').onclick = () => alert(order.steps.final.tracking ? 'Suivi final : ' + order.steps.final.tracking : 'Aucun numéro de suivi final pour le moment.');
+
+    const shipWrap = document.getElementById('creationShipments');
+    shipWrap.innerHTML = '';
+    (order.shipments || []).forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'shipment-line';
+      row.innerHTML = `<div class="date">${item.date}</div><div class="text">${item.text}</div>`;
+      shipWrap.appendChild(row);
+    });
+  }
+  function validateClientStep(step) {
+    const ctx = getCurrentOrder();
+    ctx.order.steps[step].validated = true;
+    ctx.order.steps[step].status = 'done';
+    ctx.order.steps[step].note = 'Validation client enregistrée le ' + new Date().toLocaleDateString('fr-FR');
+    ctx.orders[ctx.id] = ctx.order;
+    saveOrders(ctx.orders);
+    renderClientCreation();
+  }
+  function saveClientComment(step) {
+    const ctx = getCurrentOrder();
+    const val = document.getElementById('comment-' + step)?.value || '';
+    ctx.order.steps[step].comment = val;
+    ctx.order.steps[step].status = 'progress';
+    ctx.orders[ctx.id] = ctx.order;
+    saveOrders(ctx.orders);
+    renderClientCreation();
+  }
+  function requestPrototypeReturn() {
+    const ctx = getCurrentOrder();
+    ctx.order.steps.prototype.returnRequested = true;
+    ctx.order.steps.prototype.status = 'progress';
+    ctx.order.steps.prototype.note = 'Retour prototype demandé. Bon de retour fourni par l’atelier.';
+    ctx.order.shipments.push({ date: new Date().toLocaleDateString('fr-FR'), text: 'Demande de retour prototype enregistrée côté client.' });
+    ctx.orders[ctx.id] = ctx.order;
+    saveOrders(ctx.orders);
+    renderClientCreation();
+  }
 
   // ─── BLOG ARTICLE SYSTEM
   const articles = {
